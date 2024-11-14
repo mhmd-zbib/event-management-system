@@ -1,4 +1,4 @@
-package dev.zbib.propal;
+package dev.zbib.providerservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
