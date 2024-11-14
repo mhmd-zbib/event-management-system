@@ -1,4 +1,4 @@
-package dev.zbib.providerservice.mappers;
+package dev.zbib.providerservice.mapper;
 
 import dev.zbib.providerservice.model.entity.Provider;
 import dev.zbib.providerservice.model.request.ProviderRequest;

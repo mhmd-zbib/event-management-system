@@ -1,6 +1,6 @@
 package dev.zbib.providerservice.service;
 
-import dev.zbib.providerservice.mappers.ProviderMapper;
+import dev.zbib.providerservice.mapper.ProviderMapper;
 import dev.zbib.providerservice.model.entity.Provider;
 import dev.zbib.providerservice.model.request.ProviderRequest;
 import dev.zbib.providerservice.repository.ProviderRepository;

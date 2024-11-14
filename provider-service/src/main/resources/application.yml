@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: provider-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/user_service
+    username: guest
+    password: guest
+    hikari:
+      maximum-pool-size: 10
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+
+
+
+
+server:
+  port: 8002
