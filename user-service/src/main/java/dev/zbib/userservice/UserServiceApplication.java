@@ -1,4 +1,4 @@
-package dev.zbib.providerservice;
+package dev.zbib.userservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
