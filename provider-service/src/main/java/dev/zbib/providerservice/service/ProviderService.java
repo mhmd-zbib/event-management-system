@@ -22,7 +22,7 @@ public class ProviderService {
     }
 
     public Provider getProviderByUserId(Long userId) {
-        return providerRepository.findById(userId)
+        return providerRepository.findByUserId(userId)
                 .orElse(null);
     }
 
