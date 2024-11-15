@@ -1,5 +1,6 @@
 package dev.zbib.userservice.model.request;
 
+import dev.zbib.userservice.model.entity.Address;
 import lombok.Data;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;
@@ -28,5 +29,5 @@ public class UserRequest {
 
     private String profilePicture;
     private String history;
-    private String address;
+    private Address address;
 }
