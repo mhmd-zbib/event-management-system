@@ -40,7 +40,8 @@ public class ProviderService {
             Double hourlyRate,
             String serviceArea,
             Pageable pageable) {
-        Specification<Provider> spec = ProviderSpecification.createFilter(serviceType,
+        Specification<Provider> spec = ProviderSpecification.createFilter(
+                serviceType,
                 available,
                 hourlyRate,
                 serviceArea);
