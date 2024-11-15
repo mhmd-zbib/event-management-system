@@ -9,4 +9,9 @@ public enum ServiceType {
     PAINTER,
     ALUMINUM_SPECIALIST,
     GLASS_SPECIALIST,
+    CARPENTER,
+    TILER,
+    GARDENER,
+    LOCKSMITH,
+    
 }
