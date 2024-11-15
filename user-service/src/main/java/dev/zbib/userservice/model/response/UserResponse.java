@@ -1,5 +1,6 @@
 package dev.zbib.userservice.model.response;
 
+import dev.zbib.userservice.model.entity.Address;
 import lombok.Data;
 import lombok.Builder;
 
@@ -13,5 +14,5 @@ public class UserResponse {
     private String phoneNumber;
     private LocalDate birthDate;
     private String profilePicture;
-    private String address;
+    private Address address;
 }
