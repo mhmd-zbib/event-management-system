@@ -1,7 +1,8 @@
-package dev.zbib.userservice.dto;
+package dev.zbib.userservice.model.request;
 
 import lombok.Data;
-import org.antlr.v4.runtime.misc.NotNull;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 

@@ -1,5 +1,7 @@
-package dev.zbib.userservice.dto;
+package dev.zbib.userservice.model.mappers;
 
+import dev.zbib.userservice.model.request.UserRequest;
+import dev.zbib.userservice.model.response.UserResponse;
 import dev.zbib.userservice.entity.User;
 
 public class UserMapper {

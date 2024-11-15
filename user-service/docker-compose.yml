@@ -13,20 +13,6 @@ services:
     networks:
       - my-network
 
-  user-service:
-    build: ./path-to-your-spring-boot-project
-    container_name: user-service
-    ports:
-      - "8001:8001"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/pdatabase
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: admin123
-    depends_on:
-      - postgres
-    networks:
-      - my-network
-
 networks:
   my-network:
     driver: bridge

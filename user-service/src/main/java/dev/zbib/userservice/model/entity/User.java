@@ -1,4 +1,4 @@
-package dev.zbib.userservice.entity;
+package dev.zbib.userservice.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
