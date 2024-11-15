@@ -2,7 +2,7 @@ package dev.zbib.userservice.model.mappers;
 
 import dev.zbib.userservice.model.request.UserRequest;
 import dev.zbib.userservice.model.response.UserResponse;
-import dev.zbib.userservice.entity.User;
+import dev.zbib.userservice.model.entity.User;
 
 public class UserMapper {
     public static User toUser(UserRequest userRequest) {
@@ -13,7 +13,6 @@ public class UserMapper {
                 .password(userRequest.getPassword())
                 .birthDate(userRequest.getBirthDate())
                 .profilePicture(userRequest.getProfilePicture())
-                .history(userRequest.getHistory())
                 .address(userRequest.getAddress())
                 .build();
     }
