@@ -1,12 +1,13 @@
 package dev.zbib.userservice.controller;
 
-import dev.zbib.userservice.entity.User;
+import dev.zbib.userservice.model.mappers.UserMapper;
+import dev.zbib.userservice.model.request.UserRequest;
+import dev.zbib.userservice.model.response.UserResponse;
+import dev.zbib.userservice.model.entity.User;
 import dev.zbib.userservice.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/users")
@@ -19,24 +20,12 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestParam Long userId,
-                                           @RequestParam String firstName,
-                                           @RequestParam String lastName,
-                                           @RequestParam String phoneNumber,
-                                           @RequestParam String password,
-                                           @RequestParam LocalDate birthDate,
-                                           @RequestParam String profilePicture,
-                                           @RequestParam String history,
-                                           @RequestParam String address) {
-        User createdUser = userService.createUser(userId
-                , firstName
-                , lastName
-                , phoneNumber
-                , password
-                , birthDate
-                , profilePicture
-                , history
-                , address);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
+        User user = UserMapper.toUser(userRequest);
+
+        User savedUser = userService.createUser(user);
+        UserResponse userResponse = UserMapper.toUserResponse(savedUser);
+
+        return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
     }
 }
