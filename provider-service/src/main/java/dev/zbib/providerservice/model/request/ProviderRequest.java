@@ -13,6 +13,6 @@ public class ProviderRequest {
     private ServiceType serviceType;
     private double hourlyRate;
     private String serviceArea;
-    private String availableHours;
+//    private String availableHours;
 
 }

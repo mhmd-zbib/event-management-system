@@ -3,13 +3,12 @@ spring:
     name: provider-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/user_service
+    url: jdbc:postgresql://localhost:5433/provider_service
     username: guest
     password: guest
-    hikari:
-      maximum-pool-size: 10
-
+    driver-class-name:
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
     show-sql: true

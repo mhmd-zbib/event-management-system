@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_USER: guest
       POSTGRES_PASSWORD: guest
-      POSTGRES_DB: user_service
+      POSTGRES_DB: provider_service
     ports:
       - "5433:5432"
     volumes:
