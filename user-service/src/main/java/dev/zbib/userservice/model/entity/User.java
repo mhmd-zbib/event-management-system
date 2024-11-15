@@ -35,11 +35,6 @@ public class User {
     @Column(nullable = true)
     private String profilePicture;
 
-    @Column(nullable = true)
-    private String history;
-
-    @Column(nullable = true)
-    private String address;
-
-
+    @Embedded
+    private Address address;
 }
