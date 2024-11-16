@@ -7,4 +7,6 @@ spring:
       server:
         git:
           uri: https://github.com/mhmd-zbib/propal-config
-          default-label: main
+          default-label: master
+  application:
+    name: config-server
