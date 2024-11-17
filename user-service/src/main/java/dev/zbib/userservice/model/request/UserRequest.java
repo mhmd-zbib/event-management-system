@@ -1,9 +1,9 @@
 package dev.zbib.userservice.model.request;
 
 import dev.zbib.userservice.model.entity.Address;
-import lombok.Data;
-import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 import java.time.LocalDate;
 
