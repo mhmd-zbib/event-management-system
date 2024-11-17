@@ -1,11 +1,9 @@
-version: '3.7'
-
 services:
   postgres:
     image: postgres:latest
     container_name: postgres-server
     ports:
-      - "5432:5432"
+      - "5544:5432"
     environment:
       - POSTGRES_USER=guest
       - POSTGRES_PASSWORD=guest
@@ -16,11 +14,9 @@ services:
       - propal
     restart: unless-stopped
 
-
 networks:
   propal:
     driver: bridge
-
 
 volumes:
   provider-service-data:
