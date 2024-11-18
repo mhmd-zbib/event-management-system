@@ -1,6 +1,7 @@
 package dev.zbib.userservice.service;
 
 import dev.zbib.userservice.model.entity.User;
+import dev.zbib.userservice.model.request.UserRequest;
 import dev.zbib.userservice.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User createUser(User user) {
+    public UserRequest createUser(User user) {
         return userRepository.save(user);
     }
 }
