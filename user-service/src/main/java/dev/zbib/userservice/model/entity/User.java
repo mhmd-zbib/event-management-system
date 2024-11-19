@@ -1,5 +1,6 @@
 package dev.zbib.userservice.model.entity;
 
+import dev.zbib.userservice.model.enums.UserRoles;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,6 +35,9 @@ public class User {
 
     @Column(nullable = true)
     private String profilePicture;
+
+    @Enumerated(EnumType.STRING)
+    private UserRoles role;
 
     @Embedded
     private Address address;

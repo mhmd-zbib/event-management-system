@@ -18,6 +18,7 @@ public class UserMapper {
                 .birthDate(userRequest.getBirthDate())
                 .profilePicture(userRequest.getProfilePicture())
                 .address(userRequest.getAddress())
+                .role(userRequest.getRole())
                 .build();
     }
 

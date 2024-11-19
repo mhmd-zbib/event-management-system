@@ -1,6 +1,8 @@
 package dev.zbib.userservice.model.request;
 
 import dev.zbib.userservice.model.entity.Address;
+import dev.zbib.userservice.model.enums.UserRoles;
+import dev.zbib.userservice.model.validation.ValidProviderDetails;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -8,7 +10,9 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
+@ValidProviderDetails
 public class UserRequest {
+
     @NotNull
     @Size(min = 2, max = 50)
     private String firstName;
@@ -34,4 +38,11 @@ public class UserRequest {
     private String profilePicture;
 
     private Address address;
+
+    @NotNull
+    private UserRoles role;
+
+    private String bio;
+
+    private ProviderRequest providerDetails;
 }

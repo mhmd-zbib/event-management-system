@@ -1,6 +1,7 @@
 package dev.zbib.userservice.service;
 
 import dev.zbib.userservice.model.entity.User;
+import dev.zbib.userservice.model.enums.UserRoles;
 import dev.zbib.userservice.model.mappers.UserMapper;
 import dev.zbib.userservice.model.request.UserRequest;
 import dev.zbib.userservice.model.response.UserListResponse;
@@ -18,9 +19,14 @@ import static dev.zbib.userservice.model.mappers.UserMapper.toUserListResponse;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ProviderServiceClient providerServiceClient;
 
     public void createUser(UserRequest request) {
         User user = UserMapper.toUser(request);
+        if (request.getRole()
+                .equals(UserRoles.PROVIDER)) {
+            providerServiceClient.createProvider(request.getProviderDetails());
+        }
         userRepository.save(user);
     }
 
