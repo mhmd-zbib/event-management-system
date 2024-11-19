@@ -25,9 +25,13 @@ public class UserRequest {
     private String password;
 
     @NotNull
+    @Size(min = 8)
+    private String repeatPassword;
+
+    @NotNull
     private LocalDate birthDate;
 
     private String profilePicture;
-    private String history;
+
     private Address address;
 }

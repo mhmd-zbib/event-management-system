@@ -1,8 +1,12 @@
 package dev.zbib.userservice.model.mappers;
 
-import dev.zbib.userservice.model.request.UserRequest;
-import dev.zbib.userservice.model.response.UserResponse;
 import dev.zbib.userservice.model.entity.User;
+import dev.zbib.userservice.model.request.UserRequest;
+import dev.zbib.userservice.model.response.UserListResponse;
+import dev.zbib.userservice.model.response.UserResponse;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserMapper {
     public static User toUser(UserRequest userRequest) {
@@ -27,4 +31,20 @@ public class UserMapper {
                 .address(user.getAddress())
                 .build();
     }
+
+
+    public static List<UserListResponse> toUserListResponse(List<User> users) {
+        return users.stream()
+                .map(user -> {
+                    UserListResponse response = new UserListResponse();
+                    response.setId(user.getId());
+                    response.setFirstName(user.getFirstName());
+                    response.setLastName(user.getLastName());
+                    response.setPhoneNumber(user.getPhoneNumber());
+                    response.setProfilePicture(user.getProfilePicture());
+                    return response;
+                })
+                .collect(Collectors.toList());
+    }
+
 }
