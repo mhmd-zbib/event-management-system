@@ -35,9 +35,8 @@ public class UserService {
         userRepository.deleteById(user.getId());
     }
 
-    public List<UserListResponse> getUserListById(Long[] id) {
-        List<User> userList = userRepository.findUsersByProviderIds(id);
-        List<UserListResponse> userListResponse = toUserListResponse(userList);
-        return userListResponse;
+    public List<UserListResponse> getUserListById(List<Long> id) {
+        List<User> userList = userRepository.findUsersByIdIn(id);
+        return toUserListResponse(userList);
     }
 }
