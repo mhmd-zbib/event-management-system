@@ -7,12 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProviderRequest {
-
     private Long userId;
     private String bio;
     private ServiceType serviceType;
     private double hourlyRate;
     private String serviceArea;
-//    private String availableHours;
-
 }
