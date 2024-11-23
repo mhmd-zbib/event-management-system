@@ -37,10 +37,4 @@ public class UserRequest {
 
     private Address address;
 
-    @NotNull
-    private UserRoles role;
-
-    private String bio;
-
-    private ProviderRequest providerDetails;
 }

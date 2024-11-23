@@ -2,10 +2,13 @@ package dev.zbib.userservice.model.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class ProviderRequest extends UserRequest {
+@Builder
+public class ProviderServiceRequest {
+    private Long userId;
 
     @NotNull
     @Size(min = 1, max = 50)
@@ -19,4 +22,5 @@ public class ProviderRequest extends UserRequest {
     private String serviceArea;
 
     private String bio;
+
 }
