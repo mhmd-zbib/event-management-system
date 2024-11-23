@@ -27,7 +27,7 @@ public class ProviderServiceClient {
         webClientBuilder.baseUrl("http://provider-service")
                 .build()
                 .post()
-                .uri("/provider")
+                .uri("/providers")
                 .bodyValue(providerServiceRequest)
                 .retrieve()
                 .bodyToMono(String.class)
