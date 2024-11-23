@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ProviderServiceRequest {
+public class ProviderClientRequest {
     private Long userId;
 
     @NotNull

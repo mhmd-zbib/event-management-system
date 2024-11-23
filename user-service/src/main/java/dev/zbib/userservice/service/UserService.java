@@ -1,7 +1,8 @@
 package dev.zbib.userservice.service;
 
 import dev.zbib.userservice.model.entity.User;
-import dev.zbib.userservice.model.mappers.UserMapper;
+import dev.zbib.userservice.model.enums.UserRoles;
+import dev.zbib.userservice.model.request.ProviderClientRequest;
 import dev.zbib.userservice.model.request.UserRequest;
 import dev.zbib.userservice.model.response.UserListResponse;
 import dev.zbib.userservice.model.response.UserResponse;
@@ -11,33 +12,44 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static dev.zbib.userservice.model.mappers.UserMapper.toUser;
-import static dev.zbib.userservice.model.mappers.UserMapper.toUserListResponse;
+import static dev.zbib.userservice.model.mappers.UserMapper.*;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ProviderClient providerClient;
 
-    public User createUser(UserRequest request) {
-        User user = toUser(request);
-        return userRepository.save(user);
+    public UserResponse createUser(UserRequest request) {
+        User user = userRepository.save(toUser(request));
+        return toUserResponse(user);
     }
 
     public UserResponse getUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElse(null);
-        return UserMapper.toUserResponse(user);
+        return toUserResponse(user);
     }
 
-    public void deleteUser(long id) {
+    public void deleteUserById(long id) {
         UserResponse user = getUserById(id);
         userRepository.deleteById(user.getId());
+        if (user != null && UserRoles.PROVIDER.equals(user.getRole())) {
+            providerClient.deleteProvider(id);
+        }
     }
 
     public List<UserListResponse> getUserListById(List<Long> id) {
         List<User> userList = userRepository.findUsersByIdIn(id);
         return toUserListResponse(userList);
+    }
+
+    public void registerProvider(ProviderClientRequest providerClientRequest) {
+        User user = userRepository.findById(providerClientRequest.getUserId())
+                .orElse(null);
+        user.setRole(UserRoles.PROVIDER);
+        userRepository.save(user);
+        providerClient.createProvider(providerClientRequest);
     }
 }

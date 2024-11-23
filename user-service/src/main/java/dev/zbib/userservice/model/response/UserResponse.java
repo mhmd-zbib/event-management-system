@@ -1,6 +1,7 @@
 package dev.zbib.userservice.model.response;
 
 import dev.zbib.userservice.model.entity.Address;
+import dev.zbib.userservice.model.enums.UserRoles;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,4 +17,5 @@ public class UserResponse {
     private LocalDate birthDate;
     private String profilePicture;
     private Address address;
+    private UserRoles role;
 }

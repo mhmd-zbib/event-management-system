@@ -3,7 +3,7 @@ package dev.zbib.providerservice.model.mapper;
 import dev.zbib.providerservice.model.entity.Provider;
 import dev.zbib.providerservice.model.request.ProviderRequest;
 import dev.zbib.providerservice.model.response.ProviderListResponse;
-import dev.zbib.providerservice.model.response.UserClientResponse;
+import dev.zbib.providerservice.model.response.UserClientListResponse;
 
 public class ProviderMapper {
     public static Provider toProvider(ProviderRequest request) {
@@ -18,7 +18,7 @@ public class ProviderMapper {
 
     public static ProviderListResponse toResponseList(
             Provider provider,
-            UserClientResponse user) {
+            UserClientListResponse user) {
         return ProviderListResponse.builder()
                 .id(provider.getUserId())
                 .serviceType(provider.getServiceType())

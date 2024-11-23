@@ -23,12 +23,14 @@ public class UserMapper {
 
     public static UserResponse toUserResponse(User user) {
         return UserResponse.builder()
+                .id(user.getId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .phoneNumber(user.getPhoneNumber())
                 .birthDate(user.getBirthDate())
                 .profilePicture(user.getProfilePicture())
                 .address(user.getAddress())
+                .role(user.getRole())
                 .build();
     }
 

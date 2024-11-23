@@ -3,7 +3,7 @@ package dev.zbib.providerservice.model.response;
 import lombok.Data;
 
 @Data
-public class UserClientResponse {
+public class UserClientListResponse {
 
     private Long id;
     private String firstName;
