@@ -6,7 +6,6 @@ import dev.zbib.userservice.model.response.UserListResponse;
 import dev.zbib.userservice.model.response.UserResponse;
 import dev.zbib.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,15 +19,14 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody UserRequest userRequest) {
-        userService.createUser(userRequest);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .build();
+    public ResponseEntity<Long> createUser(@RequestBody UserRequest userRequest) {
+        Long id = userService.createUser(userRequest);
+        return ResponseEntity.ok(id);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
-        UserResponse userResponse = userService.getUserById(id);
+        UserResponse userResponse = userService.getUserResponseById(id);
         return ResponseEntity.ok(userResponse);
     }
 
@@ -46,10 +44,17 @@ public class UserController {
 
     @PostMapping("/provider/{id}")
     public void registerProvider(
-            @RequestParam ProviderClientRequest providerClientRequest,
+            @RequestBody ProviderClientRequest providerClientRequest,
             @PathVariable Long id) {
         providerClientRequest.setUserId(id);
         userService.registerProvider(providerClientRequest);
+    }
+
+    @PostMapping("/${userId}/favorites/${plumberId}")
+    public void addFavoritePlumber(
+            @PathVariable Long userId,
+            @PathVariable Long plumberId) {
+        userService.addFavoritePlumber(userId, plumberId);
     }
 
 }

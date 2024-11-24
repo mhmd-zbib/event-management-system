@@ -23,9 +23,9 @@ public class ProviderController {
     private final ProviderService providerService;
 
     @PostMapping
-    public ResponseEntity<String> createProvider(@RequestBody ProviderRequest providerRequest) {
-        providerService.createProvider(providerRequest);
-        return ResponseEntity.ok("Provider created");
+    public ResponseEntity<String> registerProvider(@RequestBody ProviderRequest providerRequest) {
+        providerService.registerProvider(providerRequest);
+        return ResponseEntity.ok("Provider registered");
     }
 
     @GetMapping("/{userId}")

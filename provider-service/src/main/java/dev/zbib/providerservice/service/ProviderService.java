@@ -30,7 +30,7 @@ public class ProviderService {
     private final ProviderRepository providerRepository;
     private final UserClient userServiceClient;
 
-    public void createProvider(ProviderRequest request) {
+    public void registerProvider(ProviderRequest request) {
         Provider provider = toProvider(request);
         providerRepository.save(provider);
     }
