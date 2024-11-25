@@ -1,6 +1,6 @@
 package dev.zbib.providerservice.service;
 
-import dev.zbib.providerservice.model.response.UserClientListResponse;
+import dev.zbib.providerservice.model.response.UserListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -14,22 +14,19 @@ public class UserClient {
 
     private final WebClient.Builder webClientBuilder;
 
-    public List<UserClientListResponse> getUsersByIds(List<Long> ids) {
+    public List<UserListResponse> getUsersByIds(List<Long> ids) {
         return webClientBuilder.baseUrl("http://user-service")
                 .build()
                 .get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/users")
-                        .queryParam(
-                                "ids",
-                                String.join(
-                                        ",",
-                                        ids.stream()
-                                                .map(String::valueOf)
-                                                .toArray(String[]::new)))
+                .uri(uriBuilder -> uriBuilder.path("/users")
+                        .queryParam("ids", String.join(
+                                ",",
+                                ids.stream()
+                                        .map(String::valueOf)
+                                        .toArray(String[]::new)))
                         .build())
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<UserClientListResponse>>() {
+                .bodyToMono(new ParameterizedTypeReference<List<UserListResponse>>() {
                 })
                 .block();
     }

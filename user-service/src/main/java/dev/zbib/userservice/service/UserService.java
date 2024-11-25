@@ -3,8 +3,9 @@ package dev.zbib.userservice.service;
 import dev.zbib.userservice.model.entity.Favorite;
 import dev.zbib.userservice.model.entity.User;
 import dev.zbib.userservice.model.enums.UserRoles;
-import dev.zbib.userservice.model.request.ProviderClientRequest;
-import dev.zbib.userservice.model.request.UserRequest;
+import dev.zbib.userservice.model.mappers.UserMapper;
+import dev.zbib.userservice.model.request.CreateUserRequest;
+import dev.zbib.userservice.model.request.RegisterProviderRequest;
 import dev.zbib.userservice.model.response.UserListResponse;
 import dev.zbib.userservice.model.response.UserResponse;
 import dev.zbib.userservice.repository.FavoriteRepository;
@@ -13,8 +14,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static dev.zbib.userservice.model.mappers.UserMapper.*;
+import static dev.zbib.userservice.model.mappers.UserMapper.toUser;
+import static dev.zbib.userservice.model.mappers.UserMapper.toUserResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +27,7 @@ public class UserService {
     private final ProviderClient providerClient;
     private final FavoriteRepository favoriteRepository;
 
-    public Long createUser(UserRequest request) {
+    public Long createUser(CreateUserRequest request) {
         User user = toUser(request);
         user.setRole(UserRoles.USER);
         return userRepository.save(user)
@@ -43,7 +46,7 @@ public class UserService {
     }
 
     public void deleteUserById(long id) {
-        UserResponse user = getUserResponseById(id);
+        User user = getUserById(id);
         userRepository.deleteById(user.getId());
         if (user != null && UserRoles.PROVIDER.equals(user.getRole())) {
             providerClient.deleteProvider(id);
@@ -52,11 +55,15 @@ public class UserService {
 
     public List<UserListResponse> getUserListById(List<Long> id) {
         List<User> userList = userRepository.findUsersByIdIn(id);
-        return toUserListResponse(userList);
+        return userList.stream()
+                .map(UserMapper::toUserListResponse)
+                .collect(Collectors.toList());
     }
 
-    public void registerProvider(ProviderClientRequest providerClientRequest) {
-        User user = userRepository.findById(providerClientRequest.getUserId())
+    public void registerProvider(
+            Long id,
+            RegisterProviderRequest registerProviderRequest) {
+        User user = userRepository.findById(id)
                 .orElse(null);
         if (user.getRole()
                 .equals(UserRoles.PROVIDER)) {
@@ -64,7 +71,7 @@ public class UserService {
         }
         user.setRole(UserRoles.PROVIDER);
         userRepository.save(user);
-        providerClient.createProvider(providerClientRequest);
+        providerClient.registerProvider(id,registerProviderRequest);
     }
 
     public void addProviderToFavorites(

@@ -2,7 +2,7 @@ package dev.zbib.providerservice.controller;
 
 import dev.zbib.providerservice.model.entity.Provider;
 import dev.zbib.providerservice.model.enums.ServiceType;
-import dev.zbib.providerservice.model.request.ProviderRequest;
+import dev.zbib.providerservice.model.request.RegisterProviderRequest;
 import dev.zbib.providerservice.model.response.ProviderListResponse;
 import dev.zbib.providerservice.service.ProviderService;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +22,6 @@ public class ProviderController {
 
     private final ProviderService providerService;
 
-    @PostMapping
-    public ResponseEntity<String> registerProvider(@RequestBody ProviderRequest providerRequest) {
-        providerService.registerProvider(providerRequest);
-        return ResponseEntity.ok("Provider registered");
-    }
 
     @GetMapping("/{userId}")
     public ResponseEntity<Provider> getProviderByUserId(@PathVariable Long userId) {
@@ -61,4 +56,13 @@ public class ProviderController {
         providerService.deleteProviderByUserId(id);
         return ResponseEntity.ok("Provider deleted");
     }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<String> registerProvider(
+            @PathVariable Long id,
+            @RequestBody RegisterProviderRequest registerProviderRequest) {
+        providerService.registerProvider(id, registerProviderRequest);
+        return ResponseEntity.ok("Provider registered");
+    }
+
 }

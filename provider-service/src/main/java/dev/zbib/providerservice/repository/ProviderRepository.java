@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface ProviderRepository extends JpaRepository<Provider, Long>, JpaSpecificationExecutor<Provider> {
 
-    Optional<Provider> findByUserId(Long userId);
+    Optional<Provider> findById(Long userId);
 
 }

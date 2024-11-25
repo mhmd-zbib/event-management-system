@@ -1,19 +1,13 @@
 package dev.zbib.userservice.model.response;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
-@Getter
-@Setter
+@Data
+@SuperBuilder
 public class UserListResponse {
-
     private Long id;
-
     private String firstName;
     private String lastName;
-
-    private String phoneNumber;
-
     private String profilePicture;
-
 }

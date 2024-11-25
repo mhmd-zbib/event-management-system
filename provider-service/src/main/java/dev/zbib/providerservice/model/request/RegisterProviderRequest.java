@@ -6,8 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ProviderRequest {
-    private Long userId;
+public class RegisterProviderRequest {
     private String bio;
     private ServiceType serviceType;
     private double hourlyRate;

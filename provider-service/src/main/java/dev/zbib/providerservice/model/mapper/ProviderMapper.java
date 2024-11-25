@@ -1,14 +1,17 @@
 package dev.zbib.providerservice.model.mapper;
 
 import dev.zbib.providerservice.model.entity.Provider;
-import dev.zbib.providerservice.model.request.ProviderRequest;
+import dev.zbib.providerservice.model.request.RegisterProviderRequest;
 import dev.zbib.providerservice.model.response.ProviderListResponse;
-import dev.zbib.providerservice.model.response.UserClientListResponse;
+import dev.zbib.providerservice.model.response.UserListResponse;
 
 public class ProviderMapper {
-    public static Provider toProvider(ProviderRequest request) {
+
+    public static Provider toProvider(
+            Long id,
+            RegisterProviderRequest request) {
         return Provider.builder()
-                .userId(request.getUserId())
+                .id(id)
                 .bio(request.getBio())
                 .hourlyRate(request.getHourlyRate())
                 .serviceArea(request.getServiceArea())
@@ -16,21 +19,21 @@ public class ProviderMapper {
                 .build();
     }
 
-    public static ProviderListResponse toResponseList(
+    public static ProviderListResponse toProviderListResponse(
             Provider provider,
-            UserClientListResponse user) {
+            UserListResponse userListResponse) {
         return ProviderListResponse.builder()
-                .id(provider.getUserId())
+                .id(provider.getId())
+                .firstName(userListResponse.getFirstName())
+                .lastName(userListResponse.getLastName())
+                .profilePicture(userListResponse.getProfilePicture())
                 .serviceType(provider.getServiceType())
                 .rating(provider.getRating())
                 .available(provider.isAvailable())
                 .hourlyRate(provider.getHourlyRate())
                 .serviceArea(provider.getServiceArea())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .phoneNumber(user.getPhoneNumber())
-                .profilePicture(user.getProfilePicture())
                 .build();
     }
+
 
 }

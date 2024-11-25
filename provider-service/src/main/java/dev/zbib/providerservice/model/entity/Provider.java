@@ -18,11 +18,8 @@ import lombok.*;
 public class Provider {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @NotNull(message = "User ID cannot be null")
-    private Long userId;
+    private Long id;
 
     @NotNull(message = "Bio cannot be null")
     @Size(min = 10, max = 500, message = "Bio should be between 10 and 500 characters")

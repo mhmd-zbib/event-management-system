@@ -2,9 +2,9 @@ package dev.zbib.providerservice.service;
 
 import dev.zbib.providerservice.model.entity.Provider;
 import dev.zbib.providerservice.model.enums.ServiceType;
-import dev.zbib.providerservice.model.request.ProviderRequest;
+import dev.zbib.providerservice.model.request.RegisterProviderRequest;
 import dev.zbib.providerservice.model.response.ProviderListResponse;
-import dev.zbib.providerservice.model.response.UserClientListResponse;
+import dev.zbib.providerservice.model.response.UserListResponse;
 import dev.zbib.providerservice.repository.ProviderRepository;
 import dev.zbib.providerservice.specification.ProviderSpecification;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static dev.zbib.providerservice.model.mapper.ProviderMapper.toProvider;
-import static dev.zbib.providerservice.model.mapper.ProviderMapper.toResponseList;
+import static dev.zbib.providerservice.model.mapper.ProviderMapper.toProviderListResponse;
 
 @Log4j2
 @Service
@@ -28,20 +28,21 @@ import static dev.zbib.providerservice.model.mapper.ProviderMapper.toResponseLis
 public class ProviderService {
 
     private final ProviderRepository providerRepository;
-    private final UserClient userServiceClient;
+    private final UserClient userClient;
 
-    public void registerProvider(ProviderRequest request) {
-        Provider provider = toProvider(request);
+    public void registerProvider(
+            Long id,
+            RegisterProviderRequest request) {
+        Provider provider = toProvider(id, request);
         providerRepository.save(provider);
     }
 
     public Provider getProviderByUserId(Long userId) {
-        return providerRepository.findByUserId(userId)
+        return providerRepository.findById(userId)
                 .orElse(null);
     }
 
     public void deleteProviderByUserId(Long userId) {
-        log.warn("id  {}", userId);
         Provider provider = getProviderByUserId(userId);
         providerRepository.delete(provider);
     }
@@ -53,29 +54,32 @@ public class ProviderService {
             String serviceArea,
             Pageable pageable) {
 
-        Specification<Provider> specification = ProviderSpecification.createFilter(serviceType,
+        Specification<Provider> specification = ProviderSpecification.createFilter(
+                serviceType,
                 available,
                 hourlyRate,
                 serviceArea);
 
         Page<Provider> providerPage = providerRepository.findAll(specification, pageable);
-
         List<Long> userIds = providerPage.getContent()
                 .stream()
-                .map(Provider::getUserId)
+                .map(Provider::getId)
                 .collect(Collectors.toList());
 
-        List<UserClientListResponse> users = userServiceClient.getUsersByIds(userIds);
+        List<UserListResponse> userList = userClient.getUsersByIds(userIds);
+        Map<Long, UserListResponse> userMap = userList.stream()
+                .collect(Collectors.toMap(UserListResponse::getId, user -> user));
 
-        Map<Long, UserClientListResponse> userMap = users.stream()
-                .collect(Collectors.toMap(UserClientListResponse::getId, user -> user));
-
-        List<ProviderListResponse> responses = providerPage.getContent()
+        List<ProviderListResponse> providerList = providerPage.getContent()
                 .stream()
-                .map(provider -> toResponseList(provider, userMap.get(provider.getUserId())))
+                .map(provider -> {
+                    UserListResponse user = userMap.get(provider.getId());
+                    return toProviderListResponse(provider, user);
+                })
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(responses, pageable, providerPage.getTotalElements());
+
+        return new PageImpl<>(providerList, pageable, providerPage.getTotalElements());
     }
 
 }

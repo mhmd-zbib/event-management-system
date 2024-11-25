@@ -1,6 +1,6 @@
 package dev.zbib.userservice.service;
 
-import dev.zbib.userservice.model.request.ProviderClientRequest;
+import dev.zbib.userservice.model.request.RegisterProviderRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,12 +15,14 @@ public class ProviderClient {
     private final WebClient.Builder webClientBuilder;
 
 
-    public void createProvider(ProviderClientRequest providerServiceRequest) {
+    public void registerProvider(
+            Long id,
+            RegisterProviderRequest registerProviderRequest) {
         webClientBuilder.baseUrl("http://provider-service")
                 .build()
                 .post()
-                .uri("/providers")
-                .bodyValue(providerServiceRequest)
+                .uri("/providers/{id}", id)
+                .bodyValue(registerProviderRequest)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
