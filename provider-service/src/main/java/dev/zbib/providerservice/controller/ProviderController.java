@@ -3,6 +3,7 @@ package dev.zbib.providerservice.controller;
 import dev.zbib.providerservice.model.entity.Provider;
 import dev.zbib.providerservice.model.enums.ServiceType;
 import dev.zbib.providerservice.model.request.RegisterProviderRequest;
+import dev.zbib.providerservice.model.response.DetailsListResponse;
 import dev.zbib.providerservice.model.response.ProviderListResponse;
 import dev.zbib.providerservice.service.ProviderService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/providers")
 @RequiredArgsConstructor
@@ -24,8 +27,8 @@ public class ProviderController {
 
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Provider> getProviderByUserId(@PathVariable Long userId) {
-        return ResponseEntity.ok(providerService.getProviderByUserId(userId));
+    public ResponseEntity<Provider> getProviderById(@PathVariable Long userId) {
+        return ResponseEntity.ok(providerService.getProviderById(userId));
     }
 
     @GetMapping
@@ -63,6 +66,11 @@ public class ProviderController {
             @RequestBody RegisterProviderRequest registerProviderRequest) {
         providerService.registerProvider(id, registerProviderRequest);
         return ResponseEntity.ok("Provider registered");
+    }
+
+    @GetMapping("/details")
+    public ResponseEntity<List<DetailsListResponse>> getDetailListById(@RequestParam List<Long> ids) {
+        return ResponseEntity.ok(providerService.getDetailListById(ids));
     }
 
 }

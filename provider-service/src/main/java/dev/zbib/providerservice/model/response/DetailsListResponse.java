@@ -1,12 +1,12 @@
 package dev.zbib.providerservice.model.response;
 
 import dev.zbib.providerservice.model.enums.ServiceType;
+import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.SuperBuilder;
 
 @Data
-@SuperBuilder
-public class DetailsResponse {
+@Builder
+public class DetailsListResponse {
     private Long id;
     private ServiceType serviceType;
     private double rating;

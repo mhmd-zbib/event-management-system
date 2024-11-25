@@ -3,6 +3,7 @@ package dev.zbib.providerservice.service;
 import dev.zbib.providerservice.model.entity.Provider;
 import dev.zbib.providerservice.model.enums.ServiceType;
 import dev.zbib.providerservice.model.request.RegisterProviderRequest;
+import dev.zbib.providerservice.model.response.DetailsListResponse;
 import dev.zbib.providerservice.model.response.ProviderListResponse;
 import dev.zbib.providerservice.model.response.UserListResponse;
 import dev.zbib.providerservice.repository.ProviderRepository;
@@ -37,13 +38,13 @@ public class ProviderService {
         providerRepository.save(provider);
     }
 
-    public Provider getProviderByUserId(Long userId) {
+    public Provider getProviderById(Long userId) {
         return providerRepository.findById(userId)
                 .orElse(null);
     }
 
     public void deleteProviderByUserId(Long userId) {
-        Provider provider = getProviderByUserId(userId);
+        Provider provider = getProviderById(userId);
         providerRepository.delete(provider);
     }
 
@@ -77,9 +78,19 @@ public class ProviderService {
                     return toProviderListResponse(provider, user);
                 })
                 .collect(Collectors.toList());
-
-
         return new PageImpl<>(providerList, pageable, providerPage.getTotalElements());
     }
 
+    public List<DetailsListResponse> getDetailListById(List<Long> id) {
+        List<Provider> providerList = providerRepository.findProvidersByIdIn(id);
+        return providerList.stream()
+                .map(user -> DetailsListResponse.builder()
+                        .id(user.getId())
+                        .available(user.isAvailable())
+                        .hourlyRate(user.getHourlyRate())
+                        .serviceArea(user.getServiceArea())
+                        .serviceType(user.getServiceType())
+                        .build())
+                .collect(Collectors.toList());
+    }
 }

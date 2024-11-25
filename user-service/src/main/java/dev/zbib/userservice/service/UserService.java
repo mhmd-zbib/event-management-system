@@ -6,14 +6,21 @@ import dev.zbib.userservice.model.enums.UserRoles;
 import dev.zbib.userservice.model.mappers.UserMapper;
 import dev.zbib.userservice.model.request.CreateUserRequest;
 import dev.zbib.userservice.model.request.RegisterProviderRequest;
+import dev.zbib.userservice.model.response.ProviderDetailsListResponse;
+import dev.zbib.userservice.model.response.ProviderListResponse;
 import dev.zbib.userservice.model.response.UserListResponse;
 import dev.zbib.userservice.model.response.UserResponse;
 import dev.zbib.userservice.repository.FavoriteRepository;
 import dev.zbib.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static dev.zbib.userservice.model.mappers.UserMapper.toUser;
@@ -53,7 +60,7 @@ public class UserService {
         }
     }
 
-    public List<UserListResponse> getUserListById(List<Long> id) {
+    public List<UserListResponse> getUserListResponseById(List<Long> id) {
         List<User> userList = userRepository.findUsersByIdIn(id);
         return userList.stream()
                 .map(UserMapper::toUserListResponse)
@@ -71,7 +78,7 @@ public class UserService {
         }
         user.setRole(UserRoles.PROVIDER);
         userRepository.save(user);
-        providerClient.registerProvider(id,registerProviderRequest);
+        providerClient.registerProvider(id, registerProviderRequest);
     }
 
     public void addProviderToFavorites(
@@ -83,5 +90,44 @@ public class UserService {
                 .providerId(providerId)
                 .build();
         favoriteRepository.save(favorite);
+    }
+
+    public Page<ProviderListResponse> getFavoriteProviderList(
+            Long id,
+            Pageable pageable) {
+
+        Page<Long> favoriteProviderIdPage = favoriteRepository.findProviderIdsByUserId(id, pageable);
+        List<UserListResponse> userResponseList = getUserListResponseById(favoriteProviderIdPage.getContent());
+        List<ProviderDetailsListResponse> providerDetailsListResponse = providerClient.getProviderDetailsListById(
+                favoriteProviderIdPage.getContent());
+
+        Map<Long, ProviderDetailsListResponse> providerDetailsListResponseMap = providerDetailsListResponse.stream()
+                .collect(Collectors.toMap(ProviderDetailsListResponse::getId, provider -> provider));
+
+        List<ProviderListResponse> providerList = userResponseList.stream()
+                .filter(user -> favoriteProviderIdPage.getContent()
+                        .contains(user.getId()))
+                .map(user -> {
+                    ProviderDetailsListResponse providerDetails = providerDetailsListResponseMap.get(user.getId());
+                    if (providerDetails == null) {
+                        return null;
+                    }
+                    return ProviderListResponse.builder()
+                            .id(user.getId())
+                            .id(user.getId())
+                            .firstName(user.getFirstName())
+                            .lastName(user.getLastName())
+                            .profilePicture(user.getProfilePicture())
+                            .serviceType(providerDetails.getServiceType())
+                            .rating(providerDetails.getRating())
+                            .available(providerDetails.isAvailable())
+                            .hourlyRate(providerDetails.getHourlyRate())
+                            .serviceArea(providerDetails.getServiceArea())
+                            .build();
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        return new PageImpl<>(providerList, pageable, favoriteProviderIdPage.getTotalElements());
+
     }
 }

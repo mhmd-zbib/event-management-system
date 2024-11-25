@@ -1,10 +1,10 @@
 package dev.zbib.userservice.model.response;
 
+import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.SuperBuilder;
 
 @Data
-@SuperBuilder
+@Builder
 public class UserListResponse {
     private Long id;
     private String firstName;

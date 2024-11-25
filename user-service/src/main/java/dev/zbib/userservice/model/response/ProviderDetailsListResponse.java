@@ -5,11 +5,8 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ProviderListResponse {
+public class ProviderDetailsListResponse {
     private Long id;
-    private String firstName;
-    private String lastName;
-    private String profilePicture;
     private String serviceType;
     private double rating;
     private boolean available;
