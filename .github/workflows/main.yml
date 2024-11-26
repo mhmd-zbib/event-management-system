@@ -7,7 +7,6 @@ on:
       - master
 
 jobs:
-  # Job to build the project and run tests
   test-and-build:
     name: Test and Build Microservices
     runs-on: ubuntu-latest
@@ -32,21 +31,20 @@ jobs:
       - name: Run Unit Tests
         run: mvn clean test -B
 
-      - name: Build Microservices
+      - name: Build All Microservices (using parent POM)
         run: mvn clean package -B
 
-      - name: Upload Build Artifacts
+      - name: Upload Build Artifacts (JAR files)
         uses: actions/upload-artifact@v3
         with:
           name: jars
           path: |
+            user-service/target/*.jar
             api-gateway/target/*.jar
             discovery-server/target/*.jar
             config-server/target/*.jar
             provider-service/target/*.jar
-            user-service/target/*.jar
 
-  # Job to containerize services
   containerize:
     name: Containerize Microservices
     runs-on: ubuntu-latest
@@ -55,21 +53,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Download Build Artifacts
+      - name: Download Build Artifacts (JAR files)
         uses: actions/download-artifact@v3
         with:
           name: jars
 
-      # Common Docker Build Step
+      # Build and push Docker images for all microservices
       - name: Build Docker Images
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/api-gateway:latest ./api-gateway
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/discovery-server:latest ./discovery-server
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/config-server:latest ./config-server
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/provider-service:latest ./provider-service
+          # Build Docker image for user-service
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/user-service:latest ./user-service
+          
+          # Build Docker image for api-gateway
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/api-gateway:latest ./api-gateway
+          
+          # Build Docker image for discovery-server
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/discovery-server:latest ./discovery-server
+          
+          # Build Docker image for config-server
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/config-server:latest ./config-server
+          
+          # Build Docker image for provider-service
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/provider-service:latest ./provider-service
 
-  # Login to DockerHub and push all images
   push-images:
     name: Push Docker Images to DockerHub
     runs-on: ubuntu-latest
@@ -81,7 +87,10 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
 
-      # Push all Docker images
+      # Push Docker images for all microservices to Docker Hub
+      - name: Push User Service Image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/user-service:latest
+
       - name: Push API Gateway Image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/api-gateway:latest
 
@@ -93,6 +102,3 @@ jobs:
 
       - name: Push Provider Service Image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/provider-service:latest
-
-      - name: Push User Service Image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/user-service:latest
