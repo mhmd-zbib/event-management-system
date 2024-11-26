@@ -1,65 +1,39 @@
-name: CI/CD for Spring Boot Microservices
+name: CI Pipeline
 
-# Trigger the workflow on push to any branch (for feature branches, etc.)
 on:
   push:
     branches:
-      - '**'  # This will trigger the workflow on any branch.
+      - '**'  # Triggers on pushes to any branch
+
+  pull_request:
+    branches:
+      - '**'  # Triggers on pull requests for any branch
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up JDK 21
-      uses: actions/setup-java@v3
-      with:
-        java-version: '21'
-        distribution: 'adoptopenjdk'
+      # Set up JDK
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: 21
+          distribution: temurin
 
-    - name: Cache Maven dependencies
-      uses: actions/cache@v2
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
+      # Cache Maven dependencies
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven
 
-    # Run tests for each microservice
-    - name: Run tests for user-service
-      run: |
-        echo "Running tests for user-service"
-        cd user-service
-        mvn clean test -B
-
-    - name: Run tests for provider-service
-      run: |
-        echo "Running tests for provider-service..."
-        cd provider-service
-        mvn clean test -B
-
-    # After all tests, we check if the tests succeeded.
-    - name: Check if all tests passed
-      run: |
-        echo "Checking test results..."
-        if [[ $(find . -name "target" -type d | xargs -I {} find {} -name "*.test") ]]; then
-          echo "Tests failed in one or more microservices."
-          exit 1
-        fi
-        echo "All tests passed. Proceeding to deploy."
-
-    # Push changes if tests are successful
-    - name: Push changes if tests passed
-      run: |
-        echo "Pushing changes to branch..."
-        git config --global user.name "github-actions"
-        git config --global user.email "actions@github.com"
-        git add .
-        git commit -m "Automated commit after successful tests"
-        git push
-      if: success()
-
-  # No need for the 'cancel' job anymore as failure will be handled naturally by the workflow.
+      # Build and test
+      - name: Build and run tests
+        run: mvn clean verify
