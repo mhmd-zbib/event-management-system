@@ -131,7 +131,7 @@ public class UserServiceTest {
                 userList.get(1),
                 userList.get(2)));
 
-        // When: Call the service method without using UserMapper
+        // When: Call the servie method without using UserMapper
         List<UserListResponse> result = userService.getUserListResponseById(ids);
 
         assertThat(result)
