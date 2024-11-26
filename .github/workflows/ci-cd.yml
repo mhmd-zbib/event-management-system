@@ -62,8 +62,4 @@ jobs:
         git push
       if: success()
 
-  # Handle failure if any test fails
-  cancel:
-    if: failure()
-    run: |
-      echo "Tests failed. Cancelling the push to branch."
+  # No need for the 'cancel' job anymore as failure will be handled naturally by the workflow.
