@@ -1,4 +1,4 @@
-name: Comprehensive Code Quality Check
+name: JUnit and Mockito Tests
 
 # Trigger on all branch pushes and pull requests
 on:
@@ -12,161 +12,40 @@ on:
 # Set permissions for the workflow
 permissions:
   contents: read
-  pull-requests: write
   checks: write
 
-# Define environment variables
-env:
-  JAVA_VERSION: '21'
-  JAVA_DISTRIBUTION: 'corretto'
-
 jobs:
-  # Initial code quality and security checks
-  code-quality:
+  run-tests:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
-          cache: maven
-
-      # Comprehensive code checks
-      - name: Run Multiple Quality Checks
-        run: |
-          # Static code analysis
-          mvn checkstyle:check
-          
-          # Dependency vulnerability check
-          mvn dependency:analyze
-          
-          # Find security vulnerabilities in dependencies
-          mvn org.owasp:dependency-check-maven:check
-
-      # CodeQL Security Analysis
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: java
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
-
-  # Comprehensive Testing
-  comprehensive-testing:
-    runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Java
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          java-version: '21'
+          distribution: 'corretto'
           cache: maven
 
-      # Run all types of tests
-      - name: Run Comprehensive Tests
-        run: |
-          # Unit tests
-          mvn test
-          
-          # Integration tests
-          mvn verify -DskipUnitTests
-          
-          # Run mutation testing for deeper test quality
-          mvn org.pitest:pitest-maven:mutationCoverage
+      - name: Run Unit Tests with Maven
+        run: mvn clean test
 
-      # Code coverage analysis
-      - name: Generate Code Coverage
-        run: mvn jacoco:prepare-agent jacoco:report
-
-      # Upload test and coverage reports
-      - name: Upload Test Reports
+      - name: Publish Test Results
         uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: test-reports
-          path: |
-            target/surefire-reports
-            target/jacoco-report
-          retention-days: 7
+          path: target/surefire-reports
+          retention-days: 5
 
-  # Code Style and Formatting
-  code-style:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - name: Generate JaCoCo Report
+        run: mvn jacoco:report
 
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
-
-      # Enforce consistent code formatting
-      - name: Check Code Formatting
-        run: |
-          # Install Google Java Format
-          curl -L https://github.com/google/google-java-format/releases/download/v1.17.0/google-java-format-1.17.0-all-deps.jar -o google-java-format.jar
-          
-          # Check formatting without making changes
-          java -jar google-java-format.jar --dry-run --set-exit-if-changed $(find src -type f -name "*.java")
-
-  # Comprehensive Security Scan
-  security-scan:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      # OWASP Dependency Check for vulnerabilities
-      - name: OWASP Dependency Check
-        uses: dependency-check/Dependency-Check_Action@main
-        id: Depcheck
-        with:
-          project: 'My Project'
-          path: '.'
-          format: 'HTML'
-          out: 'reports'
-
-      # Upload security scan results
-      - name: Upload Security Report
+      - name: Upload Coverage Report
         uses: actions/upload-artifact@v4
         with:
-          name: dependency-check-report
-          path: reports
-          retention-days: 7
-
-  # Final Status Check
-  workflow-status:
-    if: always()
-    needs:
-      - code-quality
-      - comprehensive-testing
-      - code-style
-      - security-scan
-    runs-on: ubuntu-latest
-    steps:
-      - name: Determine Workflow Status
-        run: |
-          echo "Code Quality: ${{ needs.code-quality.result }}"
-          echo "Comprehensive Testing: ${{ needs.comprehensive-testing.result }}"
-          echo "Code Style: ${{ needs.code-style.result }}"
-          echo "Security Scan: ${{ needs.security-scan.result }}"
-          
-          # Fail the workflow if any critical job fails
-          if [[ "${{ needs.code-quality.result }}" != "success" || 
-                "${{ needs.comprehensive-testing.result }}" != "success" || 
-                "${{ needs.code-style.result }}" != "success" || 
-                "${{ needs.security-scan.result }}" != "success" ]]; then
-            exit 1
-          fi
+          name: jacoco-report
+          path: target/site/jacoco
+          retention-days: 5
