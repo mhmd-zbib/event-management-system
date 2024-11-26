@@ -128,8 +128,20 @@ public class UserServiceTest {
 
         when(userRepository.findUsersByIdIn(eq(ids))).thenReturn(Arrays.asList(
                 userList.get(0),
-                userList.get(1),
-                userList.get(2)));
+                new User(
+                        999L,
+                        "Fake",
+                        "User",
+                        "0000000000",
+                        "fakepassword",
+                        LocalDate.now(),
+                        null,
+                        UserRoles.USER,
+                        null,
+                        null),
+                userList.get(2)
+        ));
+
 
         // When: Call the service method without using UserMapper
         List<UserListResponse> result = userService.getUserListResponseById(ids);
