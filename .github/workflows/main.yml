@@ -1,6 +1,5 @@
 name: JUnit and Mockito Tests
 
-# Trigger on all branch pushes and pull requests
 on:
   push:
     branches:
@@ -9,7 +8,6 @@ on:
     branches:
       - '**'
 
-# Set permissions for the workflow
 permissions:
   contents: read
   checks: write
@@ -29,7 +27,7 @@ jobs:
           distribution: 'corretto'
           cache: maven
 
-      - name: Run Unit Tests with Maven
+      - name: Run Unit Tests
         run: mvn clean test
 
       - name: Publish Test Results
@@ -37,15 +35,5 @@ jobs:
         if: failure()
         with:
           name: test-reports
-          path: target/surefire-reports
-          retention-days: 5
-
-      - name: Generate JaCoCo Report
-        run: mvn jacoco:report
-
-      - name: Upload Coverage Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: jacoco-report
-          path: target/site/jacoco
+          path: '**/target/surefire-reports'
           retention-days: 5
