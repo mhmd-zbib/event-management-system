@@ -58,23 +58,14 @@ jobs:
         with:
           name: jars
 
-      # Build and push Docker images for all microservices
+      # Build Docker images for all microservices and tag with Docker Hub repository
       - name: Build Docker Images
         run: |
-          # Build Docker image for user-service
-          docker build -t user-service:latest ./user-service
-          
-          # Build Docker image for api-gateway
-          docker build -t api-gateway:latest ./api-gateway
-          
-          # Build Docker image for discovery-server
-          docker build -t discovery-server:latest ./discovery-server
-          
-          # Build Docker image for config-server
-          docker build -t config-server:latest ./config-server
-          
-          # Build Docker image for provider-service
-          docker build -t provider-service:latest ./provider-service
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/user-service:latest ./user-service
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/api-gateway:latest ./api-gateway
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/discovery-server:latest ./discovery-server
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/config-server:latest ./config-server
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/provider-service:latest ./provider-service
 
   push-images:
     name: Push Docker Images to DockerHub
@@ -87,18 +78,18 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
 
-      # Push Docker images for all microservices to Docker Hub
+      # Push Docker images to Docker Hub using full tag with username and repository
       - name: Push User Service Image
-        run: docker push user-service:latest
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/user-service:latest
 
       - name: Push API Gateway Image
-        run: docker push api-gateway:latest
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/api-gateway:latest
 
       - name: Push Discovery Server Image
-        run: docker push discovery-server:latest
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/discovery-server:latest
 
       - name: Push Config Server Image
-        run: docker push config-server:latest
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/config-server:latest
 
       - name: Push Provider Service Image
-        run: docker push provider-service:latest
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/provider-service:latest
