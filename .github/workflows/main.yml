@@ -1,4 +1,4 @@
-name: JUnit and Mockito Tests
+name: Branches Tests
 
 on:
   push:
