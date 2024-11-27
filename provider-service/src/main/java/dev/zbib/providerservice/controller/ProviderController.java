@@ -24,7 +24,7 @@ import java.util.List;
 public class ProviderController {
 
     private final ProviderService providerService;
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<ProviderResponse> getProviderResponseById(@PathVariable Long id) {
         return ResponseEntity.ok(providerService.getProviderResponseById(id));

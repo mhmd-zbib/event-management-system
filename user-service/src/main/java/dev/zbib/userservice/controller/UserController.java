@@ -1,7 +1,7 @@
 package dev.zbib.userservice.controller;
 
+import dev.zbib.userservice.model.enums.UserRoles;
 import dev.zbib.userservice.model.request.CreateUserRequest;
-import dev.zbib.userservice.model.request.RegisterProviderRequest;
 import dev.zbib.userservice.model.response.ProviderListResponse;
 import dev.zbib.userservice.model.response.UserListResponse;
 import dev.zbib.userservice.model.response.UserResponse;
@@ -51,11 +51,12 @@ public class UserController {
         favoriteService.addProviderToFavorites(userId, providerId);
     }
 
-    @PostMapping("/{id}/provider")
-    public void registerProvider(
-            @RequestBody RegisterProviderRequest registerProviderRequest,
-            @PathVariable Long id) {
-        userService.registerProvider(id, registerProviderRequest);
+    @PutMapping("/{id}")
+    public void changeRole(
+            @PathVariable Long id,
+            @RequestBody
+            UserRoles role) {
+        userService.changeRole(id, role);
     }
 
     @GetMapping("/{id}/favorites")

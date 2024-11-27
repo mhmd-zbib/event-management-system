@@ -3,6 +3,7 @@ package dev.zbib.providerservice.service;
 import dev.zbib.providerservice.client.UserClient;
 import dev.zbib.providerservice.model.entity.Provider;
 import dev.zbib.providerservice.model.enums.ServiceType;
+import dev.zbib.providerservice.model.enums.UserRoles;
 import dev.zbib.providerservice.model.request.RegisterProviderRequest;
 import dev.zbib.providerservice.model.response.*;
 import dev.zbib.providerservice.repository.ProviderRepository;
@@ -31,8 +32,16 @@ public class ProviderService {
     public void registerProvider(
             Long id,
             RegisterProviderRequest request) {
+        if (checkProviderExists(id)) {
+            throw new IllegalArgumentException("User with id " + id + " is already a provider");
+        }
+        userClient.changeUserRole(id, UserRoles.PROVIDER);
         Provider provider = toProvider(id, request);
         providerRepository.save(provider);
+    }
+
+    public boolean checkProviderExists(Long id) {
+        return providerRepository.existsById(id);
     }
 
     public Provider getProviderById(Long id) {

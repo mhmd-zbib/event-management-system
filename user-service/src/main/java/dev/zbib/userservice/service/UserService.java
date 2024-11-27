@@ -72,4 +72,12 @@ public class UserService {
                 .map(UserMapper::toUserListResponse)
                 .collect(Collectors.toList());
     }
+
+    public void changeRole(
+            Long id,
+            UserRoles role) {
+        User user = getUserById(id);
+        user.setRole(role);
+        userRepository.save(user);
+    }
 }

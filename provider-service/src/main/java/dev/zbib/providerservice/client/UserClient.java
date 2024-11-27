@@ -1,5 +1,6 @@
 package dev.zbib.providerservice.client;
 
+import dev.zbib.providerservice.model.enums.UserRoles;
 import dev.zbib.providerservice.model.response.UserClientResponse;
 import dev.zbib.providerservice.model.response.UserListClientResponse;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -43,4 +45,17 @@ public class UserClient {
                 .block();
     }
 
+    public void changeUserRole(
+            Long id,
+            UserRoles role) {
+        webClientBuilder.baseUrl("http://user-service")
+                .build()
+                .put()
+                .uri(uri -> uri.path("/users/roles/{id}")
+                        .build(id))
+                .bodyValue(Collections.singletonMap("role", role))
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+    }
 }
