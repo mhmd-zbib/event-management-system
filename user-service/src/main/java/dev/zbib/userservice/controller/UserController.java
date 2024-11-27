@@ -5,6 +5,7 @@ import dev.zbib.userservice.model.request.RegisterProviderRequest;
 import dev.zbib.userservice.model.response.ProviderListResponse;
 import dev.zbib.userservice.model.response.UserListResponse;
 import dev.zbib.userservice.model.response.UserResponse;
+import dev.zbib.userservice.service.FavoriteService;
 import dev.zbib.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final FavoriteService favoriteService;
 
     @PostMapping
     public ResponseEntity<Long> createUser(@RequestBody CreateUserRequest createUserRequest) {
@@ -46,7 +48,7 @@ public class UserController {
     public void addProviderToFavorites(
             @PathVariable Long userId,
             @PathVariable Long providerId) {
-        userService.addProviderToFavorites(userId, providerId);
+        favoriteService.addProviderToFavorites(userId, providerId);
     }
 
     @PostMapping("/{id}/provider")
@@ -57,17 +59,17 @@ public class UserController {
     }
 
     @GetMapping("/{id}/favorites")
-    public ResponseEntity<Page<ProviderListResponse>> getFavoriteProviderList(
+    public ResponseEntity<Page<ProviderListResponse>> getFavoriteProviderPage(
             @PathVariable Long id,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(userService.getFavoriteProviderList(id, pageable));
+        return ResponseEntity.ok(favoriteService.getFavoriteProviderPage(id, pageable));
     }
 
     //  INTERNAL
     @GetMapping()
     public List<UserListResponse> getUserListByIds(@RequestParam List<Long> ids) {
-        return userService.getUserListResponseById(ids);
+        return userService.getUserListResponseByIdList(ids);
     }
 }

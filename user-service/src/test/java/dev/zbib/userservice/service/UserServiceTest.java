@@ -144,7 +144,7 @@ public class UserServiceTest {
 
 
         // When: Call the service method without using UserMapper
-        List<UserListResponse> result = userService.getUserListResponseById(ids);
+        List<UserListResponse> result = userService.getUserListResponseByIdList(ids);
 
         assertThat(result)
                 .usingRecursiveComparison()

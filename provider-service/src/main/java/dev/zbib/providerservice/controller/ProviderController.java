@@ -45,7 +45,7 @@ public class ProviderController {
                 .ascending() : Sort.by(sortBy)
                 .descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<ProviderListResponse> providers = providerService.getProviders(
+        Page<ProviderListResponse> providers = providerService.getProviderPage(
                 serviceType,
                 available,
                 hourlyRate,
