@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ProviderDetailsListResponse {
+public class ProviderDetailsListClientResponse {
     private Long id;
     private String serviceType;
     private double rating;

@@ -2,7 +2,7 @@ package dev.zbib.userservice.model.mappers;
 
 import dev.zbib.userservice.model.entity.User;
 import dev.zbib.userservice.model.request.CreateUserRequest;
-import dev.zbib.userservice.model.response.ProviderDetailsListResponse;
+import dev.zbib.userservice.model.response.ProviderDetailsListClientResponse;
 import dev.zbib.userservice.model.response.ProviderListResponse;
 import dev.zbib.userservice.model.response.UserListResponse;
 import dev.zbib.userservice.model.response.UserResponse;
@@ -49,10 +49,10 @@ public class UserMapper {
 
     public static List<ProviderListResponse> toProviderListResponse(
             List<UserListResponse> userList,
-            Map<Long, ProviderDetailsListResponse> providerDetailsMap) {
+            Map<Long, ProviderDetailsListClientResponse> providerDetailsMap) {
         return userList.stream()
                 .map(user -> {
-                    ProviderDetailsListResponse providerDetails = providerDetailsMap.get(user.getId());
+                    ProviderDetailsListClientResponse providerDetails = providerDetailsMap.get(user.getId());
                     if (providerDetails == null) {
                         return null;
                     }

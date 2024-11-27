@@ -4,9 +4,7 @@ import dev.zbib.providerservice.client.UserClient;
 import dev.zbib.providerservice.model.entity.Provider;
 import dev.zbib.providerservice.model.enums.ServiceType;
 import dev.zbib.providerservice.model.request.RegisterProviderRequest;
-import dev.zbib.providerservice.model.response.DetailsListResponse;
-import dev.zbib.providerservice.model.response.ProviderListResponse;
-import dev.zbib.providerservice.model.response.UserListResponse;
+import dev.zbib.providerservice.model.response.*;
 import dev.zbib.providerservice.repository.ProviderRepository;
 import dev.zbib.providerservice.specification.ProviderSpecification;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static dev.zbib.providerservice.model.mapper.DetailsMapper.toDetailsListResponse;
-import static dev.zbib.providerservice.model.mapper.ProviderMapper.toProvider;
-import static dev.zbib.providerservice.model.mapper.ProviderMapper.toProviderListResponse;
+import static dev.zbib.providerservice.model.mapper.ProviderMapper.*;
 
 @Log4j2
 @Service
@@ -38,9 +35,15 @@ public class ProviderService {
         providerRepository.save(provider);
     }
 
-    public Provider getProviderById(Long userId) {
-        return providerRepository.findById(userId)
+    public Provider getProviderById(Long id) {
+        return providerRepository.findById(id)
                 .orElse(null);
+    }
+
+    public ProviderResponse getProviderResponseById(Long id) {
+        Provider provider = getProviderById(id);
+        UserClientResponse userClientResponse = userClient.getUserClientResponseById(id);
+        return toProviderResponse(provider, userClientResponse);
     }
 
     public void deleteProviderByUserId(Long userId) {
@@ -61,7 +64,7 @@ public class ProviderService {
         List<Long> userIds = providerPage.stream()
                 .map(Provider::getId)
                 .toList();
-        List<UserListResponse> users = userClient.getUsersByIds(userIds);
+        List<UserListClientResponse> users = userClient.getUserListClientResponseByIdList(userIds);
         List<ProviderListResponse> providerList = toProviderListResponse(providerPage.getContent(), users);
 
         return new PageImpl<>(providerList, pageable, providerPage.getTotalElements());

@@ -1,7 +1,7 @@
 package dev.zbib.userservice.client;
 
 import dev.zbib.userservice.model.request.RegisterProviderRequest;
-import dev.zbib.userservice.model.response.ProviderDetailsListResponse;
+import dev.zbib.userservice.model.response.ProviderDetailsListClientResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -42,7 +42,7 @@ public class ProviderClient {
                 .block();
     }
 
-    public List<ProviderDetailsListResponse> getProviderDetailsListById(List<Long> ids) {
+    public List<ProviderDetailsListClientResponse> getProviderDetailsListById(List<Long> ids) {
         return webClientBuilder.baseUrl("http://provider-service")
                 .build()
                 .get()
@@ -54,7 +54,7 @@ public class ProviderClient {
                                         .toArray(String[]::new)))
                         .build())
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<ProviderDetailsListResponse>>() {
+                .bodyToMono(new ParameterizedTypeReference<List<ProviderDetailsListClientResponse>>() {
                 })
                 .block();
     }

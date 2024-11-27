@@ -3,7 +3,7 @@ package dev.zbib.userservice.service;
 import dev.zbib.userservice.client.ProviderClient;
 import dev.zbib.userservice.model.entity.Favorite;
 import dev.zbib.userservice.model.entity.User;
-import dev.zbib.userservice.model.response.ProviderDetailsListResponse;
+import dev.zbib.userservice.model.response.ProviderDetailsListClientResponse;
 import dev.zbib.userservice.model.response.ProviderListResponse;
 import dev.zbib.userservice.model.response.UserListResponse;
 import dev.zbib.userservice.repository.FavoriteRepository;
@@ -45,11 +45,11 @@ public class FavoriteService {
         Page<Long> favoriteProviderIdPage = favoriteRepository.findProviderIdsByUserId(userId, pageable);
         List<Long> favoriteProviderIdList = favoriteProviderIdPage.getContent();
         List<UserListResponse> userList = userService.getUserListResponseByIdList(favoriteProviderIdList);
-        List<ProviderDetailsListResponse> providerDetailsList = providerClient.getProviderDetailsListById(
+        List<ProviderDetailsListClientResponse> providerDetailsList = providerClient.getProviderDetailsListById(
                 favoriteProviderIdList);
 
-        Map<Long, ProviderDetailsListResponse> providerDetailsMap = providerDetailsList.stream()
-                .collect(Collectors.toMap(ProviderDetailsListResponse::getId, provider -> provider));
+        Map<Long, ProviderDetailsListClientResponse> providerDetailsMap = providerDetailsList.stream()
+                .collect(Collectors.toMap(ProviderDetailsListClientResponse::getId, provider -> provider));
 
         List<ProviderListResponse> providerList = toProviderListResponse(userList, providerDetailsMap);
         return new PageImpl<>(providerList, pageable, favoriteProviderIdPage.getTotalElements());

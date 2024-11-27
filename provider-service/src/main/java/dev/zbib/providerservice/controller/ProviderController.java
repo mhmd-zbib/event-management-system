@@ -1,10 +1,10 @@
 package dev.zbib.providerservice.controller;
 
-import dev.zbib.providerservice.model.entity.Provider;
 import dev.zbib.providerservice.model.enums.ServiceType;
 import dev.zbib.providerservice.model.request.RegisterProviderRequest;
 import dev.zbib.providerservice.model.response.DetailsListResponse;
 import dev.zbib.providerservice.model.response.ProviderListResponse;
+import dev.zbib.providerservice.model.response.ProviderResponse;
 import dev.zbib.providerservice.service.ProviderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -24,11 +24,10 @@ import java.util.List;
 public class ProviderController {
 
     private final ProviderService providerService;
-
-
-    @GetMapping("/{userId}")
-    public ResponseEntity<Provider> getProviderById(@PathVariable Long userId) {
-        return ResponseEntity.ok(providerService.getProviderById(userId));
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<ProviderResponse> getProviderResponseById(@PathVariable Long id) {
+        return ResponseEntity.ok(providerService.getProviderResponseById(id));
     }
 
     @GetMapping
