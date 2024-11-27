@@ -8,12 +8,10 @@ import java.util.stream.Collectors;
 
 public class DetailsMapper {
 
-    // Maps a list of Providers to a list of DetailsListResponse
     public static List<DetailsListResponse> toDetailsListResponse(List<Provider> providers) {
         if (providers == null) {
-            return null;  // Return null if providers list is null
+            return null;
         }
-
         return providers.stream()
                 .map(provider -> DetailsListResponse.builder()
                         .id(provider.getId())

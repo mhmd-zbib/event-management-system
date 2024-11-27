@@ -1,4 +1,4 @@
-package dev.zbib.userservice.service;
+package dev.zbib.userservice.client;
 
 import dev.zbib.userservice.model.request.RegisterProviderRequest;
 import dev.zbib.userservice.model.response.ProviderDetailsListResponse;

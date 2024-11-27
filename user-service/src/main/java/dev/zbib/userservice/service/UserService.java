@@ -1,5 +1,6 @@
 package dev.zbib.userservice.service;
 
+import dev.zbib.userservice.client.ProviderClient;
 import dev.zbib.userservice.model.entity.User;
 import dev.zbib.userservice.model.enums.UserRoles;
 import dev.zbib.userservice.model.mappers.UserMapper;
@@ -7,7 +8,6 @@ import dev.zbib.userservice.model.request.CreateUserRequest;
 import dev.zbib.userservice.model.request.RegisterProviderRequest;
 import dev.zbib.userservice.model.response.UserListResponse;
 import dev.zbib.userservice.model.response.UserResponse;
-import dev.zbib.userservice.repository.FavoriteRepository;
 import dev.zbib.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final ProviderClient providerClient;
-    private final FavoriteRepository favoriteRepository;
 
     public Long createUser(CreateUserRequest request) {
         User user = toUser(request);

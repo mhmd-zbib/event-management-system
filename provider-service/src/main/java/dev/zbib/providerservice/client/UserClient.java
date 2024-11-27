@@ -1,4 +1,4 @@
-package dev.zbib.providerservice.service;
+package dev.zbib.providerservice.client;
 
 import dev.zbib.providerservice.model.response.UserListResponse;
 import lombok.RequiredArgsConstructor;

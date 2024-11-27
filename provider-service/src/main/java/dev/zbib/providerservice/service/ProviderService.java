@@ -1,5 +1,6 @@
 package dev.zbib.providerservice.service;
 
+import dev.zbib.providerservice.client.UserClient;
 import dev.zbib.providerservice.model.entity.Provider;
 import dev.zbib.providerservice.model.enums.ServiceType;
 import dev.zbib.providerservice.model.request.RegisterProviderRequest;
@@ -28,7 +29,6 @@ public class ProviderService {
 
     private final ProviderRepository providerRepository;
     private final UserClient userClient;
-    private final UserService userService;
 
 
     public void registerProvider(
@@ -58,10 +58,11 @@ public class ProviderService {
             Pageable pageable) {
         var specification = ProviderSpecification.createFilter(serviceType, available, hourlyRate, serviceArea);
         Page<Provider> providerPage = providerRepository.findAll(specification, pageable);
-        List<UserListResponse> users = userService.getUserDetailsForProviders(providerPage.getContent());
-        List<ProviderListResponse> providerList = toProviderListResponse(
-                providerPage.getContent(),
-                users);
+        List<Long> userIds = providerPage.stream()
+                .map(Provider::getId)
+                .toList();
+        List<UserListResponse> users = userClient.getUsersByIds(userIds);
+        List<ProviderListResponse> providerList = toProviderListResponse(providerPage.getContent(), users);
 
         return new PageImpl<>(providerList, pageable, providerPage.getTotalElements());
     }
