@@ -59,17 +59,55 @@ public class ProviderController {
         return ResponseEntity.ok("Provider deleted");
     }
 
-    @PostMapping("/{id}")
+    @PostMapping()
     public ResponseEntity<String> registerProvider(
-            @PathVariable Long id,
             @RequestBody RegisterProviderRequest registerProviderRequest) {
-        providerService.registerProvider(id, registerProviderRequest);
+        providerService.registerProvider(registerProviderRequest);
         return ResponseEntity.ok("Provider registered");
+    }
+
+    @PutMapping("/{id}/available")
+    public ResponseEntity<String> setAvailability(
+            @PathVariable Long id,
+            @RequestBody boolean availability) {
+        providerService.setAvailability(id, availability);
+        return ResponseEntity.ok("Availability set");
     }
 
     @GetMapping("/details")
     public ResponseEntity<List<DetailsListResponse>> getDetailListById(@RequestParam List<Long> ids) {
         return ResponseEntity.ok(providerService.getDetailListById(ids));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<String> getAnalytics(@PathVariable String id) {
+        /**
+         * TODO: creating an analysis for the user's info and return:
+         * {
+         *   "total_earnings": 1500.0,
+         *   "completed_bookings": 20,
+         *   "canceled_bookings": 3,
+         *   "top_users": [
+         *     { "user_id": 101, "name": "John Doe", "total_spent": 500.0 },
+         *     { "user_id": 102, "name": "Jane Smith", "total_spent": 300.0 }
+         *   ],
+         *   "average_rating": 4.7
+         * }
+         */
+        return ResponseEntity.ok("Soon...");
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<String> getReviews(@PathVariable String id) {
+        /**
+         * TODO: fetch reviews from their place:
+         * [
+         *   { "user_id": 101, "rating": 5, "comment": "Excellent service!" },
+         *   { "user_id": 102, "rating": 4, "comment": "Good but slightly late." }
+         * ]
+         */
+        return ResponseEntity.ok("Soon...");
+
     }
 
 }

@@ -30,13 +30,13 @@ public class ProviderService {
 
 
     public void registerProvider(
-            Long id,
+
             RegisterProviderRequest request) {
-        if (checkProviderExists(id)) {
-            throw new IllegalArgumentException("User with id " + id + " is already a provider");
+        if (checkProviderExists(request.getId())) {
+            throw new IllegalArgumentException("User with id " + request.getId() + " is already a provider");
         }
-        userClient.changeUserRole(id, UserRoles.PROVIDER);
-        Provider provider = toProvider(id, request);
+        userClient.changeUserRole(request.getId(), UserRoles.PROVIDER);
+        Provider provider = toProvider(request);
         providerRepository.save(provider);
     }
 
@@ -82,5 +82,13 @@ public class ProviderService {
     public List<DetailsListResponse> getDetailListById(List<Long> ids) {
         List<Provider> providerList = providerRepository.findProvidersByIdIn(ids);
         return toDetailsListResponse(providerList);
+    }
+
+    public void setAvailability(
+            Long id,
+            boolean availability) {
+        Provider provider = getProviderById(id);
+        provider.setAvailable(availability);
+        providerRepository.save(provider);
     }
 }

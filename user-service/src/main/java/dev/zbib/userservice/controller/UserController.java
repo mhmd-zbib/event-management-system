@@ -68,6 +68,18 @@ public class UserController {
         return ResponseEntity.ok(favoriteService.getFavoriteProviderPage(id, pageable));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<String> getBookingPage(@PathVariable Long id) {
+        /**
+         * TODO: return the following:
+         * [
+         *   { "booking_id": 201, "provider_name": "John Doe", "status": "completed", "date": "2024-12-01" },
+         *   { "booking_id": 202, "provider_name": "Jane Smith", "status": "pending", "date": "2024-12-05" }
+         * ]
+         */
+        return ResponseEntity.ok("Soon...");
+    }
+
     //  INTERNAL
     @GetMapping()
     public List<UserListResponse> getUserListByIds(@RequestParam List<Long> ids) {

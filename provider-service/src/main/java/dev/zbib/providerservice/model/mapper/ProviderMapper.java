@@ -14,10 +14,10 @@ public class ProviderMapper {
 
 
     public static Provider toProvider(
-            Long id,
+
             RegisterProviderRequest request) {
         return Provider.builder()
-                .id(id)
+                .id(request.getId())
                 .bio(request.getBio())
                 .serviceType(request.getServiceType())
                 .hourlyRate(request.getHourlyRate())
