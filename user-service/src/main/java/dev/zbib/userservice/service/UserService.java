@@ -5,7 +5,6 @@ import dev.zbib.userservice.model.entity.User;
 import dev.zbib.userservice.model.enums.UserRoles;
 import dev.zbib.userservice.model.mappers.UserMapper;
 import dev.zbib.userservice.model.request.CreateUserRequest;
-import dev.zbib.userservice.model.request.RegisterProviderRequest;
 import dev.zbib.userservice.model.response.UserListResponse;
 import dev.zbib.userservice.model.response.UserResponse;
 import dev.zbib.userservice.repository.UserRepository;
@@ -30,21 +29,6 @@ public class UserService {
         user.setRole(UserRoles.USER);
         return userRepository.save(user)
                 .getId();
-    }
-
-    public void registerProvider(
-            Long id,
-            RegisterProviderRequest registerProviderRequest) {
-        User user = userRepository.findById(id)
-                .orElse(null);
-        if (user.getRole()
-                .equals(UserRoles.PROVIDER)) {
-
-            throw new IllegalStateException("User is already registered as a provider.");
-        }
-        user.setRole(UserRoles.PROVIDER);
-        userRepository.save(user);
-        providerClient.registerProvider(id, registerProviderRequest);
     }
 
     public UserResponse getUserResponseById(Long id) {
