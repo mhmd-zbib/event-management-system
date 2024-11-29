@@ -56,7 +56,7 @@ public class UserController {
             @PathVariable Long id,
             @RequestBody
             UserRoles role) {
-        userService.changeRole(id, role);
+        userService.setRole(id, role);
     }
 
     @GetMapping("/{id}/favorites")

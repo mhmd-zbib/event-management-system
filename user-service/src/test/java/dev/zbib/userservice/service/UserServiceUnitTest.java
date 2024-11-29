@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
@@ -22,8 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -48,8 +46,6 @@ public class UserServiceUnitTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
-
         // Initializing the address object for user instances
         address = new Address("123 Street", "City", "State", "Country");
 
@@ -106,22 +102,34 @@ public class UserServiceUnitTest {
     @Test
     public void testCreateUser() {
         when(userRepository.save(any(User.class))).thenReturn(user1);
+
         Long userId = userService.createUser(createUserRequest);
-        assertNotNull(userId);
-        assertEquals(user1.getId(), userId);
+
+        assertNotNull(userId, "User ID should not be null");
+        assertEquals(user1.getId(), userId, "User ID should match the mock user ID");
         verify(userRepository, times(1)).save(any(User.class));
     }
 
     @Test
     public void testGetUserResponseById() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user1));
+
         UserResponse userResponse = userService.getUserResponseById(1L);
-        assertNotNull(userResponse);
-        assertEquals(user1.getId(), userResponse.getId());
+
+        assertNotNull(userResponse, "User response should not be null");
+        assertEquals(user1.getId(), userResponse.getId(), "User response ID should match the mock user ID");
     }
 
     @Test
-    public void testDeleteUserById() {
+    public void testGetUserResponseById_NotFound() {
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(RuntimeException.class, () -> userService.getUserResponseById(1L));
+        assertEquals("User not found", exception.getMessage(), "Exception message should indicate user not found");
+    }
+
+    @Test
+    public void testDeleteUserById_Success() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user1));
         userService.deleteUserById(1L);
         verify(userRepository, times(1)).deleteById(1L);
@@ -129,10 +137,43 @@ public class UserServiceUnitTest {
     }
 
     @Test
+    public void testDeleteUserById_NotFound() {
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+        Exception exception = assertThrows(RuntimeException.class, () -> userService.deleteUserById(1L));
+        assertEquals("User not found", exception.getMessage(), "Exception message should indicate user not found");
+        verify(userRepository, never()).deleteById(anyLong());
+        verify(providerClient, never()).deleteProvider(anyLong());
+    }
+
+    @Test
     public void testGetUserListResponseByIdList() {
         List<Long> ids = Arrays.asList(1L, 2L);
         when(userRepository.findUsersByIdIn(ids)).thenReturn(userList);
+
         List<UserListResponse> responses = userService.getUserListResponseByIdList(ids);
-        assertEquals(2, responses.size());
+
+        assertNotNull(responses, "Response list should not be null");
+        assertEquals(2, responses.size(), "Response list size should match the mock user list size");
+        assertEquals(
+                user1.getId(),
+                responses.get(0)
+                        .getId(),
+                "First user ID should match");
+        assertEquals(
+                user2.getId(),
+                responses.get(1)
+                        .getId(),
+                "Second user ID should match");
+    }
+
+    @Test
+    public void testGetUserListResponseByIdList_EmptyList() {
+        List<Long> ids = Arrays.asList(3L);
+        when(userRepository.findUsersByIdIn(ids)).thenReturn(new ArrayList<>());
+
+        List<UserListResponse> responses = userService.getUserListResponseByIdList(ids);
+
+        assertNotNull(responses, "Response list should not be null");
+        assertEquals(0, responses.size(), "Response list should be empty when no users are found");
     }
 }

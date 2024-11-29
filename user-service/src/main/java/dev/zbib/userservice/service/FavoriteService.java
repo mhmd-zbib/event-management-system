@@ -43,7 +43,9 @@ public class FavoriteService {
             Long userId,
             Pageable pageable) {
         Page<Long> favoriteProviderIdPage = favoriteRepository.findProviderIdsByUserId(userId, pageable);
+        
         List<Long> favoriteProviderIdList = favoriteProviderIdPage.getContent();
+
         List<UserListResponse> userList = userService.getUserListResponseByIdList(favoriteProviderIdList);
         List<ProviderDetailsListClientResponse> providerDetailsList = providerClient.getProviderDetailsListById(
                 favoriteProviderIdList);

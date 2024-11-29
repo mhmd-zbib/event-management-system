@@ -45,7 +45,7 @@ public class UserService {
     public void deleteUserById(long id) {
         User user = getUserById(id);
         userRepository.deleteById(user.getId());
-        if (user != null && UserRoles.PROVIDER.equals(user.getRole())) {
+        if (UserRoles.PROVIDER.equals(user.getRole())) {
             providerClient.deleteProvider(id);
         }
     }
@@ -57,7 +57,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public void changeRole(
+    public void setRole(
             Long id,
             UserRoles role) {
         User user = getUserById(id);
