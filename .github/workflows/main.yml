@@ -1,4 +1,4 @@
-name: Branches Tests
+name: CI Tests
 
 on:
   push:
@@ -24,16 +24,16 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: '21'
-          distribution: 'corretto'
+          distribution: 'temurin' # Standardize the distribution
           cache: maven
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven
 
       - name: Run Unit Tests
         run: mvn clean test
-
-      - name: Publish Test Results
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: test-reports
-          path: '**/target/surefire-reports'
-          retention-days: 5
