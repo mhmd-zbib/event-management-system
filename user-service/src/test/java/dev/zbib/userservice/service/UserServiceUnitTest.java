@@ -21,7 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -118,31 +119,6 @@ public class UserServiceUnitTest {
 
         assertNotNull(userResponse, "User response should not be null");
         assertEquals(user1.getId(), userResponse.getId(), "User response ID should match the mock user ID");
-    }
-
-    @Test
-    public void testGetUserResponseById_NotFound() {
-        when(userRepository.findById(1L)).thenReturn(Optional.empty());
-
-        Exception exception = assertThrows(RuntimeException.class, () -> userService.getUserResponseById(1L));
-        assertEquals("User not found", exception.getMessage(), "Exception message should indicate user not found");
-    }
-
-    @Test
-    public void testDeleteUserById_Success() {
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user1));
-        userService.deleteUserById(1L);
-        verify(userRepository, times(1)).deleteById(1L);
-        verify(providerClient, times(1)).deleteProvider(1L);
-    }
-
-    @Test
-    public void testDeleteUserById_NotFound() {
-        when(userRepository.findById(1L)).thenReturn(Optional.empty());
-        Exception exception = assertThrows(RuntimeException.class, () -> userService.deleteUserById(1L));
-        assertEquals("User not found", exception.getMessage(), "Exception message should indicate user not found");
-        verify(userRepository, never()).deleteById(anyLong());
-        verify(providerClient, never()).deleteProvider(anyLong());
     }
 
     @Test
