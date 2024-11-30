@@ -1,9 +1,11 @@
 package dev.zbib.userservice.model.entity;
 
+import dev.zbib.userservice.model.enums.UserRoles;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -35,6 +37,12 @@ public class User {
     @Column(nullable = true)
     private String profilePicture;
 
+    @Enumerated(EnumType.STRING)
+    private UserRoles role;
+
     @Embedded
     private Address address;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Favorite> favorites;
 }

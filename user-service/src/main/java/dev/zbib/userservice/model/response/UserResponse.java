@@ -12,8 +12,8 @@ public class UserResponse {
     private Long id;
     private String firstName;
     private String lastName;
-    private String phoneNumber;
-    private LocalDate birthDate;
     private String profilePicture;
+    private LocalDate birthDate;
     private Address address;
+    private String phoneNumber;
 }

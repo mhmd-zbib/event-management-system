@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class LoggingAspect {
 
     // Log method execution before the actual method is called (for all layers)
-    @Before("execution(* dev.zbib.providerservice..*(..))")
+    @Before("execution(* dev.zbib.userservice..*(..))")
     public void logMethodExecution(JoinPoint joinPoint) {
         String layer = getLayer(joinPoint);
         String methodName = getMethodName(joinPoint);
@@ -21,15 +21,17 @@ public class LoggingAspect {
     }
 
     // Log method return value after the method is executed (for all layers)
-    @AfterReturning(value = "execution(* dev.zbib.providerservice..*(..))", returning = "result")
-    public void logMethodReturn(JoinPoint joinPoint, Object result) {
+    @AfterReturning(value = "execution(* dev.zbib.userservice..*(..))", returning = "result")
+    public void logMethodReturn(
+            JoinPoint joinPoint,
+            Object result) {
         String layer = getLayer(joinPoint);
         String methodName = getMethodName(joinPoint);
         log.info("[{}] Method executed: {} returned: {}", layer, methodName, result);
     }
 
     // Log method execution time and status after method execution (for all layers)
-    @After("execution(* dev.zbib.providerservice..*(..))")
+    @After("execution(* dev.zbib.userservice..*(..))")
     public void logMethodExit(JoinPoint joinPoint) {
         String layer = getLayer(joinPoint);
         String methodName = getMethodName(joinPoint);
@@ -37,8 +39,10 @@ public class LoggingAspect {
     }
 
     // Log exceptions thrown by any method (for all layers)
-    @AfterThrowing(value = "execution(* dev.zbib.providerservice..*(..))", throwing = "exception")
-    public void logMethodException(JoinPoint joinPoint, Throwable exception) {
+    @AfterThrowing(value = "execution(* dev.zbib.userservice..*(..))", throwing = "exception")
+    public void logMethodException(
+            JoinPoint joinPoint,
+            Throwable exception) {
         String layer = getLayer(joinPoint);
         String methodName = getMethodName(joinPoint);
         log.error("[{}] Method execution failed: {} with exception: {}", layer, methodName, exception.getMessage());
@@ -60,14 +64,16 @@ public class LoggingAspect {
 
     // Helper method to remove the package prefix from the class name
     private String getClassName(JoinPoint joinPoint) {
-        String className = joinPoint.getSignature().getDeclaringTypeName();
-        // Remove the package prefix `dev.zbib.providerservice`
-        return className.replace("dev.zbib.providerservice", "");
+        String className = joinPoint.getSignature()
+                .getDeclaringTypeName();
+        // Remove the package prefix `dev.zbib.userservice`
+        return className.replace("dev.zbib.userservice", "");
     }
 
     // Helper method to get the method name without package prefix
     private String getMethodName(JoinPoint joinPoint) {
-        return joinPoint.getSignature().getName();
+        return joinPoint.getSignature()
+                .getName();
     }
 
     // Helper method to format arguments for logging
