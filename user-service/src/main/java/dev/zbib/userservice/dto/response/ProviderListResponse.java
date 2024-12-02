@@ -1,4 +1,4 @@
-package dev.zbib.userservice.model.response;
+package dev.zbib.userservice.dto.response;
 
 import lombok.Builder;
 import lombok.Data;

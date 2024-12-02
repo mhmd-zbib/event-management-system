@@ -1,15 +1,21 @@
 package dev.zbib.bookingservice.controller;
 
-import dev.zbib.bookingservice.model.request.CreateBookingRequest;
+import dev.zbib.bookingservice.model.request.CreateDirectBookingRequest;
+import dev.zbib.bookingservice.model.request.CreateOpenBookingRequest;
 import org.springframework.web.bind.annotation.*;
 
 @RestController("/booking")
 public class BookingController {
 
-    @PostMapping
-    public void createBooking(@RequestBody CreateBookingRequest req) {
+    @PostMapping("/direct")
+    public void createDirectBooking(@RequestBody CreateDirectBookingRequest req) {
         // call the booking service to create a booking
         // return the booking id, the status and te time for it, and put if a provider is assigned
+    }
+
+    @PostMapping("/open")
+    public void createOpenBooking(@RequestBody CreateOpenBookingRequest req) {
+
     }
 
     @GetMapping
@@ -21,7 +27,7 @@ public class BookingController {
 
     @PutMapping("/{id}")
     public void updateBooking(
-            @RequestBody UpdateBookingRequest req,
+            // @RequestBody UpdateBookingRequest req,
             @PathVariable Long id) {
         // cal the booking and update the info
         // return its info

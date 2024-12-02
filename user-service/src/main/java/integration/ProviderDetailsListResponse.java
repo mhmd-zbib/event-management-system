@@ -1,11 +1,11 @@
-package dev.zbib.userservice.model.response;
+package integration;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class ProviderDetailsListClientResponse {
+public class ProviderDetailsListResponse {
     private Long id;
     private String serviceType;
     private double rating;

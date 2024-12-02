@@ -1,11 +1,11 @@
 package dev.zbib.userservice.service;
 
 import dev.zbib.userservice.client.ProviderClient;
-import dev.zbib.userservice.model.entity.Favorite;
-import dev.zbib.userservice.model.entity.User;
-import dev.zbib.userservice.model.response.ProviderDetailsListClientResponse;
-import dev.zbib.userservice.model.response.ProviderListResponse;
-import dev.zbib.userservice.model.response.UserListResponse;
+import dev.zbib.userservice.entity.Favorite;
+import dev.zbib.userservice.entity.User;
+import integration.ProviderDetailsListResponse;
+import dev.zbib.userservice.dto.response.ProviderListResponse;
+import dev.zbib.userservice.dto.response.UserListResponse;
 import dev.zbib.userservice.repository.FavoriteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static dev.zbib.userservice.model.mappers.UserMapper.toProviderListResponse;
+import static dev.zbib.userservice.mapper.UserMapper.toProviderListResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -47,11 +47,11 @@ public class FavoriteService {
         List<Long> favoriteProviderIdList = favoriteProviderIdPage.getContent();
 
         List<UserListResponse> userList = userService.getUserListResponseByIdList(favoriteProviderIdList);
-        List<ProviderDetailsListClientResponse> providerDetailsList = providerClient.getProviderDetailsListById(
+        List<ProviderDetailsListResponse> providerDetailsList = providerClient.getProviderDetailsListById(
                 favoriteProviderIdList);
 
-        Map<Long, ProviderDetailsListClientResponse> providerDetailsMap = providerDetailsList.stream()
-                .collect(Collectors.toMap(ProviderDetailsListClientResponse::getId, provider -> provider));
+        Map<Long, ProviderDetailsListResponse> providerDetailsMap = providerDetailsList.stream()
+                .collect(Collectors.toMap(ProviderDetailsListResponse::getId, provider -> provider));
 
         List<ProviderListResponse> providerList = toProviderListResponse(userList, providerDetailsMap);
         return new PageImpl<>(providerList, pageable, favoriteProviderIdPage.getTotalElements());

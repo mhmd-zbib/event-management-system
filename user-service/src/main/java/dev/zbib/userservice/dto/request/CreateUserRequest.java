@@ -1,6 +1,6 @@
-package dev.zbib.userservice.model.request;
+package dev.zbib.userservice.dto.request;
 
-import dev.zbib.userservice.model.entity.Address;
+import dev.zbib.userservice.entity.Address;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;

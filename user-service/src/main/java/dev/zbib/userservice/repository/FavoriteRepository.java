@@ -1,6 +1,6 @@
 package dev.zbib.userservice.repository;
 
-import dev.zbib.userservice.model.entity.Favorite;
+import dev.zbib.userservice.entity.Favorite;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

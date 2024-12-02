@@ -1,12 +1,13 @@
 package dev.zbib.userservice.service;
 
 import dev.zbib.userservice.client.ProviderClient;
-import dev.zbib.userservice.model.entity.User;
-import dev.zbib.userservice.model.enums.UserRoles;
-import dev.zbib.userservice.model.mappers.UserMapper;
-import dev.zbib.userservice.model.request.CreateUserRequest;
-import dev.zbib.userservice.model.response.UserListResponse;
-import dev.zbib.userservice.model.response.UserResponse;
+import dev.zbib.userservice.entity.User;
+import dev.zbib.userservice.enums.UserRoles;
+import dev.zbib.userservice.mapper.UserMapper;
+import dev.zbib.userservice.dto.request.CreateUserRequest;
+import integration.UserStatusResponse;
+import dev.zbib.userservice.dto.response.UserListResponse;
+import dev.zbib.userservice.dto.response.UserResponse;
 import dev.zbib.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static dev.zbib.userservice.model.mappers.UserMapper.toUser;
-import static dev.zbib.userservice.model.mappers.UserMapper.toUserResponse;
+import static dev.zbib.userservice.mapper.UserMapper.toUser;
+import static dev.zbib.userservice.mapper.UserMapper.toUserResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -64,4 +65,10 @@ public class UserService {
         user.setRole(role);
         userRepository.save(user);
     }
+
+    public UserStatusResponse getUserBookingInfo(Long id) {
+        User user = getUserById(id);
+        UserStatusResponse response = UserStatusResponse.
+    }
+
 }
