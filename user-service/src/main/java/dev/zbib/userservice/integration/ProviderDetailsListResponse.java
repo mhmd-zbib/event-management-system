@@ -1,4 +1,4 @@
-package integration;
+package dev.zbib.userservice.integration;
 
 import lombok.Builder;
 import lombok.Data;

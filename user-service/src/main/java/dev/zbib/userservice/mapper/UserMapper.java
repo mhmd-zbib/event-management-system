@@ -2,7 +2,7 @@ package dev.zbib.userservice.mapper;
 
 import dev.zbib.userservice.entity.User;
 import dev.zbib.userservice.dto.request.CreateUserRequest;
-import integration.ProviderDetailsListResponse;
+import dev.zbib.userservice.integration.ProviderDetailsListResponse;
 import dev.zbib.userservice.dto.response.ProviderListResponse;
 import dev.zbib.userservice.dto.response.UserListResponse;
 import dev.zbib.userservice.dto.response.UserResponse;

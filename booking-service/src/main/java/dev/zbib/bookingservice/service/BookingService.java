@@ -1,9 +1,9 @@
 package dev.zbib.bookingservice.service;
 
 import dev.zbib.bookingservice.BookingRepository;
-import dev.zbib.bookingservice.model.entity.Booking;
-import dev.zbib.bookingservice.model.enums.BookingStatus;
-import dev.zbib.bookingservice.model.request.CreateDirectBookingRequest;
+import dev.zbib.bookingservice.dto.request.CreateDirectBookingRequest;
+import dev.zbib.bookingservice.entity.Booking;
+import dev.zbib.bookingservice.enums.BookingStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -16,14 +16,11 @@ import java.time.Instant;
 public class BookingService {
 
     private final BookingRepository bookingRepository;
+    private final UserService userService;
 
     public Long createDirectBooking(CreateDirectBookingRequest req) {
-        log.info("Starting direct booking creation");
-        log.info("Checking customer's info");
-        log.info("Checking provider's info");
-        log.info("Matching provider's job with service booked");
-        log.info("Checking provider's schedule");
-
+        userService.verifyUserStatus(req.getUserId());
+        userService.verifyProviderStatus(req.getProviderId());
 
         Booking booking = Booking.builder()
                 .userId(req.getUserId())

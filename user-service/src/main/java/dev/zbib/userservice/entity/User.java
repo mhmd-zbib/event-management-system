@@ -1,5 +1,6 @@
 package dev.zbib.userservice.entity;
 
+import dev.zbib.userservice.enums.AccountStatus;
 import dev.zbib.userservice.enums.UserRoles;
 import jakarta.persistence.*;
 import lombok.*;

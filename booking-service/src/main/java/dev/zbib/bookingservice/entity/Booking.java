@@ -1,6 +1,6 @@
-package dev.zbib.bookingservice.model.entity;
+package dev.zbib.bookingservice.entity;
 
-import dev.zbib.bookingservice.model.enums.BookingStatus;
+import dev.zbib.bookingservice.enums.BookingStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;

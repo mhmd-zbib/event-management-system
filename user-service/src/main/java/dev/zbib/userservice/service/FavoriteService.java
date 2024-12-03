@@ -3,7 +3,7 @@ package dev.zbib.userservice.service;
 import dev.zbib.userservice.client.ProviderClient;
 import dev.zbib.userservice.entity.Favorite;
 import dev.zbib.userservice.entity.User;
-import integration.ProviderDetailsListResponse;
+import dev.zbib.userservice.integration.ProviderDetailsListResponse;
 import dev.zbib.userservice.dto.response.ProviderListResponse;
 import dev.zbib.userservice.dto.response.UserListResponse;
 import dev.zbib.userservice.repository.FavoriteRepository;

@@ -1,7 +1,7 @@
 package dev.zbib.bookingservice.controller;
 
-import dev.zbib.bookingservice.model.request.CreateDirectBookingRequest;
-import dev.zbib.bookingservice.model.request.CreateOpenBookingRequest;
+import dev.zbib.bookingservice.dto.request.CreateDirectBookingRequest;
+import dev.zbib.bookingservice.dto.request.CreateOpenBookingRequest;
 import org.springframework.web.bind.annotation.*;
 
 @RestController("/booking")

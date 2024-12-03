@@ -1,7 +1,7 @@
 package dev.zbib.userservice.client;
 
 import dev.zbib.userservice.dto.request.RegisterProviderRequest;
-import integration.ProviderDetailsListResponse;
+import dev.zbib.userservice.integration.ProviderDetailsListResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;

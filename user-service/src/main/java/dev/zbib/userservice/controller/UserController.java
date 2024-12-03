@@ -1,10 +1,11 @@
 package dev.zbib.userservice.controller;
 
-import dev.zbib.userservice.enums.UserRoles;
 import dev.zbib.userservice.dto.request.CreateUserRequest;
 import dev.zbib.userservice.dto.response.ProviderListResponse;
 import dev.zbib.userservice.dto.response.UserListResponse;
 import dev.zbib.userservice.dto.response.UserResponse;
+import dev.zbib.userservice.dto.response.UserStatusResponse;
+import dev.zbib.userservice.enums.UserRoles;
 import dev.zbib.userservice.service.FavoriteService;
 import dev.zbib.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +60,12 @@ public class UserController {
         userService.setRole(id, role);
     }
 
+    @GetMapping("/{id}/status")
+    public ResponseEntity<UserStatusResponse> getUserStatus(@PathVariable Long id) {
+        UserStatusResponse userStatusResponse = userService.getUserStatus(id);
+        return ResponseEntity.ok(userStatusResponse);
+    }
+
     @GetMapping("/{id}/favorites")
     public ResponseEntity<Page<ProviderListResponse>> getFavoriteProviderPage(
             @PathVariable Long id,
@@ -68,7 +75,7 @@ public class UserController {
         return ResponseEntity.ok(favoriteService.getFavoriteProviderPage(id, pageable));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/booking")
     public ResponseEntity<String> getBookingPage(@PathVariable Long id) {
         /**
          * TODO: return the following:
@@ -82,7 +89,7 @@ public class UserController {
 
     //  INTERNAL
     @GetMapping()
-    public List<UserListResponse> getUserListByIds(@RequestParam List<Long> ids) {
+    public List<UserListResponse> getUserListResponseByIds(@RequestParam List<Long> ids) {
         return userService.getUserListResponseByIdList(ids);
     }
 }
