@@ -1,0 +1,18 @@
+logging:
+  level:
+    root: INFO
+
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      allowOverride: true
+server:
+  timezone: UTC
+  port: 8888
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-server:8761/eureka/

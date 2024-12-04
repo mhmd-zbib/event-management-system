@@ -2,15 +2,22 @@ package dev.zbib.bookingservice.controller;
 
 import dev.zbib.bookingservice.dto.request.CreateDirectBookingRequest;
 import dev.zbib.bookingservice.dto.request.CreateOpenBookingRequest;
+import dev.zbib.bookingservice.entity.Booking;
+import dev.zbib.bookingservice.service.BookingService;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("/booking")
+@RestController("/bookings")
 public class BookingController {
+
+    private final BookingService bookingService;
+
+    public BookingController(BookingService bookingService) {
+        this.bookingService = bookingService;
+    }
 
     @PostMapping("/direct")
     public void createDirectBooking(@RequestBody CreateDirectBookingRequest req) {
-        // call the booking service to create a booking
-        // return the booking id, the status and te time for it, and put if a provider is assigned
+        bookingService.createDirectBooking(req);
     }
 
     @PostMapping("/open")
@@ -19,10 +26,8 @@ public class BookingController {
     }
 
     @GetMapping
-    public void getBookingStatus(@PathVariable Long id) {
-        // call the service to get the details of the booking
-
-        // returns the id, status, provider assigned, and estimated time of arrival
+    public Booking getBooking(@PathVariable Long id) {
+        return bookingService.getBookingById(id);
     }
 
     @PutMapping("/{id}")
@@ -35,7 +40,19 @@ public class BookingController {
 
     @DeleteMapping("/{id}")
     public void cancelBooking(@PathVariable Long id) {
-        //  call service for deleting
+        bookingService.cancelBooking(id);
     }
 
+    @PatchMapping("/{id}/accept")
+    public void acceptBooking(
+            @PathVariable Long id) {
+        bookingService.acceptBooking(id);
+    }
+
+    @PatchMapping("/{id}/decline")
+    public void declineBooking(
+            @PathVariable Long id,
+            @RequestBody String reason) {
+        bookingService.declineBooking(id, reason);
+    }
 }

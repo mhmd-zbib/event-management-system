@@ -1,9 +1,9 @@
 package dev.zbib.bookingservice.service;
 
-import dev.zbib.bookingservice.BookingRepository;
 import dev.zbib.bookingservice.dto.request.CreateDirectBookingRequest;
 import dev.zbib.bookingservice.entity.Booking;
 import dev.zbib.bookingservice.enums.BookingStatus;
+import dev.zbib.bookingservice.repository.BookingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -16,12 +16,8 @@ import java.time.Instant;
 public class BookingService {
 
     private final BookingRepository bookingRepository;
-    private final UserService userService;
 
     public Long createDirectBooking(CreateDirectBookingRequest req) {
-        userService.verifyUserStatus(req.getUserId());
-        userService.verifyProviderStatus(req.getProviderId());
-
         Booking booking = Booking.builder()
                 .userId(req.getUserId())
                 .providerId(req.getProviderId())
@@ -35,5 +31,28 @@ public class BookingService {
                 .build();
         return bookingRepository.save(booking)
                 .getId();
+    }
+
+    public Booking getBookingById(Long id) {
+        return bookingRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Not found"));
+    }
+
+
+    public void acceptBooking(Long id) {
+        Booking booking = getBookingById(id);
+        booking.setStatus(BookingStatus.ACCEPTED);
+    }
+
+    public void declineBooking(
+            Long id,
+            String reason) {
+        Booking booking = getBookingById(id);
+        booking.setStatus(BookingStatus.DECLINED);
+    }
+
+    public void cancelBooking(Long id) {
+        Booking booking = getBookingById(id);
+        booking.setStatus(BookingStatus.CANCELED);
     }
 }

@@ -53,7 +53,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public void changeRole(
+    public void setUserRole(
             @PathVariable Long id,
             @RequestBody
             UserRoles role) {

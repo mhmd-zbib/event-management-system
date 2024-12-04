@@ -1,8 +1,8 @@
 package dev.zbib.providerservice.client;
 
-import dev.zbib.providerservice.model.enums.UserRoles;
-import dev.zbib.providerservice.model.response.UserClientResponse;
-import dev.zbib.providerservice.model.response.UserListClientResponse;
+import dev.zbib.providerservice.enums.UserRoles;
+import dev.zbib.shared.dto.UserResponse;
+import dev.zbib.shared.dto.UserListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class UserClient {
 
     private final WebClient.Builder webClientBuilder;
 
-    public List<UserListClientResponse> getUserListClientResponseByIdList(List<Long> ids) {
+    public List<UserListResponse> getUserListClientResponseByIdList(List<Long> ids) {
         return webClientBuilder.baseUrl("http://user-service")
                 .build()
                 .get()
@@ -29,23 +29,23 @@ public class UserClient {
                                         .toArray(String[]::new)))
                         .build())
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<UserListClientResponse>>() {
+                .bodyToMono(new ParameterizedTypeReference<List<UserListResponse>>() {
                 })
                 .block();
     }
 
-    public UserClientResponse getUserClientResponseById(Long id) {
+    public UserResponse getUserClientResponseById(Long id) {
         return webClientBuilder.baseUrl("http://user-service")
                 .build()
                 .get()
                 .uri(uriBuilder -> uriBuilder.path("/users/{id}")
                         .build(id))
                 .retrieve()
-                .bodyToMono(UserClientResponse.class)
+                .bodyToMono(UserResponse.class)
                 .block();
     }
 
-    public void changeUserRole(
+    public void setUserRole(
             Long id,
             UserRoles role) {
         webClientBuilder.baseUrl("http://user-service")

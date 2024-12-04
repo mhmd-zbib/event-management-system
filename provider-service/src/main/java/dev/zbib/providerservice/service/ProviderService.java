@@ -1,13 +1,14 @@
 package dev.zbib.providerservice.service;
 
 import dev.zbib.providerservice.client.UserClient;
-import dev.zbib.providerservice.model.entity.Provider;
-import dev.zbib.providerservice.model.enums.ServiceType;
-import dev.zbib.providerservice.model.enums.UserRoles;
-import dev.zbib.providerservice.model.request.RegisterProviderRequest;
-import dev.zbib.providerservice.model.response.*;
+import dev.zbib.providerservice.entity.Provider;
+import dev.zbib.providerservice.enums.ServiceType;
+import dev.zbib.providerservice.enums.UserRoles;
+import dev.zbib.providerservice.dto.request.RegisterProviderRequest;
+import dev.zbib.providerservice.dto.response.*;
+import dev.zbib.shared.dto.UserResponse;
+import dev.zbib.shared.dto.UserListResponse;
 import dev.zbib.providerservice.repository.ProviderRepository;
-import dev.zbib.providerservice.specification.ProviderSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -17,8 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static dev.zbib.providerservice.model.mapper.DetailsMapper.toDetailsListResponse;
-import static dev.zbib.providerservice.model.mapper.ProviderMapper.*;
+import static dev.zbib.providerservice.mapper.DetailsMapper.toDetailsListResponse;
+import static dev.zbib.providerservice.mapper.ProviderMapper.*;
 
 @Log4j2
 @Service
@@ -35,7 +36,7 @@ public class ProviderService {
         if (checkProviderExists(request.getId())) {
             throw new IllegalArgumentException("User with id " + request.getId() + " is already a provider");
         }
-        userClient.changeUserRole(request.getId(), UserRoles.PROVIDER);
+        userClient.setUserRole(request.getId(), UserRoles.PROVIDER);
         Provider provider = toProvider(request);
         providerRepository.save(provider);
     }
@@ -51,7 +52,7 @@ public class ProviderService {
 
     public ProviderResponse getProviderResponseById(Long id) {
         Provider provider = getProviderById(id);
-        UserClientResponse userClientResponse = userClient.getUserClientResponseById(id);
+        UserResponse userClientResponse = userClient.getUserClientResponseById(id);
         return toProviderResponse(provider, userClientResponse);
     }
 
@@ -73,7 +74,7 @@ public class ProviderService {
         List<Long> userIds = providerPage.stream()
                 .map(Provider::getId)
                 .toList();
-        List<UserListClientResponse> users = userClient.getUserListClientResponseByIdList(userIds);
+        List<UserListResponse> users = userClient.getUserListClientResponseByIdList(userIds);
         List<ProviderListResponse> providerList = toProviderListResponse(providerPage.getContent(), users);
 
         return new PageImpl<>(providerList, pageable, providerPage.getTotalElements());

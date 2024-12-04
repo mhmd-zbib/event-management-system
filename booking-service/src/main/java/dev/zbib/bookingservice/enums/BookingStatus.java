@@ -1,5 +1,5 @@
 package dev.zbib.bookingservice.enums;
 
 public enum BookingStatus {
-    PENDING, COMPLETED, CANCELED
+    PENDING, COMPLETED, CANCELED, ACCEPTED, DECLINED
 }
