@@ -1,6 +1,5 @@
 package dev.zbib.shared.dto;
 
-import dev.zbib.providerservice.entity.Address;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,6 +13,6 @@ public class UserResponse {
     private String lastName;
     private String profilePicture;
     private LocalDate birthDate;
-    private Address address;
+    //    private Address address;
     private String phoneNumber;
 }

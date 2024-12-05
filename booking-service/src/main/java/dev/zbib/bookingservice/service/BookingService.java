@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +18,7 @@ public class BookingService {
     private final BookingRepository bookingRepository;
 
     public Long createDirectBooking(CreateDirectBookingRequest req) {
+
         Booking booking = Booking.builder()
                 .userId(req.getUserId())
                 .providerId(req.getProviderId())
@@ -26,8 +27,9 @@ public class BookingService {
                 .description(req.getDescription())
                 .additionalInfo(req.getAdditionalInfo())
                 .status(BookingStatus.PENDING)
-                .createAt(Instant.now())
-                .bookingDate(req.getBookingDate())
+                .createdAt(LocalDateTime.now())
+                .bookingDate(req.getBookingDate()
+                        .toLocalDateTime())
                 .build();
         return bookingRepository.save(booking)
                 .getId();
@@ -38,21 +40,22 @@ public class BookingService {
                 .orElseThrow(() -> new IllegalArgumentException("Not found"));
     }
 
-
     public void acceptBooking(Long id) {
         Booking booking = getBookingById(id);
         booking.setStatus(BookingStatus.ACCEPTED);
+        bookingRepository.save(booking);
     }
 
     public void declineBooking(
-            Long id,
-            String reason) {
+            Long id) {
         Booking booking = getBookingById(id);
         booking.setStatus(BookingStatus.DECLINED);
+        bookingRepository.save(booking);
     }
 
     public void cancelBooking(Long id) {
         Booking booking = getBookingById(id);
         booking.setStatus(BookingStatus.CANCELED);
+        bookingRepository.save(booking);
     }
 }

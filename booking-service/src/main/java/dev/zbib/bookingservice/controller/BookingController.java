@@ -1,12 +1,12 @@
 package dev.zbib.bookingservice.controller;
 
 import dev.zbib.bookingservice.dto.request.CreateDirectBookingRequest;
-import dev.zbib.bookingservice.dto.request.CreateOpenBookingRequest;
 import dev.zbib.bookingservice.entity.Booking;
 import dev.zbib.bookingservice.service.BookingService;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("/bookings")
+@RestController
+@RequestMapping("/bookings")
 public class BookingController {
 
     private final BookingService bookingService;
@@ -15,17 +15,12 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    @PostMapping("/direct")
+    @PostMapping
     public void createDirectBooking(@RequestBody CreateDirectBookingRequest req) {
         bookingService.createDirectBooking(req);
     }
 
-    @PostMapping("/open")
-    public void createOpenBooking(@RequestBody CreateOpenBookingRequest req) {
-
-    }
-
-    @GetMapping
+    @GetMapping("/{id}")
     public Booking getBooking(@PathVariable Long id) {
         return bookingService.getBookingById(id);
     }
@@ -51,8 +46,7 @@ public class BookingController {
 
     @PatchMapping("/{id}/decline")
     public void declineBooking(
-            @PathVariable Long id,
-            @RequestBody String reason) {
-        bookingService.declineBooking(id, reason);
+            @PathVariable Long id) {
+        bookingService.declineBooking(id);
     }
 }
