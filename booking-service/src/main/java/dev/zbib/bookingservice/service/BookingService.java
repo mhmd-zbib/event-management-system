@@ -1,9 +1,9 @@
 package dev.zbib.bookingservice.service;
 
-import dev.zbib.bookingservice.model.request.CreateDirectBookingRequest;
 import dev.zbib.bookingservice.model.entity.Booking;
-import dev.zbib.shared.enums.BookingStatus;
+import dev.zbib.bookingservice.model.request.CreateDirectBookingRequest;
 import dev.zbib.bookingservice.repository.BookingRepository;
+import dev.zbib.shared.enums.BookingStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,6 @@ public class BookingService {
     private final BookingRepository bookingRepository;
 
     public Long createDirectBooking(CreateDirectBookingRequest req) {
-
         Booking booking = Booking.builder()
                 .userId(req.getUserId())
                 .providerId(req.getProviderId())
@@ -49,13 +48,13 @@ public class BookingService {
     public void declineBooking(
             Long id) {
         Booking booking = getBookingById(id);
-        booking.setStatus(BookingStatus.DECLINED);
+        booking.setStatus(BookingStatus.REJECTED);
         bookingRepository.save(booking);
     }
 
     public void cancelBooking(Long id) {
         Booking booking = getBookingById(id);
-        booking.setStatus(BookingStatus.CANCELED);
+        booking.setStatus(BookingStatus.CANCELLED);
         bookingRepository.save(booking);
     }
 }

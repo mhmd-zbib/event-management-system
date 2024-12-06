@@ -1,32 +1,13 @@
 package dev.zbib.bookingservice.client;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
+import dev.zbib.shared.dto.UserDetailsResponse;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
-@Component
-@RequiredArgsConstructor
-@Log4j2
-public class UserClient {
-    private final WebClient.Builder webClientBuilder;
-    private static final String USER_SERVICE_URL = "http://user-service";
-
-    public UserDetailsResponse getUserDetails(Long userId) {
-        return webClientBuilder.build()
-                .get()
-                .uri(USER_SERVICE_URL + "/users/{id}", userId)
-                .retrieve()
-                .bodyToMono(UserDetailsResponse.class)
-                .block();
-    }
-
-    public void validateUser(Long userId) {
-        webClientBuilder.build()
-                .get()
-                .uri(USER_SERVICE_URL + "/users/{id}/status", userId)
-                .retrieve()
-                .bodyToMono(Void.class)
-                .block();
-    }
+@FeignClient(name = "user-service")
+public interface UserClient {
+    
+    @GetMapping("/users/{userId}/details")
+    UserDetailsResponse getUserDetails(@PathVariable("userId") Long userId);
 }
