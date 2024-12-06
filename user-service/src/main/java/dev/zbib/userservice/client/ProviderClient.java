@@ -1,6 +1,6 @@
 package dev.zbib.userservice.client;
 
-import dev.zbib.userservice.dto.request.RegisterProviderRequest;
+import dev.zbib.userservice.model.request.RegisterProviderRequest;
 import dev.zbib.userservice.integration.ProviderDetailsListResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,8 +1,8 @@
 package dev.zbib.bookingservice.service;
 
-import dev.zbib.bookingservice.dto.request.CreateDirectBookingRequest;
-import dev.zbib.bookingservice.entity.Booking;
-import dev.zbib.bookingservice.enums.BookingStatus;
+import dev.zbib.bookingservice.model.request.CreateDirectBookingRequest;
+import dev.zbib.bookingservice.model.entity.Booking;
+import dev.zbib.shared.enums.BookingStatus;
 import dev.zbib.bookingservice.repository.BookingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

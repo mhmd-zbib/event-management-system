@@ -1,11 +1,10 @@
 package dev.zbib.userservice.controller;
 
-import dev.zbib.userservice.dto.request.CreateUserRequest;
-import dev.zbib.userservice.dto.response.ProviderListResponse;
-import dev.zbib.userservice.dto.response.UserListResponse;
-import dev.zbib.userservice.dto.response.UserResponse;
-import dev.zbib.userservice.dto.response.UserStatusResponse;
-import dev.zbib.userservice.enums.UserRoles;
+import dev.zbib.userservice.model.request.CreateUserRequest;
+import dev.zbib.userservice.model.response.ProviderListResponse;
+import dev.zbib.userservice.model.response.UserListResponse;
+import dev.zbib.userservice.model.response.UserResponse;
+import dev.zbib.shared.enums.UserRoles;
 import dev.zbib.userservice.service.FavoriteService;
 import dev.zbib.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;

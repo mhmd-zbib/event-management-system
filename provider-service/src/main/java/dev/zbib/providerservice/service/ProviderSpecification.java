@@ -1,7 +1,7 @@
 package dev.zbib.providerservice.service;
 
-import dev.zbib.providerservice.entity.Provider;
-import dev.zbib.providerservice.enums.ServiceType;
+import dev.zbib.providerservice.model.entity.Provider;
+import dev.zbib.shared.enums.ServiceType;
 import org.springframework.data.jpa.domain.Specification;
 
 public class ProviderSpecification {

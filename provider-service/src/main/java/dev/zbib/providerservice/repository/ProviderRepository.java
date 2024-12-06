@@ -1,6 +1,6 @@
 package dev.zbib.providerservice.repository;
 
-import dev.zbib.providerservice.entity.Provider;
+import dev.zbib.providerservice.model.entity.Provider;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

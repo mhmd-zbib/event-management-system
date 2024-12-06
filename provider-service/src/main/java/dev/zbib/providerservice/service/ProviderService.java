@@ -1,14 +1,16 @@
 package dev.zbib.providerservice.service;
 
 import dev.zbib.providerservice.client.UserClient;
-import dev.zbib.providerservice.entity.Provider;
-import dev.zbib.providerservice.enums.ServiceType;
-import dev.zbib.providerservice.enums.UserRoles;
-import dev.zbib.providerservice.dto.request.RegisterProviderRequest;
-import dev.zbib.providerservice.dto.response.*;
-import dev.zbib.shared.dto.UserResponse;
-import dev.zbib.shared.dto.UserListResponse;
+import dev.zbib.providerservice.model.entity.Provider;
+import dev.zbib.providerservice.model.request.RegisterProviderRequest;
+import dev.zbib.providerservice.model.response.DetailsListResponse;
+import dev.zbib.providerservice.model.response.ProviderListResponse;
+import dev.zbib.providerservice.model.response.ProviderResponse;
 import dev.zbib.providerservice.repository.ProviderRepository;
+import dev.zbib.shared.dto.UserListResponse;
+import dev.zbib.shared.dto.UserResponse;
+import dev.zbib.shared.enums.ServiceType;
+import dev.zbib.shared.enums.UserRoles;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -18,8 +20,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static dev.zbib.providerservice.mapper.DetailsMapper.toDetailsListResponse;
-import static dev.zbib.providerservice.mapper.ProviderMapper.*;
+import static dev.zbib.providerservice.model.mapper.DetailsMapper.toDetailsListResponse;
+import static dev.zbib.providerservice.model.mapper.ProviderMapper.*;
 
 @Log4j2
 @Service

@@ -1,7 +1,7 @@
 package dev.zbib.bookingservice.controller;
 
-import dev.zbib.bookingservice.dto.request.CreateDirectBookingRequest;
-import dev.zbib.bookingservice.entity.Booking;
+import dev.zbib.bookingservice.model.request.CreateDirectBookingRequest;
+import dev.zbib.bookingservice.model.entity.Booking;
 import dev.zbib.bookingservice.service.BookingService;
 import org.springframework.web.bind.annotation.*;
 

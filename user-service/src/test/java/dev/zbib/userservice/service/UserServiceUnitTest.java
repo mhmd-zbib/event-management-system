@@ -1,12 +1,12 @@
 package dev.zbib.userservice.service;
 
 import dev.zbib.userservice.client.ProviderClient;
-import dev.zbib.userservice.entity.Address;
-import dev.zbib.userservice.entity.User;
-import dev.zbib.userservice.enums.UserRoles;
-import dev.zbib.userservice.dto.request.CreateUserRequest;
-import dev.zbib.userservice.dto.response.UserListResponse;
-import dev.zbib.userservice.dto.response.UserResponse;
+import dev.zbib.userservice.model.entity.Address;
+import dev.zbib.userservice.model.entity.User;
+import dev.zbib.shared.enums.UserRoles;
+import dev.zbib.userservice.model.request.CreateUserRequest;
+import dev.zbib.userservice.model.response.UserListResponse;
+import dev.zbib.userservice.model.response.UserResponse;
 import dev.zbib.userservice.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

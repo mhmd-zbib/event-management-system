@@ -1,10 +1,10 @@
 package dev.zbib.providerservice.controller;
 
-import dev.zbib.providerservice.enums.ServiceType;
-import dev.zbib.providerservice.dto.request.RegisterProviderRequest;
-import dev.zbib.providerservice.dto.response.DetailsListResponse;
-import dev.zbib.providerservice.dto.response.ProviderListResponse;
-import dev.zbib.providerservice.dto.response.ProviderResponse;
+import dev.zbib.shared.enums.ServiceType;
+import dev.zbib.providerservice.model.request.RegisterProviderRequest;
+import dev.zbib.providerservice.model.response.DetailsListResponse;
+import dev.zbib.providerservice.model.response.ProviderListResponse;
+import dev.zbib.providerservice.model.response.ProviderResponse;
 import dev.zbib.providerservice.service.ProviderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

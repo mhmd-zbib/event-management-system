@@ -1,8 +1,8 @@
 package dev.zbib.providerservice.client;
 
-import dev.zbib.providerservice.enums.UserRoles;
-import dev.zbib.shared.dto.UserResponse;
 import dev.zbib.shared.dto.UserListResponse;
+import dev.zbib.shared.dto.UserResponse;
+import dev.zbib.shared.enums.UserRoles;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;

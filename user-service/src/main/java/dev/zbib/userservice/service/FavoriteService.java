@@ -1,11 +1,11 @@
 package dev.zbib.userservice.service;
 
 import dev.zbib.userservice.client.ProviderClient;
-import dev.zbib.userservice.entity.Favorite;
-import dev.zbib.userservice.entity.User;
-import dev.zbib.userservice.integration.ProviderDetailsListResponse;
-import dev.zbib.userservice.dto.response.ProviderListResponse;
-import dev.zbib.userservice.dto.response.UserListResponse;
+import dev.zbib.userservice.model.entity.Favorite;
+import dev.zbib.userservice.model.entity.User;
+import dev.zbib.userservice.model.response.ProviderDetailsListResponse;
+import dev.zbib.userservice.model.response.ProviderListResponse;
+import dev.zbib.userservice.model.response.UserListResponse;
 import dev.zbib.userservice.repository.FavoriteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static dev.zbib.userservice.mapper.UserMapper.toProviderListResponse;
+import static dev.zbib.userservice.model.mapper.UserMapper.toProviderListResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +43,7 @@ public class FavoriteService {
             Long userId,
             Pageable pageable) {
         Page<Long> favoriteProviderIdPage = favoriteRepository.findProviderIdsByUserId(userId, pageable);
-        
+
         List<Long> favoriteProviderIdList = favoriteProviderIdPage.getContent();
 
         List<UserListResponse> userList = userService.getUserListResponseByIdList(favoriteProviderIdList);
