@@ -20,4 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "FROM User u LEFT JOIN u.address a WHERE u.id = :id")
     UserResponse findUserResponseById(Long id);
 
+    boolean existsByPhoneNumber(String phoneNumber);
+
 }
