@@ -1,18 +1,25 @@
 package dev.zbib.shared.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import dev.zbib.shared.enums.AccountStatus;
+import dev.zbib.shared.enums.UserRoles;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Data
-@Builder
+@Getter
+@Setter
+@AllArgsConstructor
 public class UserResponse {
     private Long id;
     private String firstName;
     private String lastName;
-    private String profilePicture;
-    private LocalDate birthDate;
-    //    private Address address;
     private String phoneNumber;
+    private LocalDate birthDate;
+    private String profilePicture;
+    private UserRoles role;
+    private AccountStatus status;
+    private boolean isVerified;
+    private boolean isBlocked;
 }

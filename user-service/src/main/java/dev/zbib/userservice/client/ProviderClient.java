@@ -1,6 +1,5 @@
 package dev.zbib.userservice.client;
 
-import dev.zbib.shared.dto.ProviderDetailsResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

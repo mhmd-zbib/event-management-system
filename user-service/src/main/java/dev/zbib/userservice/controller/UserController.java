@@ -2,7 +2,7 @@ package dev.zbib.userservice.controller;
 
 import dev.zbib.userservice.dto.request.CreateUserRequest;
 import dev.zbib.userservice.dto.response.UserListResponse;
-import dev.zbib.userservice.dto.response.UserResponse;
+import dev.zbib.shared.dto.UserResponse;
 import dev.zbib.userservice.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

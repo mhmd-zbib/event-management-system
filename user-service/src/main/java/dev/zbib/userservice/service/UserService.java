@@ -6,7 +6,7 @@ import dev.zbib.shared.enums.UserRoles;
 import dev.zbib.shared.exception.ResourceNotFoundException;
 import dev.zbib.userservice.dto.request.CreateUserRequest;
 import dev.zbib.userservice.dto.response.UserListResponse;
-import dev.zbib.userservice.dto.response.UserResponse;
+import dev.zbib.shared.dto.UserResponse;
 import dev.zbib.userservice.entity.User;
 import dev.zbib.userservice.repository.UserRepository;
 import jakarta.validation.Valid;

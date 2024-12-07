@@ -1,18 +1,14 @@
-package dev.zbib.userservice.dto.response;
+package dev.zbib.providerservice.dto.response;
 
 import dev.zbib.shared.enums.AccountStatus;
+import dev.zbib.shared.enums.ServiceType;
 import dev.zbib.shared.enums.UserRoles;
-import dev.zbib.userservice.entity.Address;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
-@AllArgsConstructor
-public class UserResponse {
+@Builder
+public class ProviderResponse {
     private Long id;
     private String firstName;
     private String lastName;
@@ -23,5 +19,10 @@ public class UserResponse {
     private AccountStatus status;
     private boolean isVerified;
     private boolean isBlocked;
-    private Address address;
+    private String bio;
+    private ServiceType serviceType;
+    private double hourlyRate;
+    private String serviceArea;
+    private double rating;
+    private boolean available;
 }

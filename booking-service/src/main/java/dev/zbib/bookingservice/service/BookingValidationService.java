@@ -4,7 +4,6 @@ import dev.zbib.bookingservice.client.ProviderClient;
 import dev.zbib.bookingservice.client.UserClient;
 import dev.zbib.bookingservice.exception.BookingValidationException;
 import dev.zbib.bookingservice.repository.BookingRepository;
-import dev.zbib.shared.dto.UserDetailsResponse;
 import dev.zbib.shared.enums.AccountStatus;
 import dev.zbib.shared.enums.BookingStatus;
 import dev.zbib.shared.enums.UserRoles;

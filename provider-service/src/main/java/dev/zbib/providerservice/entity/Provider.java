@@ -1,8 +1,12 @@
 package dev.zbib.providerservice.entity;
 
+import dev.zbib.shared.constant.ErrorMessages;
 import dev.zbib.shared.enums.ServiceType;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -16,19 +20,14 @@ import java.time.LocalDateTime;
 @Table(name = "providers")
 public class Provider {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "User ID cannot be null")
-    @Column(unique = true, nullable = false)
-    private Long userId;
-
-    @NotNull(message = "Bio cannot be null")
-    @Size(min = 10, max = 500)
+    @NotNull(message = ErrorMessages.Provider.BIO_REQUIRED)
+    @Size(min = 10, max = 500, message = ErrorMessages.Provider.BIO_SIZE)
     @Column(nullable = false)
     private String bio;
 
-    @NotNull(message = "Service type cannot be null")
+    @NotNull(message = ErrorMessages.Provider.SERVICE_TYPE_REQUIRED)
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ServiceType serviceType;
@@ -41,11 +40,11 @@ public class Provider {
     @Column(nullable = false)
     private boolean available;
 
-    @DecimalMin(value = "0.0")
+    @DecimalMin(value = "0.0", message = ErrorMessages.Provider.MIN_HOURLY_RATE)
     @Column(nullable = false)
     private Double hourlyRate;
 
-    @NotNull(message = "Service area cannot be null")
+    @NotNull(message = ErrorMessages.Provider.SERVICE_AREA_REQUIRED)
     @Size(min = 5, max = 100)
     @Column(nullable = false)
     private String serviceArea;

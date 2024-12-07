@@ -23,4 +23,13 @@ public class ErrorMessages {
         public static final String INVALID_BIRTH_DATE = "Birth date must be a valid date in the past.";
     }
 
+    public static class Provider {
+        public static final String BIO_REQUIRED = "Bio is required";
+        public static final String SERVICE_TYPE_REQUIRED = "Service type is required";
+        public static final String SERVICE_AREA_REQUIRED = "Service are required";
+        public static final String BIO_SIZE = "Bio needs to be between 10 and 500 character";
+        public static final String MIN_HOURLY_RATE = "Hourly rate can't be negative";
+        public static final String NOT_FOUND = "Provider not found";
+    }
+
 }

@@ -1,7 +1,7 @@
 package dev.zbib.userservice.repository;
 
 import dev.zbib.userservice.dto.response.UserListResponse;
-import dev.zbib.userservice.dto.response.UserResponse;
+import dev.zbib.shared.dto.UserResponse;
 import dev.zbib.userservice.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
