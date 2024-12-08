@@ -1,6 +1,5 @@
 package dev.zbib.providerservice.entity;
 
-import dev.zbib.shared.constant.ErrorMessages;
 import dev.zbib.shared.enums.ServiceType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
@@ -22,12 +21,12 @@ public class Provider {
     @Id
     private Long id;
 
-    @NotNull(message = ErrorMessages.Provider.BIO_REQUIRED)
-    @Size(min = 10, max = 500, message = ErrorMessages.Provider.BIO_SIZE)
+    @NotNull(message = BaseException.Provider.BIO_REQUIRED)
+    @Size(min = 10, max = 500, message = BaseException.Provider.BIO_SIZE)
     @Column(nullable = false)
     private String bio;
 
-    @NotNull(message = ErrorMessages.Provider.SERVICE_TYPE_REQUIRED)
+    @NotNull(message = BaseException.Provider.SERVICE_TYPE_REQUIRED)
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ServiceType serviceType;
@@ -40,11 +39,11 @@ public class Provider {
     @Column(nullable = false)
     private boolean available;
 
-    @DecimalMin(value = "0.0", message = ErrorMessages.Provider.MIN_HOURLY_RATE)
+    @DecimalMin(value = "0.0", message = BaseException.Provider.MIN_HOURLY_RATE)
     @Column(nullable = false)
     private Double hourlyRate;
 
-    @NotNull(message = ErrorMessages.Provider.SERVICE_AREA_REQUIRED)
+    @NotNull(message = BaseException.Provider.SERVICE_AREA_REQUIRED)
     @Size(min = 5, max = 100)
     @Column(nullable = false)
     private String serviceArea;

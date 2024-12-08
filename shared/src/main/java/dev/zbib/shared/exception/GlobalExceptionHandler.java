@@ -1,68 +1,54 @@
 package dev.zbib.shared.exception;
 
+import dev.zbib.shared.constant.SystemExceptionMessage;
 import dev.zbib.shared.dto.ErrorResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 
 import java.time.LocalDateTime;
 
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(
-            ResourceNotFoundException ex,
-            HttpServletRequest request) {
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .message(ex.getMessage())
-                .code(ex.getCode())
-                .path(request.getRequestURI())
-                .build();
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    private ObjectError error;
+
+    @ExceptionHandler(AppException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessException(AppException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), LocalDateTime.now());
+        return new ResponseEntity<>(errorResponse, ex.getHttpStatus());
     }
 
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ErrorResponse> handleBadRequestException(
-            BadRequestException ex,
-            HttpServletRequest request) {
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .message(ex.getMessage())
-                .code(ex.getCode())
-                .path(request.getRequestURI())
-                .build();
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(ServiceException.class)
-    public ResponseEntity<ErrorResponse> handleServiceException(
-            ServiceException ex,
-            HttpServletRequest request) {
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .message(ex.getMessage())
-                .code(ex.getCode())
-                .path(request.getRequestURI())
-                .build();
-        return new ResponseEntity<>(errorResponse, ex.getStatus());
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorResponse> handleGenericRuntimeException(RuntimeException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                SystemExceptionMessage.INTERNAL_SERVER_ERROR,
+                LocalDateTime.now());
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGenericException(
-            Exception ex,
-            HttpServletRequest request) {
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .message("An unexpected error occurred")
-                .code("INTERNAL_SERVER_ERROR")
-                .path(request.getRequestURI())
-                .build();
+    public ResponseEntity<ErrorResponse> handleAllUncaughtExceptions(Exception ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                SystemExceptionMessage.INTERNAL_SERVER_ERROR,
+                LocalDateTime.now());
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-} 
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(SystemExceptionMessage.VALIDATION_FAILED, LocalDateTime.now());
+        ex.getBindingResult()
+                .getFieldErrors()
+                .forEach(fieldError -> {
+                    String field = fieldError.getField();
+                    String message = fieldError.getDefaultMessage();
+                    errorResponse.addValidationError(field, message);
+                });
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+}

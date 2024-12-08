@@ -1,12 +1,11 @@
 package dev.zbib.userservice.service;
 
-import dev.zbib.shared.constant.ErrorMessages;
+import dev.zbib.shared.dto.UserResponse;
 import dev.zbib.shared.enums.AccountStatus;
 import dev.zbib.shared.enums.UserRoles;
-import dev.zbib.shared.exception.ResourceNotFoundException;
+import dev.zbib.shared.exception.UserException;
 import dev.zbib.userservice.dto.request.CreateUserRequest;
 import dev.zbib.userservice.dto.response.UserListResponse;
-import dev.zbib.shared.dto.UserResponse;
 import dev.zbib.userservice.entity.User;
 import dev.zbib.userservice.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -41,7 +40,7 @@ public class UserService {
 
     public User getUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.User.NOT_FOUND));
+                .orElseThrow(UserException::notFound);
     }
 
     public Page<UserListResponse> getUserListResponse(Pageable page) {

@@ -5,10 +5,9 @@ import dev.zbib.providerservice.dto.response.DetailsResponse;
 import dev.zbib.providerservice.dto.response.ProviderResponse;
 import dev.zbib.providerservice.entity.Provider;
 import dev.zbib.providerservice.repository.ProviderRepository;
-import dev.zbib.shared.constant.ErrorMessages;
 import dev.zbib.shared.dto.UserResponse;
 import dev.zbib.shared.enums.UserRoles;
-import dev.zbib.shared.exception.ResourceNotFoundException;
+import dev.zbib.shared.exception.ProviderException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,13 +29,12 @@ public class ProviderService {
     public ProviderResponse getProviderById(Long id) {
         DetailsResponse detailsResponse = getProviderDetailsById(id);
         UserResponse userResponse = userService.getUser(id);
-        ProviderResponse providerResponse = toProviderResponse(userResponse, detailsResponse);
-        return providerResponse;
+        return toProviderResponse(userResponse, detailsResponse);
     }
 
-    public DetailsResponse getProviderDetailsById(Long id) {
+    private DetailsResponse getProviderDetailsById(Long id) {
         return providerRepository.findDetailsById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.Provider.NOT_FOUND));
+                .orElseThrow(ProviderException::notFound);
     }
 
 }

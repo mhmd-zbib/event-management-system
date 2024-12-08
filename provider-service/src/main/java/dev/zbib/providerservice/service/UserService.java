@@ -1,10 +1,8 @@
 package dev.zbib.providerservice.service;
 
 import dev.zbib.providerservice.client.UserClient;
-import dev.zbib.shared.constant.ErrorMessages;
 import dev.zbib.shared.dto.UserResponse;
 import dev.zbib.shared.enums.UserRoles;
-import dev.zbib.shared.exception.ResourceNotFoundException;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,14 +12,13 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private UserClient userClient;
 
-
     public void setUserRole(
             Long id,
             UserRoles role) {
         try {
-            userClient.setUserRole(id, UserRoles.PROVIDER);
+            userClient.setUserRole(id, role);
         } catch (FeignException.NotFound e) {
-            throw new ResourceNotFoundException(ErrorMessages.Provider.NOT_FOUND);
+            throw new ResourceNotFoundException(BaseException.Provider.NOT_FOUND);
         }
     }
 
@@ -29,7 +26,7 @@ public class UserService {
         try {
             return userClient.getUser(id);
         } catch (FeignException.NotFound e) {
-            throw new ResourceNotFoundException(ErrorMessages.Provider.NOT_FOUND);
+            throw new ResourceNotFoundException(BaseException.Provider.NOT_FOUND);
         }
     }
 }
