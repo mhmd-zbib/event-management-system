@@ -13,4 +13,9 @@ public class ProviderException extends AppException {
     public static ProviderException notFound() {
         return new ProviderException(ProviderExceptionMessage.NOT_FOUND, HttpStatus.NOT_FOUND);
     }
+
+    public static ProviderException alreadyExist() {
+        return new ProviderException(ProviderExceptionMessage.ALREADY_EXIST, HttpStatus.BAD_REQUEST);
+    }
+
 }

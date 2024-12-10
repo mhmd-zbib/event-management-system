@@ -21,6 +21,9 @@ public class ProviderService {
     private final UserService userService;
 
     public void createProvider(CreateProviderRequest req) {
+        if (providerRepository.existsById(req.getId())) {
+            throw ProviderException.alreadyExist();
+        }
         Provider provider = toProvider(req);
         providerRepository.save(provider);
         userService.setUserRole(req.getId(), UserRoles.PROVIDER);
@@ -36,5 +39,8 @@ public class ProviderService {
         return providerRepository.findDetailsById(id)
                 .orElseThrow(ProviderException::notFound);
     }
+
+
+
 
 }

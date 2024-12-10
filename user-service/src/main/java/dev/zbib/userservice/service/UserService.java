@@ -55,4 +55,11 @@ public class UserService {
         User user = getUserById(id);
         userRepository.delete(user);
     }
+
+    public void setUserRole(Long id) {
+        User user = getUserById(id);
+        user.setRole(UserRoles.USER);
+        userRepository.save(user);
+    }
+
 }

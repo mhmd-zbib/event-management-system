@@ -22,4 +22,6 @@ public class UserResponse {
     private AccountStatus status;
     private boolean isVerified;
     private boolean isBlocked;
+    private Address address;
+
 }

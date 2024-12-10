@@ -1,13 +1,15 @@
 package dev.zbib.userservice.controller;
 
+import dev.zbib.shared.dto.UserResponse;
 import dev.zbib.userservice.dto.request.CreateUserRequest;
 import dev.zbib.userservice.dto.response.UserListResponse;
-import dev.zbib.shared.dto.UserResponse;
 import dev.zbib.userservice.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +28,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<UserListResponse>> getUserListResponse(Pageable pageable) {
+    public ResponseEntity<Page<UserListResponse>> getUserListResponse(@PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.ok(userService.getUserListResponse(pageable));
     }
 
@@ -40,4 +42,5 @@ public class UserController {
         userService.deleteUserById(id);
         return ResponseEntity.ok("User deleted");
     }
+
 }
