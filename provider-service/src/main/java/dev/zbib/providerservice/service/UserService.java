@@ -2,43 +2,27 @@ package dev.zbib.providerservice.service;
 
 import dev.zbib.providerservice.client.UserClient;
 import dev.zbib.shared.dto.UserResponse;
-import dev.zbib.shared.enums.UserRoles;
-import dev.zbib.shared.exception.ProviderException;
-import dev.zbib.shared.exception.UserException;
-import feign.FeignException;
+import dev.zbib.shared.dto.AppException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class UserService {
-    private UserClient userClient;
-
+    private final UserClient userClient;
 
     public UserResponse getUserById(Long id) {
-        UserResponse res = userClient.getUser(id);
-        if (res == null) {
-            throw UserException.notFound();
-        }
-        return res;
-    }
-
-
-    public void setUserRole(
-            Long id,
-            UserRoles role) {
         try {
-            userClient.setUserRole(id, role);
-        } catch (FeignException.NotFound e) {
-            throw ProviderException.notFound();
-        }
-    }
-
-    public UserResponse getUser(Long id) {
-        try {
+            log.debug("Fetching user with id: {}", id);
             return userClient.getUser(id);
-        } catch (FeignException.NotFound e) {
-            throw ProviderException.notFound();
+        } catch (AppException ex) {
+            log.error("Error fetching user with id {}: {}", id, ex.getMessage());
+            throw ex;
+        } catch (Exception ex) {
+            log.error("Unexpected error fetching user with id {}", id, ex);
+            throw ex;
         }
     }
 }

@@ -18,17 +18,17 @@ public class ProviderController {
     private final UserService userService;
 
 
-    @PostMapping
-    public ResponseEntity<String> createProvider(@RequestBody CreateProviderRequest provider) {
-        providerService.createProvider(provider);
-        return ResponseEntity.ok()
-                .body("Provider created");
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ProviderResponse> getProviderBId(@PathVariable Long id) {
-        return ResponseEntity.ok(providerService.getProviderById(id));
-    }
+//    @PostMapping
+//    public ResponseEntity<String> createProvider(@RequestBody CreateProviderRequest provider) {
+//        providerService.createProvider(provider);
+//        return ResponseEntity.ok()
+//                .body("Provider created");
+//    }
+//
+//    @GetMapping("/{id}")
+//    public ResponseEntity<ProviderResponse> getProviderBId(@PathVariable Long id) {
+//        return ResponseEntity.ok(providerService.getProviderById(id));
+//    }
 
 
     @GetMapping("/users/{id}")

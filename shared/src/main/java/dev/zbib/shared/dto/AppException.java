@@ -1,4 +1,4 @@
-package dev.zbib.shared.exception;
+package dev.zbib.shared.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

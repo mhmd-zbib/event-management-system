@@ -1,6 +1,6 @@
 package dev.zbib.userservice.entity;
 
-import dev.zbib.shared.constant.UserExceptionMessage;
+import dev.zbib.userservice.exception.ExceptionMessages;
 import dev.zbib.shared.enums.AccountStatus;
 import dev.zbib.shared.enums.UserRoles;
 import jakarta.persistence.*;
@@ -24,29 +24,29 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = UserExceptionMessage.FIRST_NAME_REQUIRED)
+    @NotBlank(message = ExceptionMessages.FIRST_NAME_REQUIRED)
     @Column(nullable = false)
     private String firstName;
 
-    @NotBlank(message = UserExceptionMessage.LAST_NAME_REQUIRED)
+    @NotBlank(message = ExceptionMessages.LAST_NAME_REQUIRED)
     @Column(nullable = false)
     private String lastName;
 
-    @NotBlank(message = UserExceptionMessage.PHONE_NUMBER_REQUIRED)
-    @Pattern(regexp = "^\\+?[1-9]\\d{1,14}$", message = UserExceptionMessage.INVALID_PHONE_NUMBER)
+    @NotBlank(message = ExceptionMessages.PHONE_NUMBER_REQUIRED)
+    @Pattern(regexp = "^\\+?[1-9]\\d{1,14}$", message = ExceptionMessages.INVALID_PHONE_NUMBER)
     @Column(nullable = false, unique = true)
     private String phoneNumber;
 
-    @NotBlank(message = UserExceptionMessage.PASSWORD_REQUIRED)
+    @NotBlank(message = ExceptionMessages.PASSWORD_REQUIRED)
     @Pattern(
             regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",
-            message = UserExceptionMessage.INVALID_PASSWORD
+            message = ExceptionMessages.INVALID_PASSWORD
     )
     @Column(nullable = false)
     private String password;
 
-    @NotNull(message = UserExceptionMessage.BIRTH_DATE_REQUIRED)
-    @Past(message = UserExceptionMessage.INVALID_BIRTH_DATE)
+    @NotNull(message = ExceptionMessages.BIRTH_DATE_REQUIRED)
+    @Past(message = ExceptionMessages.INVALID_BIRTH_DATE)
     @Column(nullable = false)
     private LocalDate birthDate;
 
@@ -56,7 +56,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRoles role;
 
-    @NotNull(message = UserExceptionMessage.ADDRESS_REQUIRED)
+    @NotNull(message = ExceptionMessages.ADDRESS_REQUIRED)
     @Embedded
     private Address address;
 

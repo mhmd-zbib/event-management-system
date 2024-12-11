@@ -8,10 +8,12 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EnableFeignClients
 @ComponentScan(basePackages = {
-        "dev.zbib.shared.exception"
+        "dev.zbib.providerservice",
+        "dev.zbib.shared"
 })
 public class ProviderServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(ProviderServiceApplication.class, args);
     }
 }
+

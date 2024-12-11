@@ -3,10 +3,10 @@ package dev.zbib.userservice.service;
 import dev.zbib.shared.dto.UserResponse;
 import dev.zbib.shared.enums.AccountStatus;
 import dev.zbib.shared.enums.UserRoles;
-import dev.zbib.shared.exception.UserException;
 import dev.zbib.userservice.dto.request.CreateUserRequest;
 import dev.zbib.userservice.dto.response.UserListResponse;
 import dev.zbib.userservice.entity.User;
+import dev.zbib.userservice.exception.UserNotFoundException;
 import dev.zbib.userservice.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class UserService {
 
     public User getUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(UserException::notFound);
+                .orElseThrow(UserNotFoundException::new);
     }
 
     public Page<UserListResponse> getUserListResponse(Pageable page) {
@@ -48,7 +48,8 @@ public class UserService {
     }
 
     public UserResponse getUserResponseById(Long id) {
-        return userRepository.findUserResponseById(id);
+        return userRepository.findUserResponseById(id)
+                .orElseThrow(UserNotFoundException::new);
     }
 
     public void deleteUserById(Long id) {
