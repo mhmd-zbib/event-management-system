@@ -1,13 +1,14 @@
 package dev.zbib.providerservice.controller;
 
-import dev.zbib.providerservice.dto.request.CreateProviderRequest;
-import dev.zbib.providerservice.dto.response.ProviderResponse;
 import dev.zbib.providerservice.service.ProviderService;
 import dev.zbib.providerservice.service.UserService;
 import dev.zbib.shared.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/providers")
