@@ -43,19 +43,27 @@ public class LoggingAspect {
         log.error("[{}] Method execution failed: {} with exception: {}", layer, methodName, exception.getMessage());
     }
 
-    // Helper method to determine the layer based on the class name or method signature
-    private String getLayer(JoinPoint joinPoint) {
-        String className = getClassName(joinPoint);
-        if (className.contains("controller")) {
-            return "Controller";
-        } else if (className.contains("service")) {
-            return "Service";
-        } else if (className.contains("repository")) {
-            return "Repository";
-        } else {
-            return "Unknown Layer";
-        }
+    // Helper method to determine the layer private String getLayer(JoinPoint joinPoint) {
+    String className = joinPoint.getSignature().getDeclaringTypeName();
+
+     extract the package components
+    String[] packages = className.split("\\.");
+
+   to extract the desired part
+    if (packages.length > 3) {
+        String layer = packages[3]; 
+        return capitalize(layer);  
     }
+    
+    return "Unknown Layer"; 
+}
+
+// Helper method to capitalize the first letter of the string
+private String capitalize(String str) {
+    if (str == null || str.isEmpty()) return str;
+    return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
+}
+
 
     // Helper method to remove the package prefix from the class name
     private String getClassName(JoinPoint joinPoint) {
