@@ -43,7 +43,8 @@ public class LoggingAspect {
         log.error("[{}] Method execution failed: {} with exception: {}", layer, methodName, exception.getMessage());
     }
 
-    // Helper method to determine the layer private String getLayer(JoinPoint joinPoint) {
+    // Helper method to determine the layer
+ private String getLayer(JoinPoint joinPoint) {
     String className = joinPoint.getSignature().getDeclaringTypeName();
 
      extract the package components
