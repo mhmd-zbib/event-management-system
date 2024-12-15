@@ -3,7 +3,7 @@ package dev.zbib.userservice.service;
 import dev.zbib.userservice.client.ProviderClient;
 import dev.zbib.userservice.entity.Address;
 import dev.zbib.userservice.entity.User;
-import dev.zbib.shared.enums.UserRoles;
+import dev.zbib.shared.enums.UserRole;
 import dev.zbib.userservice.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,7 +55,7 @@ public class UserServiceUnitTest {
         user1.setPhoneNumber("123456789");
         user1.setPassword("password123");
         user1.setBirthDate(LocalDate.of(1990, 1, 1));
-        user1.setRole(UserRoles.USER);
+        user1.setRole(UserRole.USER);
         user1.setAddress(address);
 
         // Initialize user2
@@ -66,7 +66,7 @@ public class UserServiceUnitTest {
         user2.setPhoneNumber("414141");
         user2.setPassword("password123");
         user2.setBirthDate(LocalDate.of(1990, 1, 1));
-        user2.setRole(UserRoles.USER);
+        user2.setRole(UserRole.USER);
         user2.setAddress(address);
 
         // Initialize user3 (with a provider role)
@@ -77,7 +77,7 @@ public class UserServiceUnitTest {
         user3.setPhoneNumber("414141");
         user3.setPassword("password123");
         user3.setBirthDate(LocalDate.of(1990, 1, 1));
-        user3.setRole(UserRoles.PROVIDER);
+        user3.setRole(UserRole.PROVIDER);
         user3.setAddress(address);
 
         // Initialize CreateUserRequest

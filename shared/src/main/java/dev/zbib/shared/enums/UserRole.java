@@ -1,5 +1,5 @@
 package dev.zbib.shared.enums;
 
-public enum UserRoles {
+public enum UserRole {
     USER, PROVIDER
 }

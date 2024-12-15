@@ -1,8 +1,8 @@
 package dev.zbib.userservice.entity;
 
-import dev.zbib.userservice.exception.ExceptionMessages;
 import dev.zbib.shared.enums.AccountStatus;
-import dev.zbib.shared.enums.UserRoles;
+import dev.zbib.shared.enums.UserRole;
+import dev.zbib.userservice.exception.ExceptionMessages;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -38,10 +39,7 @@ public class User {
     private String phoneNumber;
 
     @NotBlank(message = ExceptionMessages.PASSWORD_REQUIRED)
-    @Pattern(
-            regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",
-            message = ExceptionMessages.INVALID_PASSWORD
-    )
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$", message = ExceptionMessages.INVALID_PASSWORD)
     @Column(nullable = false)
     private String password;
 
@@ -54,19 +52,38 @@ public class User {
     private String profilePicture;
 
     @Enumerated(EnumType.STRING)
-    private UserRoles role;
+    private UserRole role;
 
     @NotNull(message = ExceptionMessages.ADDRESS_REQUIRED)
     @Embedded
     private Address address;
 
     @NotNull
-    private AccountStatus status;
+    private AccountStatus accountStatus;
 
     @Column(nullable = false)
     private boolean isVerified;
 
     @Column(nullable = false)
     private boolean isBlocked;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+        role = UserRole.USER;
+        accountStatus = AccountStatus.ACTIVE;
+        isVerified = false;
+        isBlocked = false;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 
 }

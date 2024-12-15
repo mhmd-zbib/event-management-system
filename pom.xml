@@ -37,6 +37,11 @@
             <version>1.18.34</version>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.5.5.Final</version>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>

@@ -1,7 +1,6 @@
 package dev.zbib.providerservice.service;
 
 import dev.zbib.providerservice.client.UserClient;
-import dev.zbib.shared.dto.UserResponse;
 import dev.zbib.shared.dto.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

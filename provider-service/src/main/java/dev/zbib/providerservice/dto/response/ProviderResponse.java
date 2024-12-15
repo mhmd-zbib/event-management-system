@@ -2,7 +2,7 @@ package dev.zbib.providerservice.dto.response;
 
 import dev.zbib.shared.enums.AccountStatus;
 import dev.zbib.shared.enums.ServiceType;
-import dev.zbib.shared.enums.UserRoles;
+import dev.zbib.shared.enums.UserRole;
 import lombok.Builder;
 
 import java.time.LocalDate;
@@ -15,7 +15,7 @@ public class ProviderResponse {
     private String phoneNumber;
     private LocalDate birthDate;
     private String profilePicture;
-    private UserRoles role;
+    private UserRole role;
     private AccountStatus status;
     private boolean isVerified;
     private boolean isBlocked;

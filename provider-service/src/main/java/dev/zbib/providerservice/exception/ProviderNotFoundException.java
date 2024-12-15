@@ -1,10 +1,13 @@
 package dev.zbib.providerservice.exception;
 
-import dev.zbib.shared.dto.AppException;
 import org.springframework.http.HttpStatus;
 
-public class ProviderNotFoundException extends AppException {
-    public ProviderNotFoundException() {
-        super(ExceptionMessages.PROVIDER_NOT_FOUND, HttpStatus.NOT_FOUND);
+public class ProviderNotFoundException extends ProviderException {
+
+    private final Long providerId;
+
+    public ProviderNotFoundException(Long providerId) {
+        super("Provider with id " + providerId + "not found", HttpStatus.NOT_FOUND);
+        this.providerId = providerId;
     }
 }

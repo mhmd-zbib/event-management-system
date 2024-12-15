@@ -6,7 +6,7 @@ import dev.zbib.bookingservice.exception.BookingValidationException;
 import dev.zbib.bookingservice.repository.BookingRepository;
 import dev.zbib.shared.enums.AccountStatus;
 import dev.zbib.shared.enums.BookingStatus;
-import dev.zbib.shared.enums.UserRoles;
+import dev.zbib.shared.enums.UserRole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -44,7 +44,7 @@ public class BookingValidationService {
         UserDetailsResponse userDetails = userClient.getUserDetails(userId);
 
         // Check if user exists and has correct role
-        if (userDetails.getRole() != UserRoles.USER) {
+        if (userDetails.getRole() != UserRole.USER) {
             log.warn("Attempt to book with non-user account: {} with role {}", userId, userDetails.getRole());
             throw new BookingValidationException("Only regular users can create bookings");
         }

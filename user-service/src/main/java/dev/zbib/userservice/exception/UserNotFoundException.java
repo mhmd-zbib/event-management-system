@@ -1,10 +1,14 @@
 package dev.zbib.userservice.exception;
 
-import dev.zbib.shared.dto.AppException;
-import org.springframework.http.HttpStatus;
+import lombok.Getter;
 
-public class UserNotFoundException extends AppException {
-    public UserNotFoundException() {
-        super(ExceptionMessages.NOT_FOUND, HttpStatus.NOT_FOUND);
+@Getter
+public class UserNotFoundException extends UserException {
+    private final Long userId;
+
+    public UserNotFoundException(
+            Long userId) {
+        super("User with id " + userId + " not found");
+        this.userId = userId;
     }
 }

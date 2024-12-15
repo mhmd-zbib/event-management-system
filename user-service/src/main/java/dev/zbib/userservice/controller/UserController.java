@@ -1,17 +1,16 @@
 package dev.zbib.userservice.controller;
 
-import dev.zbib.shared.dto.UserResponse;
 import dev.zbib.userservice.dto.request.CreateUserRequest;
+import dev.zbib.userservice.dto.response.ProviderEligibilityResponse;
 import dev.zbib.userservice.dto.response.UserListResponse;
+import dev.zbib.userservice.dto.response.UserResponse;
 import dev.zbib.userservice.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -22,19 +21,19 @@ public class UserController {
 
 
     @PostMapping
-    public ResponseEntity<String> createUser(@Valid @RequestBody CreateUserRequest req) {
-        userService.createUser(req);
-        return ResponseEntity.ok("User created");
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest req) {
+        return ResponseEntity.ok(userService.createUser(req));
     }
 
     @GetMapping
-    public ResponseEntity<Page<UserListResponse>> getUserListResponse(@PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
-        return ResponseEntity.ok(userService.getUserListResponse(pageable));
+    public ResponseEntity<List<UserListResponse>> getUsersByIds(List<Long> ids) {
+        return ResponseEntity.ok(userService.getUsersByIds(ids));
     }
 
+
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserResponseById(@PathVariable long id) {
-        return ResponseEntity.ok(userService.getUserResponseById(id));
+    public ResponseEntity<UserResponse> getUserById(@PathVariable long id) {
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
     @DeleteMapping("/{id}")
@@ -43,4 +42,9 @@ public class UserController {
         return ResponseEntity.ok("User deleted");
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ProviderEligibilityResponse> getProviderEligibility(@PathVariable Long id) {
+        return ResponseEntity.ok()
+                .body(userService.getProviderEligibility(id));
+    }
 }
