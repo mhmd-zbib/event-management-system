@@ -1,6 +1,7 @@
-package dev.zbib.bookingservice.dto;
+package dev.zbib.bookingservice.dto.request;
 
 import dev.zbib.bookingservice.model.BookingStatus;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,12 +13,13 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingListResponse {
-    private Long id;
-    private Long userId;
-    private Long providerId;
-    private BookingStatus status;
+public class UpdateBookingRequest {
+    @Future(message = "Start time must be in the future")
     private LocalDateTime scheduledStartTime;
+
+    @Future(message = "End time must be in the future")
     private LocalDateTime scheduledEndTime;
+
     private String serviceAddress;
+    private String description;
 } 

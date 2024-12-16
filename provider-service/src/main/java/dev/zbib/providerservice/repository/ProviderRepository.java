@@ -1,5 +1,6 @@
 package dev.zbib.providerservice.repository;
 
+import dev.zbib.providerservice.dto.internal.ProviderValidationDTO;
 import dev.zbib.providerservice.dto.response.DetailsListResponse;
 import dev.zbib.providerservice.dto.response.DetailsResponse;
 import dev.zbib.providerservice.entity.Provider;
@@ -18,4 +19,6 @@ public interface ProviderRepository extends JpaRepository<Provider, Long>, JpaSp
             Specification<Provider> specification,
             Pageable pageable);
 
+    Optional<ProviderValidationDTO> findValidationDetailsById(
+            Long id);
 }

@@ -1,6 +1,7 @@
 package dev.zbib.providerservice.service;
 
 import dev.zbib.providerservice.client.UserClient;
+import dev.zbib.providerservice.dto.internal.ProviderValidationDTO;
 import dev.zbib.providerservice.dto.request.CreateProviderRequest;
 import dev.zbib.providerservice.dto.request.ProviderFilterRequest;
 import dev.zbib.providerservice.dto.response.*;
@@ -10,6 +11,8 @@ import dev.zbib.providerservice.exception.ProviderNotFoundException;
 import dev.zbib.providerservice.mapper.ProviderMapper;
 import dev.zbib.providerservice.repository.ProviderRepository;
 import dev.zbib.providerservice.repository.ProviderSpecification;
+import dev.zbib.shared.dto.EligibilityResponse;
+import dev.zbib.shared.enums.ServiceType;
 import dev.zbib.shared.enums.UserRole;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -83,7 +87,7 @@ public class ProviderService {
 
     private void validateProviderEligibility(Long id) {
         try {
-            ProviderEligibilityResponse eligibilityResponse = userClient.getProviderEligibility(id);
+            EligibilityResponse eligibilityResponse = userClient.getProviderEligibility(id);
             if (!eligibilityResponse.isEligible()) {
                 throw new ProviderEligibilityException(eligibilityResponse.getReasons());
             }
@@ -126,4 +130,21 @@ public class ProviderService {
                 .collect(Collectors.toList());
     }
 
+    public EligibilityResponse validateProviderBooking(
+            Long id,
+            ServiceType serviceType) {
+
+        List<String> reasons = new ArrayList<>();
+        ProviderValidationDTO provider = providerRepository.findValidationDetailsById(id)
+                .orElseThrow(() -> new ProviderNotFoundException(id));
+
+        if (!serviceType
+                .equals(provider.serviceType())) reasons.add("Provider service type mismatch");
+        if (!provider.availability()) reasons.add("Provider is not available");
+
+        return EligibilityResponse.builder()
+                .reasons(reasons)
+                .eligible(!reasons.isEmpty())
+                .build();
+    }
 }

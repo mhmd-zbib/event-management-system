@@ -1,9 +1,9 @@
 package dev.zbib.providerservice.client;
 
-import dev.zbib.providerservice.dto.response.ProviderEligibilityResponse;
 import dev.zbib.providerservice.dto.response.UserListResponse;
 import dev.zbib.providerservice.dto.response.UserResponse;
 import dev.zbib.shared.config.FeignConfig;
+import dev.zbib.shared.dto.EligibilityResponse;
 import dev.zbib.shared.enums.UserRole;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +21,7 @@ public interface UserClient {
             @RequestBody UserRole role);
 
     @GetMapping("/users/{id}")
-    ProviderEligibilityResponse getProviderEligibility(@PathVariable Long id);
+    EligibilityResponse getProviderEligibility(@PathVariable Long id);
 
     @GetMapping("/users")
     List<UserListResponse> getUsersById(@RequestParam List<Long> ids);

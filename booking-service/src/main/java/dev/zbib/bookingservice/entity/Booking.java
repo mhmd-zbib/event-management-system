@@ -28,18 +28,24 @@ public class Booking {
     
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    private String paymentStatus;
+
+    private Double amount;
     
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
     
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+        this.status = BookingStatus.PENDING;
     }
     
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
 } 

@@ -1,7 +1,7 @@
 package dev.zbib.userservice.controller;
 
+import dev.zbib.shared.dto.EligibilityResponse;
 import dev.zbib.userservice.dto.request.CreateUserRequest;
-import dev.zbib.userservice.dto.response.ProviderEligibilityResponse;
 import dev.zbib.userservice.dto.response.UserListResponse;
 import dev.zbib.userservice.dto.response.UserResponse;
 import dev.zbib.userservice.service.UserService;
@@ -42,9 +42,16 @@ public class UserController {
         return ResponseEntity.ok("User deleted");
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProviderEligibilityResponse> getProviderEligibility(@PathVariable Long id) {
+
+    @GetMapping("/{id}/validate/customer")
+    public ResponseEntity<EligibilityResponse> getCustomerBookingEligibility(@PathVariable Long id) {
         return ResponseEntity.ok()
-                .body(userService.getProviderEligibility(id));
+                .body(userService.getCustomerBookingEligibility(id));
+    }
+
+    @GetMapping("/{id}/validate/provider")
+    public ResponseEntity<EligibilityResponse> getProviderBookingEligibility(@PathVariable Long id) {
+        return ResponseEntity.ok()
+                .body(userService.getProviderBookingEligibility(id));
     }
 }

@@ -1,9 +1,9 @@
 package dev.zbib.userservice.service;
 
+import dev.zbib.shared.dto.EligibilityResponse;
 import dev.zbib.shared.enums.AccountStatus;
 import dev.zbib.shared.enums.UserRole;
 import dev.zbib.userservice.dto.request.CreateUserRequest;
-import dev.zbib.userservice.dto.response.ProviderEligibilityResponse;
 import dev.zbib.userservice.dto.response.UserListResponse;
 import dev.zbib.userservice.dto.response.UserResponse;
 import dev.zbib.userservice.entity.User;
@@ -50,21 +50,37 @@ public class UserService {
         return userRepository.findUsersById(ids);
     }
 
-    public ProviderEligibilityResponse getProviderEligibility(Long id) {
+
+    private User getEntityUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+
+    public EligibilityResponse getCustomerBookingEligibility(Long id) {
         User user = getEntityUserById(id);
         List<String> reasons = new ArrayList<>();
         if (!user.isVerified()) reasons.add("Your account is not verified");
-        if (user.getRole() == UserRole.PROVIDER) reasons.add("You are already a provider");
         if (user.getAccountStatus() != AccountStatus.ACTIVE) reasons.add("Your account is not active");
+        if (user.getRole() == UserRole.PROVIDER) reasons.add("Providers can't book");
 
-        return ProviderEligibilityResponse.builder()
+        return EligibilityResponse.builder()
                 .eligible(reasons.isEmpty())
                 .reasons(reasons)
                 .build();
     }
 
-    private User getEntityUserById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+
+    public EligibilityResponse getProviderBookingEligibility(Long id) {
+        User user = getEntityUserById(id);
+        List<String> reasons = new ArrayList<>();
+        if (!user.isVerified()) reasons.add("Provider account is not verified");
+        if (user.getAccountStatus() != AccountStatus.ACTIVE) reasons.add("Provider account is not active");
+        if (user.getRole() == UserRole.USER) reasons.add("User is not a provider");
+
+        return EligibilityResponse.builder()
+                .eligible(reasons.isEmpty())
+                .reasons(reasons)
+                .build();
     }
 }

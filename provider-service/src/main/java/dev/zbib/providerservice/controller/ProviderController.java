@@ -6,6 +6,8 @@ import dev.zbib.providerservice.dto.response.DetailsResponse;
 import dev.zbib.providerservice.dto.response.ProviderListResponse;
 import dev.zbib.providerservice.dto.response.ProviderResponse;
 import dev.zbib.providerservice.service.ProviderService;
+import dev.zbib.shared.dto.EligibilityResponse;
+import dev.zbib.shared.enums.ServiceType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -57,6 +59,14 @@ public class ProviderController {
                 .build();
         Page<ProviderListResponse> providerDetails = providerService.getDetails(filter);
         return new ResponseEntity<>(providerDetails, HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/validate-booking")
+    public ResponseEntity<EligibilityResponse> validateProvider(
+            @PathVariable Long id,
+            @RequestBody ServiceType service) {
+        return ResponseEntity.ok()
+                .body(providerService.validateProviderBooking(id, service));
     }
 
 }

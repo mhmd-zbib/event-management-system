@@ -17,4 +17,4 @@ public class ErrorResponse {
     private String message;
     private LocalDateTime timestamp;
     private List<String> details;
-} 
+}

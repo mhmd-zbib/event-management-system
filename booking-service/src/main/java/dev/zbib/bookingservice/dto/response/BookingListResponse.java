@@ -1,4 +1,4 @@
-package dev.zbib.bookingservice.dto;
+package dev.zbib.bookingservice.dto.response;
 
 import dev.zbib.bookingservice.model.BookingStatus;
 import lombok.AllArgsConstructor;
@@ -12,14 +12,12 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingFilterCriteria {
+public class BookingListResponse {
+    private Long id;
     private Long userId;
     private Long providerId;
     private BookingStatus status;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private Double minRating;
-    private Double maxRating;
-    private Double minCost;
-    private Double maxCost;
+    private LocalDateTime scheduledStartTime;
+    private LocalDateTime scheduledEndTime;
+    private String serviceAddress;
 } 

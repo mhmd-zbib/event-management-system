@@ -1,4 +1,4 @@
-package dev.zbib.userservice.dto.response;
+package dev.zbib.shared.dto;
 
 import lombok.Builder;
 import lombok.Data;
@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class ProviderEligibilityResponse {
+public class EligibilityResponse {
     private boolean eligible;
     private List<String> reasons;
 }
