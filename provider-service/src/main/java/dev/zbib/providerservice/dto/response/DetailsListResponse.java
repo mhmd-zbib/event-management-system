@@ -2,9 +2,8 @@ package dev.zbib.providerservice.dto.response;
 
 import dev.zbib.shared.enums.ServiceType;
 
-public record DetailsResponse(
+public record DetailsListResponse(
         Long id,
-        String bio,
         ServiceType serviceType,
         double hourlyRate,
         String serviceArea,
