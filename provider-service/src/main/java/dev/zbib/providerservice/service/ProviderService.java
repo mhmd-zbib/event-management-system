@@ -52,6 +52,7 @@ public class ProviderService {
         return providerMapper.toProviderResponse(user, details);
     }
 
+
     public Page<ProviderListResponse> getDetails(ProviderFilterRequest filter) {
         var specification = ProviderSpecification.withRatingRange(filter.getMinRating(), filter.getMaxRating())
                 .and(ProviderSpecification.withAvailability(filter.getAvailable()))
@@ -79,6 +80,7 @@ public class ProviderService {
                 .orElseThrow(() -> new ProviderNotFoundException(id));
     }
 
+
     private void validateProviderEligibility(Long id) {
         try {
             ProviderEligibilityResponse eligibilityResponse = userClient.getProviderEligibility(id);
@@ -90,6 +92,7 @@ public class ProviderService {
             throw new ProviderNotFoundException(id);
         }
     }
+
 
     private void assignProviderRole(Long id) {
         try {

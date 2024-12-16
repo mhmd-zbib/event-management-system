@@ -3,11 +3,13 @@ package dev.zbib.providerservice.dto.request;
 import dev.zbib.shared.enums.ServiceType;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class ProviderFilterRequest {
     @Min(0)
     private Double minHourlyRate;
