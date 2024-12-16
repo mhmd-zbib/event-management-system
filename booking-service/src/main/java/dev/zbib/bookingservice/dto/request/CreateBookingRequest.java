@@ -18,11 +18,7 @@ public class CreateBookingRequest {
 
     @NotNull(message = "Service start time is required")
     @Future(message = "Service start time must be in the future")
-    private LocalDateTime startTime;
-
-    @NotNull(message = "Service end time is required")
-    @Future(message = "Service end time must be in the future")
-    private LocalDateTime endTime;
+    private LocalDateTime bookingTime;
 
     @NotBlank(message = "Service address is required")
     private String serviceAddress;

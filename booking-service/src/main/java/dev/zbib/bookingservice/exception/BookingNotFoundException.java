@@ -1,10 +1,9 @@
 package dev.zbib.bookingservice.exception;
 
-public class BookingNotFoundException extends BookingException {
-    private final Long id;
+import org.springframework.http.HttpStatus;
 
+public class BookingNotFoundException extends BookingException {
     public BookingNotFoundException(Long id) {
-        super("Booking with id " + id + " not found");
-        this.id = null;
+        super(HttpStatus.NOT_FOUND, "Booking with id " + id + " not found");
     }
 } 

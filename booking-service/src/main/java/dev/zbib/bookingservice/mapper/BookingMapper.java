@@ -1,7 +1,7 @@
 package dev.zbib.bookingservice.mapper;
 
-import dev.zbib.bookingservice.dto.response.BookingResponse;
 import dev.zbib.bookingservice.dto.request.CreateBookingRequest;
+import dev.zbib.bookingservice.dto.response.BookingResponse;
 import dev.zbib.bookingservice.entity.Booking;
 import org.mapstruct.Mapper;
 

@@ -1,60 +1,48 @@
 package dev.zbib.bookingservice.service;
 
-import dev.zbib.bookingservice.client.ProviderClient;
-import dev.zbib.bookingservice.client.UserClient;
 import dev.zbib.bookingservice.dto.request.CreateBookingRequest;
 import dev.zbib.bookingservice.dto.response.BookingResponse;
 import dev.zbib.bookingservice.entity.Booking;
-import dev.zbib.bookingservice.exception.BookingNotFoundException;
-import dev.zbib.bookingservice.exception.EligibilityException;
-import dev.zbib.bookingservice.exception.ProviderDetailsException;
+import dev.zbib.bookingservice.exception.*;
 import dev.zbib.bookingservice.mapper.BookingMapper;
 import dev.zbib.bookingservice.repository.BookingRepository;
-import dev.zbib.shared.dto.EligibilityResponse;
-import dev.zbib.shared.enums.ServiceType;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class BookingService {
 
+    private final BookingValidationService validation;
     private final BookingRepository bookingRepository;
     private final BookingMapper bookingMapper;
-    private final UserClient userClient;
-    private final ProviderClient providerClient;
 
+
+    @Transactional
     public BookingResponse createBooking(CreateBookingRequest req) {
-        validateCustomerEligibility(req.getUserId());
-        validateProviderEligibility(req.getProviderId());
-        validateProviderDetails(req.getProviderId(), req.getServiceType());
-        Booking booking = bookingMapper.toBooking(req);
-        Booking createBooking = bookingRepository.save(booking);
-        return bookingMapper.toBookingResponse(createBooking);
-    }
 
+        try {
+            validation.validateCreation(req);
+            Booking booking = bookingMapper.toBooking(req);
+            Booking createBooking = bookingRepository.save(booking);
+            return bookingMapper.toBookingResponse(createBooking);
+        } catch (CustomerNotEligibleException | ProviderNotEligibleException e) {
+            log.warn("Eligibility check failed: {} with {}", e.getMessage(), e.getDetails());
+            throw e;
+        } catch (BookingTimeOverlapException e) {
+            log.warn("Booking time overlap detected: {}", e.getMessage());
+            throw e;
+        } catch (ProviderDetailsMismatchException e) {
+            log.warn("Provider details mismatch: {}", e.getMessage());
+            throw e;
+        }
+    }
 
     public BookingResponse getBooking(Long id) {
         return bookingRepository.findResponseById(id)
                 .orElseThrow(() -> new BookingNotFoundException(id));
-    }
-
-
-    private void validateCustomerEligibility(Long id) {
-        EligibilityResponse userEligibility = userClient.getCustomerBookingEligibility(id);
-        if (!userEligibility.isEligible()) throw new EligibilityException(userEligibility.getReasons());
-    }
-
-
-    private void validateProviderEligibility(Long id) {
-        EligibilityResponse providerEligibility = userClient.getProviderBookingEligibility(id);
-        if (!providerEligibility.isEligible()) throw new EligibilityException(providerEligibility.getReasons());
-    }
-
-    private void validateProviderDetails(
-            Long id,
-            ServiceType serviceType) {
-        EligibilityResponse providerEligibility = providerClient.getProviderAvailability(id, serviceType);
-        if (!providerEligibility.isEligible()) throw new ProviderDetailsException(providerEligibility.getReasons());
     }
 }
