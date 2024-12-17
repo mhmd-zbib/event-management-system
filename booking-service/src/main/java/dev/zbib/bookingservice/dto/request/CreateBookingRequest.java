@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 public class CreateBookingRequest {
@@ -18,7 +18,7 @@ public class CreateBookingRequest {
 
     @NotNull(message = "Service start time is required")
     @Future(message = "Service start time must be in the future")
-    private LocalDateTime bookingTime;
+    private ZonedDateTime bookingTime;
 
     @NotBlank(message = "Service address is required")
     private String serviceAddress;

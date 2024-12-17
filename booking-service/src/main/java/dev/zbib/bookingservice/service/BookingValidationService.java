@@ -13,6 +13,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 @Log4j2
 @Service
@@ -69,11 +71,13 @@ public class BookingValidationService {
 
     private void validateBookingTimeAvailability(
             Long providerId,
-            LocalDateTime bookingTime) {
+            ZonedDateTime bookingTime) {
         if (!bookingRepository.existsByProviderId(providerId)) {
             return;
         }
-        if (bookingRepository.hasOverlappingBookings(providerId, bookingTime))
-            throw new BookingTimeOverlapException(bookingTime);
+        LocalDateTime localDateTime = bookingTime.withZoneSameInstant(ZoneOffset.UTC)
+                .toLocalDateTime();
+        if (bookingRepository.hasOverlappingBookings(providerId, localDateTime))
+            throw new BookingTimeOverlapException(localDateTime);
     }
 }

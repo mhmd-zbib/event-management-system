@@ -23,7 +23,6 @@ public class BookingService {
 
     @Transactional
     public BookingResponse createBooking(CreateBookingRequest req) {
-
         try {
             validation.validateCreation(req);
             Booking booking = bookingMapper.toBooking(req);

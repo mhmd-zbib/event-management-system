@@ -26,6 +26,7 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
 
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
