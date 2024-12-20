@@ -1,7 +1,7 @@
 package dev.zbib.userservice.service;
 
 import dev.zbib.userservice.client.ProviderClient;
-import dev.zbib.userservice.entity.Address;
+import dev.zbib.shared.entity.Address;
 import dev.zbib.userservice.entity.User;
 import dev.zbib.shared.enums.UserRole;
 import dev.zbib.userservice.repository.UserRepository;

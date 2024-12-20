@@ -1,4 +1,4 @@
-package dev.zbib.userservice.entity;
+package dev.zbib.shared.entity;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

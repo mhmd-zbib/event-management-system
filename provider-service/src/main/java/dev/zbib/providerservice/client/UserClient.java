@@ -2,7 +2,6 @@ package dev.zbib.providerservice.client;
 
 import dev.zbib.providerservice.dto.response.UserListResponse;
 import dev.zbib.providerservice.dto.response.UserResponse;
-import dev.zbib.shared.config.FeignConfig;
 import dev.zbib.shared.dto.EligibilityResponse;
 import dev.zbib.shared.enums.UserRole;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -10,8 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "user-service", configuration = FeignConfig.class)
+@FeignClient(name = "user-service")
 public interface UserClient {
+
     @GetMapping("/users/{id}")
     UserResponse getUser(@PathVariable Long id);
 

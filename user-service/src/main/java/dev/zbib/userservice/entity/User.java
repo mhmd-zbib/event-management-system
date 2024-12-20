@@ -1,5 +1,6 @@
 package dev.zbib.userservice.entity;
 
+import dev.zbib.shared.entity.Address;
 import dev.zbib.shared.enums.AccountStatus;
 import dev.zbib.shared.enums.UserRole;
 import dev.zbib.userservice.exception.ExceptionMessages;

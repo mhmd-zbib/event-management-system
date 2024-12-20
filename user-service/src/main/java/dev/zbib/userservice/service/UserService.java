@@ -1,63 +1,36 @@
 package dev.zbib.userservice.service;
 
-import dev.zbib.shared.enums.UserRole;
 import dev.zbib.userservice.dto.request.CreateUserRequest;
-import dev.zbib.userservice.dto.response.UserListResponse;
 import dev.zbib.userservice.dto.response.UserResponse;
 import dev.zbib.userservice.entity.User;
 import dev.zbib.userservice.exception.UserNotFoundException;
 import dev.zbib.userservice.mapper.UserMapper;
 import dev.zbib.userservice.repository.UserRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Validated
-@Log4j2
 public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public UserResponse createUser(@Valid CreateUserRequest req) {
-        User user = userMapper.toUser(req);
-        User createdUser = userRepository.save(user);
-        return userMapper.toUserResponse(createdUser);
-    }
-
-    public UserResponse getUserById(@Valid Long id) {
-        return userRepository.findUserById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
-    }
-
-    public void deleteUserById(Long id) {
-        User user = getEntityUserById(id);
-        userRepository.delete(user);
-    }
-
-
-    public List<UserListResponse> getUsersByIds(
-            List<Long> ids) {
-        return userRepository.findByIdIn(ids);
-    }
-
-
-    public User getEntityUserById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
-    }
-
-    public void setRole(
-            Long id,
-            UserRole role) {
-        User user = getEntityUserById(id);
-        user.setRole(role);
+    public UserResponse createUser(CreateUserRequest request) {
+        User user = userMapper.toUser(request);
         userRepository.save(user);
+        return userMapper.toUserResponse(user);
+    }
+
+    public UserResponse getUserById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+        return userMapper.toUserResponse(user);
+    }
+
+    public List<UserResponse> getUsersByIds(List<Long> ids) {
+        return userRepository.findByIdIn(ids);
     }
 }

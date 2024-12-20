@@ -30,16 +30,14 @@ public class ProviderController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ProviderResponse> getProvider(@PathVariable Long id) {
-        ProviderResponse response = providerService.getProvider(id);
+        ProviderResponse response = providerService.getProviderById(id);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
     public ResponseEntity<Page<ProviderListResponse>> getProviders(
-@ModelAttribute ProviderFilterRequest providerFilterRequest,
-
+            @ModelAttribute ProviderFilterRequest providerFilterRequest,
             Pageable pageable) {
-
         Page<ProviderListResponse> providerDetails = providerService.getProviders(providerFilterRequest, pageable);
         return new ResponseEntity<>(providerDetails, HttpStatus.OK);
     }

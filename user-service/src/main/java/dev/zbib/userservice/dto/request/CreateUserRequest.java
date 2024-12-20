@@ -1,6 +1,6 @@
 package dev.zbib.userservice.dto.request;
 
-import dev.zbib.userservice.entity.Address;
+import dev.zbib.shared.entity.Address;
 import lombok.Data;
 
 import java.time.LocalDate;

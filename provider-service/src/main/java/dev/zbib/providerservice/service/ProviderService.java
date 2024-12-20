@@ -48,7 +48,7 @@ public class ProviderService {
     }
 
 
-    public ProviderResponse getProvider(Long id) {
+    public ProviderResponse getProviderById(Long id) {
         DetailsResponse details = getDetailsById(id);
         UserResponse user;
         try {
