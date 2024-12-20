@@ -37,6 +37,9 @@ public class BookingService {
         } catch (ProviderDetailsMismatchException e) {
             log.warn("Provider details mismatch: {}", e.getMessage());
             throw e;
+        } catch (Exception e) {
+            log.error("Unexpected error occurred while creating booking: {}", e.getMessage(), e);
+            throw new BookingException("An unexpected error occurred during booking creation");
         }
     }
 

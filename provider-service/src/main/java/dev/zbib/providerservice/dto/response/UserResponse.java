@@ -15,7 +15,6 @@ public record UserResponse(
         UserRole role,
         AccountStatus status,
         boolean isVerified,
-        boolean isBlocked,
-        String bio
+        boolean isBlocked
 ) {
 }

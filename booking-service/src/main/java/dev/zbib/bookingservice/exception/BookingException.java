@@ -7,8 +7,12 @@ import java.util.List;
 
 @Getter
 public class BookingException extends RuntimeException {
-    private final HttpStatus status;
+    private HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
     private List<String> details;
+
+    public BookingException(String message) {
+        super(message);
+    }
 
     public BookingException(
             HttpStatus status,

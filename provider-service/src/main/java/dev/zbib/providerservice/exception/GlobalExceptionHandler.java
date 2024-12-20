@@ -13,21 +13,14 @@ import java.time.LocalDateTime;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ProviderException.class)
-    public ResponseEntity<ErrorResponse> handleUserNotFound(ProviderException e) {
+    public ResponseEntity<ErrorResponse> handleProviderException(ProviderException e) {
         log.error("User not found: " + e.getMessage());
+        log.info(e.getDetails());
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .message(e.getMessage())
+                .details(e.getDetails() == null || e.getDetails()
+                        .isEmpty() ? null : e.getDetails())
                 .timestamp(LocalDateTime.now())
-                .build();
-        return new ResponseEntity<>(errorResponse, e.getStatusCode());
-    }
-
-    @ExceptionHandler(ProviderEligibilityException.class)
-    public ResponseEntity<ErrorResponse> handleProviderEligibilityException(ProviderEligibilityException e) {
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .message(e.getMessage())
-                .timestamp(LocalDateTime.now())
-                .details(e.getReasons())
                 .build();
         return new ResponseEntity<>(errorResponse, e.getStatusCode());
     }

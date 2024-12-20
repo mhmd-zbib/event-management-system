@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "user-service")
 public interface UserClient {
 
-    @GetMapping()
+    @GetMapping("/users/{id}/eligibility/can-book")
     EligibilityResponse getCustomerBookingEligibility(@RequestParam Long userId);
 
-    @GetMapping
+    @GetMapping("/users/{id}/eligibility/can-be-booked")
     EligibilityResponse getProviderBookingEligibility(@RequestParam Long userId);
 }

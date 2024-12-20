@@ -1,6 +1,6 @@
 package dev.zbib.userservice.controller;
 
-import dev.zbib.shared.dto.EligibilityResponse;
+import dev.zbib.shared.enums.UserRole;
 import dev.zbib.userservice.dto.request.CreateUserRequest;
 import dev.zbib.userservice.dto.response.UserListResponse;
 import dev.zbib.userservice.dto.response.UserResponse;
@@ -19,14 +19,13 @@ public class UserController {
 
     private final UserService userService;
 
-
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest req) {
         return ResponseEntity.ok(userService.createUser(req));
     }
 
     @GetMapping
-    public ResponseEntity<List<UserListResponse>> getUsersByIds(List<Long> ids) {
+    public ResponseEntity<List<UserListResponse>> getUsersByIds(@RequestParam List<Long> ids) {
         return ResponseEntity.ok(userService.getUsersByIds(ids));
     }
 
@@ -42,16 +41,12 @@ public class UserController {
         return ResponseEntity.ok("User deleted");
     }
 
-
-    @GetMapping("/{id}/validate/customer")
-    public ResponseEntity<EligibilityResponse> getCustomerBookingEligibility(@PathVariable Long id) {
-        return ResponseEntity.ok()
-                .body(userService.getCustomerBookingEligibility(id));
+    @PutMapping("/{id}/role")
+    public ResponseEntity<String> setRole(
+            @PathVariable Long id,
+            @RequestBody UserRole role) {
+        userService.setRole(id, role);
+        return ResponseEntity.ok("Role set");
     }
 
-    @GetMapping("/{id}/validate/provider")
-    public ResponseEntity<EligibilityResponse> getProviderBookingEligibility(@PathVariable Long id) {
-        return ResponseEntity.ok()
-                .body(userService.getProviderBookingEligibility(id));
-    }
 }

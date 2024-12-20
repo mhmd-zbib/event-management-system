@@ -9,16 +9,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public interface ProviderRepository extends JpaRepository<Provider, Long>, JpaSpecificationExecutor<Provider> {
     Optional<DetailsResponse> findDetailsById(Long id);
 
-    Page<DetailsListResponse> findAllDetails(
-            Specification<Provider> specification,
-            Pageable pageable);
-
     Optional<ProviderValidationDTO> findValidationDetailsById(
             Long id);
+
 }

@@ -15,12 +15,12 @@ public interface UserClient {
     @GetMapping("/users/{id}")
     UserResponse getUser(@PathVariable Long id);
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/users/{id}/role")
     void setRole(
             @PathVariable Long id,
             @RequestBody UserRole role);
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/users/{id}/eligibility/can-be-provider")
     EligibilityResponse getProviderEligibility(@PathVariable Long id);
 
     @GetMapping("/users")

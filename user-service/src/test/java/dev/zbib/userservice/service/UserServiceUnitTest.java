@@ -55,7 +55,7 @@ public class UserServiceUnitTest {
         user1.setPhoneNumber("123456789");
         user1.setPassword("password123");
         user1.setBirthDate(LocalDate.of(1990, 1, 1));
-        user1.setRole(UserRole.USER);
+        user1.setRole(UserRole.CUSTOMER);
         user1.setAddress(address);
 
         // Initialize user2
@@ -66,7 +66,7 @@ public class UserServiceUnitTest {
         user2.setPhoneNumber("414141");
         user2.setPassword("password123");
         user2.setBirthDate(LocalDate.of(1990, 1, 1));
-        user2.setRole(UserRole.USER);
+        user2.setRole(UserRole.CUSTOMER);
         user2.setAddress(address);
 
         // Initialize user3 (with a provider role)

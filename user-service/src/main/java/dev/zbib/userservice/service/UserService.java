@@ -1,7 +1,5 @@
 package dev.zbib.userservice.service;
 
-import dev.zbib.shared.dto.EligibilityResponse;
-import dev.zbib.shared.enums.AccountStatus;
 import dev.zbib.shared.enums.UserRole;
 import dev.zbib.userservice.dto.request.CreateUserRequest;
 import dev.zbib.userservice.dto.response.UserListResponse;
@@ -16,7 +14,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -47,40 +44,20 @@ public class UserService {
 
     public List<UserListResponse> getUsersByIds(
             List<Long> ids) {
-        return userRepository.findUsersById(ids);
+        return userRepository.findByIdIn(ids);
     }
 
 
-    private User getEntityUserById(Long id) {
+    public User getEntityUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
-
-    public EligibilityResponse getCustomerBookingEligibility(Long id) {
+    public void setRole(
+            Long id,
+            UserRole role) {
         User user = getEntityUserById(id);
-        List<String> reasons = new ArrayList<>();
-        if (!user.isVerified()) reasons.add("Your account is not verified");
-        if (user.getAccountStatus() != AccountStatus.ACTIVE) reasons.add("Your account is not active");
-        if (user.getRole() == UserRole.PROVIDER) reasons.add("Providers can't book");
-
-        return EligibilityResponse.builder()
-                .eligible(reasons.isEmpty())
-                .reasons(reasons)
-                .build();
-    }
-
-
-    public EligibilityResponse getProviderBookingEligibility(Long id) {
-        User user = getEntityUserById(id);
-        List<String> reasons = new ArrayList<>();
-        if (!user.isVerified()) reasons.add("Provider account is not verified");
-        if (user.getAccountStatus() != AccountStatus.ACTIVE) reasons.add("Provider account is not active");
-        if (user.getRole() == UserRole.USER) reasons.add("User is not a provider");
-
-        return EligibilityResponse.builder()
-                .eligible(reasons.isEmpty())
-                .reasons(reasons)
-                .build();
+        user.setRole(role);
+        userRepository.save(user);
     }
 }

@@ -75,7 +75,7 @@ public class User {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
-        role = UserRole.USER;
+        role = UserRole.CUSTOMER;
         accountStatus = AccountStatus.ACTIVE;
         isVerified = false;
         isBlocked = false;

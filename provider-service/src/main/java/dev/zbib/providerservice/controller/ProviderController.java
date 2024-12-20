@@ -10,6 +10,7 @@ import dev.zbib.shared.dto.EligibilityResponse;
 import dev.zbib.shared.enums.ServiceType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,31 +34,13 @@ public class ProviderController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping
     public ResponseEntity<Page<ProviderListResponse>> getProviders(
-            @RequestParam(value = "minRating", required = false) Double minRating,
-            @RequestParam(value = "maxRating", required = false) Double maxRating,
-            @RequestParam(value = "minHourlyRate", required = false) Double minHourlyRate,
-            @RequestParam(value = "maxHourlyRate", required = false) Double maxHourlyRate,
-            @RequestParam(value = "available", required = false) Boolean available,
-            @RequestParam(value = "serviceArea", required = false) String serviceArea,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size,
-            @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
-            @RequestParam(value = "sortDirection", defaultValue = "asc") String sortDirection) {
+@ModelAttribute ProviderFilterRequest providerFilterRequest,
 
-        ProviderFilterRequest filter = ProviderFilterRequest.builder()
-                .minRating(minRating)
-                .maxRating(maxRating)
-                .minHourlyRate(minHourlyRate)
-                .maxHourlyRate(maxHourlyRate)
-                .available(available)
-                .serviceArea(serviceArea)
-                .page(page)
-                .size(size)
-                .sortBy(sortBy)
-                .sortDirection(sortDirection)
-                .build();
-        Page<ProviderListResponse> providerDetails = providerService.getDetails(filter);
+            Pageable pageable) {
+
+        Page<ProviderListResponse> providerDetails = providerService.getProviders(providerFilterRequest, pageable);
         return new ResponseEntity<>(providerDetails, HttpStatus.OK);
     }
 
@@ -68,5 +51,4 @@ public class ProviderController {
         return ResponseEntity.ok()
                 .body(providerService.validateProviderBooking(id, service));
     }
-
 }

@@ -72,12 +72,13 @@ public class BookingValidationService {
     private void validateBookingTimeAvailability(
             Long providerId,
             ZonedDateTime bookingTime) {
-        if (!bookingRepository.existsByProviderId(providerId)) {
-            return;
-        }
+        if (!bookingRepository.existsByProviderId(providerId)) return;
         LocalDateTime localDateTime = bookingTime.withZoneSameInstant(ZoneOffset.UTC)
                 .toLocalDateTime();
         if (bookingRepository.hasOverlappingBookings(providerId, localDateTime))
             throw new BookingTimeOverlapException(localDateTime);
     }
 }
+
+
+
