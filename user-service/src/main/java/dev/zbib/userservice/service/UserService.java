@@ -18,10 +18,10 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final UserValidationService userValidation;
+    private final ValidationService validation;
 
     public UserResponse createUser(CreateUserRequest request) {
-        userValidation.validateUserCreation(request);
+        validation.validateUserCreation(request);
         User user = userMapper.toUser(request);
         userRepository.save(user);
         return userMapper.toUserResponse(user);

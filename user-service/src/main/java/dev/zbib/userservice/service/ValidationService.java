@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserValidationService {
+public class ValidationService {
 
     private final UserRepository userRepository;
 
-    public void validateUserCreation(CreateUserRequest req) {
+    protected void validateUserCreation(CreateUserRequest req) {
         validatePhoneNumber(req.getPhoneNumber());
     }
 

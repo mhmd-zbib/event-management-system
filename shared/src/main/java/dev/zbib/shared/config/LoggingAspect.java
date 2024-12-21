@@ -14,13 +14,16 @@ import java.util.Map;
 @Log4j2
 public class LoggingAspect {
 
-
     @Before("execution(* dev.zbib..*(..))")
     public void logMethodExecution(JoinPoint joinPoint) {
         String layer = getLayer(joinPoint);
         String methodName = getMethodName(joinPoint);
         Object[] args = joinPoint.getArgs();
-        log.info("[{}] ⏳ Executing method: {} with arguments: {}", layer, methodName, formatArgs(args));
+        log.info(
+                "\u001B[33m⏳ [Layer: {}] - Executing method: {} with args: {} \u001B[0m",
+                layer,
+                methodName,
+                formatArgs(args));
     }
 
     @AfterReturning(value = "execution(* dev.zbib..*(..))", returning = "result")
@@ -29,14 +32,18 @@ public class LoggingAspect {
             Object result) {
         String layer = getLayer(joinPoint);
         String methodName = getMethodName(joinPoint);
-        log.info("[{}] 📦 Method executed: {} returned: {}", layer, methodName, result != null ? result : "null");
+        log.info(
+                "\u001B[34m📦 [Layer: {}] - Method executed: {} returned: {} \u001B[0m",
+                layer,
+                methodName,
+                formatResult(result));
     }
 
     @After("execution(* dev.zbib..*(..))")
     public void logMethodExit(JoinPoint joinPoint) {
         String layer = getLayer(joinPoint);
         String methodName = getMethodName(joinPoint);
-        log.info("[{}] ✅ Method exit: {}", layer, methodName);
+        log.info("\u001B[32m✅ [Layer: {}] - Method exit: {} \u001B[0m", layer, methodName);
     }
 
     @AfterThrowing(value = "execution(* dev.zbib..*(..))", throwing = "exception")
@@ -45,7 +52,11 @@ public class LoggingAspect {
             Throwable exception) {
         String layer = getLayer(joinPoint);
         String methodName = getMethodName(joinPoint);
-        log.error("[{}] ❌ Method execution failed: {} with exception: {}", layer, methodName, exception.getMessage());
+        log.error(
+                "\u001B[31m❌ [Layer: {}] - Method execution failed: {} with exception: {} \u001B[0m",
+                layer,
+                methodName,
+                exception.getMessage());
     }
 
     private String formatArgs(Object[] args) {
@@ -86,6 +97,19 @@ public class LoggingAspect {
         return formattedArgs.toString();
     }
 
+    private String formatResult(Object result) {
+        if (result == null) {
+            return "null";
+        } else if (result instanceof String) {
+            return "\"" + result + "\"";
+        } else if (result instanceof Collection || result instanceof Map) {
+            assert result instanceof Collection<?>;
+            return result.getClass()
+                    .getSimpleName() + "[size=" + ((Collection<?>) result).size() + "]";
+        }
+        return result.toString();
+    }
+
     private String getMethodName(JoinPoint joinPoint) {
         return joinPoint.getSignature()
                 .getName();
@@ -100,6 +124,4 @@ public class LoggingAspect {
         return layer.substring(0, 1)
                 .toUpperCase() + layer.substring(1);
     }
-
-
 }

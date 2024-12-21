@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <!-- Define Rolling File Appender for storing logs -->
+    <Appenders>
+        <!-- Console Appender with colorful, detailed logs -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%highlight{%d{yyyy-MM-dd HH:mm:ss.SSS}}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue, TRACE=magenta} %-5level %logger{36} - %msg%n%throwable"/>
+        </Console>
+
+        <!-- Rolling File Appender -->
+        <RollingFile name="RollingFile" fileName="logs/application.log"
+                     filePattern="logs/$${date:yyyy-MM}/application-%d{MM-dd-yyyy}.log">
+            <PatternLayout>
+                <!-- Adjusted pattern to remove duplicate trace/span IDs -->
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n%throwable</Pattern>
+            </PatternLayout>
+            <Policies>
+                <!-- Create a new log file every day -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+    <!-- Loggers configuration -->
+    <Loggers>
+        <!-- Root logger (set global logging level here) -->
+        <Root level="DEBUG">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+
+        <!-- Specific loggers for detailed debugging -->
+        <Logger name="dev.zbib" level="TRACE" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
+    </Loggers>
+
+</Configuration>

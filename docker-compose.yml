@@ -14,6 +14,14 @@ services:
       - propal
     restart: unless-stopped
 
+  zipkin:
+    image: openzipkin/zipkin:2.23.2
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - propal
+
 networks:
   propal:
     driver: bridge
