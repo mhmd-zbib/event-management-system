@@ -5,7 +5,6 @@ import dev.zbib.userservice.dto.response.UserResponse;
 import dev.zbib.userservice.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {

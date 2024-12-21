@@ -1,6 +1,7 @@
 package dev.zbib.userservice.controller;
 
 import dev.zbib.userservice.dto.request.CreateUserRequest;
+import dev.zbib.userservice.dto.response.UserListResponse;
 import dev.zbib.userservice.dto.response.UserResponse;
 import dev.zbib.userservice.service.UserService;
 import jakarta.validation.Valid;
@@ -30,8 +31,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getUsersByIds(@RequestParam List<Long> ids) {
-        List<UserResponse> responses = userService.getUserListByIds(ids);
+    public ResponseEntity<List<UserListResponse>> getUserListByIds(@RequestParam List<Long> ids) {
+        List<UserListResponse> responses = userService.getUserListByIds(ids);
         return ResponseEntity.ok(responses);
     }
 }
