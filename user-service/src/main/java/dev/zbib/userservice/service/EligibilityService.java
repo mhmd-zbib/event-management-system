@@ -16,9 +16,8 @@ public class EligibilityService {
 
     private final UserService userService;
 
-
     public EligibilityResponse canCustomerBook(Long id) {
-        User user = userService.getEntityUserById(id);
+        User user = userService.getUserById(id);
         List<String> reasons = new ArrayList<>();
         if (!user.isVerified()) reasons.add("Your account is not verified");
         if (user.getAccountStatus() != AccountStatus.ACTIVE) reasons.add("Your account is not active");
@@ -31,7 +30,7 @@ public class EligibilityService {
 
 
     public EligibilityResponse canProviderBeBooked(Long id) {
-        User user = userService.getEntityUserById(id);
+        User user = userService.getUserById(id);
         List<String> reasons = new ArrayList<>();
         if (user.getRole() == UserRole.CUSTOMER) reasons.add("User is not a provider");
         if (!user.isVerified()) reasons.add("Provider account is not verified");
@@ -44,7 +43,7 @@ public class EligibilityService {
     }
 
     public EligibilityResponse canBecomeProvider(Long id) {
-        User user = userService.getEntityUserById(id);
+        User user = userService.getUserById(id);
         List<String> reasons = new ArrayList<>();
         if (user.getRole() == UserRole.PROVIDER) reasons.add("You already are a provider");
         if (!user.isVerified()) reasons.add("Provider account is not verified");

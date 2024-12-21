@@ -76,7 +76,6 @@ public class LoggingAspect {
                 .getName();
     }
 
-    // Helper method to format arguments for logging
     private String formatArguments(Object[] args) {
         if (args == null || args.length == 0) {
             return "";

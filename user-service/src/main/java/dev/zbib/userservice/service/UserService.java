@@ -1,6 +1,7 @@
 package dev.zbib.userservice.service;
 
 import dev.zbib.userservice.dto.request.CreateUserRequest;
+import dev.zbib.userservice.dto.response.UserListResponse;
 import dev.zbib.userservice.dto.response.UserResponse;
 import dev.zbib.userservice.entity.User;
 import dev.zbib.userservice.exception.UserNotFoundException;
@@ -17,20 +18,26 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final UserValidationService userValidation;
 
     public UserResponse createUser(CreateUserRequest request) {
+        userValidation.validateUserCreation(request);
         User user = userMapper.toUser(request);
         userRepository.save(user);
         return userMapper.toUserResponse(user);
     }
 
-    public UserResponse getUserById(Long id) {
-        User user = userRepository.findById(id)
+    public UserResponse getUserResponseById(Long id) {
+        return userRepository.findUserResponseById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
-        return userMapper.toUserResponse(user);
     }
 
-    public List<UserResponse> getUsersByIds(List<Long> ids) {
+    public List<UserListResponse> getUserListByIds(List<Long> ids) {
         return userRepository.findByIdIn(ids);
+    }
+
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 }

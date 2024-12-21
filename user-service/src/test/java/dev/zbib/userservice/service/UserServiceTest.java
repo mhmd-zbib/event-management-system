@@ -57,6 +57,6 @@ class UserServiceTest {
         long userId = 1L;
         when(userRepository.findUserById(userId)).thenReturn(Optional.empty());
 
-        assertThrows(UserNotFoundException.class, () -> userService.getUserById(userId));
+        assertThrows(UserNotFoundException.class, () -> userService.getUserResponseById(userId));
     }
 } 
