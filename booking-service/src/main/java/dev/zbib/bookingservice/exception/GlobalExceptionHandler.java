@@ -1,6 +1,5 @@
-package dev.zbib.userservice.exception;
+package dev.zbib.bookingservice.exception;
 
-import dev.zbib.bookingservice.exception.BookingException;
 import dev.zbib.shared.dto.ErrorResponse;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.log4j.Log4j2;

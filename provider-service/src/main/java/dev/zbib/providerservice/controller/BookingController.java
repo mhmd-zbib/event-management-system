@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/providers/{id}/booking")
+@RequestMapping("/providers/{id}/bookings")
 @RequiredArgsConstructor
 public class BookingController {
 
@@ -17,8 +17,7 @@ public class BookingController {
     @PostMapping("/can-be-booked")
     public ResponseEntity<EligibilityResponse> canProviderBeBooked(
             @PathVariable Long id,
-            @RequestBody
-            ServiceType serviceType) {
+            @RequestBody ServiceType serviceType) {
         return ResponseEntity.ok()
                 .body(bookingService.canBeBooked(id, serviceType));
     }

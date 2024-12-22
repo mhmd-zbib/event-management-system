@@ -20,7 +20,7 @@ public interface UserClient {
             @PathVariable Long id,
             @RequestBody UserRole role);
 
-    @GetMapping("/users/{id}/eligibility/can-be-provider")
+    @GetMapping("/users/{id}/providers/can-be-provider")
     EligibilityResponse canBeProvider(@PathVariable Long id);
 
     @GetMapping("/users")

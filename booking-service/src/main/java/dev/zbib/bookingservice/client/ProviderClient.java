@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "provider-service")
 public interface ProviderClient {
 
-    @PostMapping("/providers/{providerId}/can-be-booked")
+    @PostMapping("/providers/{id}/bookings/can-be-booked")
     EligibilityResponse getProviderAvailability(
-            @PathVariable Long providerId,
+            @PathVariable Long id,
             @RequestBody ServiceType serviceType
     );
 }

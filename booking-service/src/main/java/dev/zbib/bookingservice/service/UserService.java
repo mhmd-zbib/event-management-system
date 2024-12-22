@@ -16,7 +16,7 @@ public class UserService {
 
     protected void canBook(Long id) {
         try {
-            EligibilityResponse userEligibility = userClient.getCustomerBookingEligibility(id);
+            EligibilityResponse userEligibility = userClient.canBook(id);
             if (!userEligibility.isEligible()) throw new CustomerCantBookException(userEligibility.getReasons());
         } catch (FeignException.NotFound e) {
             throw new CustomerNotFoundException(id);
@@ -26,7 +26,7 @@ public class UserService {
 
     protected void canBeBooked(Long id) {
         try {
-            EligibilityResponse providerEligibility = userClient.getProviderBookingEligibility(id);
+            EligibilityResponse providerEligibility = userClient.canBeBooked(id);
             if (!providerEligibility.isEligible())
                 throw new CustomerCantBookException(providerEligibility.getReasons());
         } catch (FeignException.NotFound e) {

@@ -1,14 +1,18 @@
 package dev.zbib.bookingservice.mapper;
 
 import dev.zbib.bookingservice.dto.request.CreateBookingRequest;
-import dev.zbib.bookingservice.dto.response.BookingResponse;
 import dev.zbib.bookingservice.entity.Booking;
-import org.mapstruct.Mapper;
+import dev.zbib.shared.enums.BookingStatus;
 
-@Mapper(componentModel = "spring")
-public interface BookingMapper {
+public class BookingMapper {
 
-    Booking toBooking(CreateBookingRequest req);
-
-    BookingResponse toBookingResponse(Booking booking);
+    public static Booking toBooking(CreateBookingRequest req) {
+        return Booking.builder()
+                .customerId(req.getCustomerId())
+                .providerId(req.getProviderId())
+                .serviceType(req.getServiceType())
+                .status(BookingStatus.PENDING)
+                .bookingDate(req.getBookingDate())
+                .build();
+    }
 } 

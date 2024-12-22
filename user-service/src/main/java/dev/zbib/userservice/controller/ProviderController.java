@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/users/{id}/provider")
+@RequestMapping("/users/{id}/providers")
 @RequiredArgsConstructor
 public class ProviderController {
 
-    private ProviderService providerService;
+    private final ProviderService providerService;
 
     @GetMapping("/can-be-provider")
     public ResponseEntity<EligibilityResponse> canBecomeProvider(@PathVariable Long id) {

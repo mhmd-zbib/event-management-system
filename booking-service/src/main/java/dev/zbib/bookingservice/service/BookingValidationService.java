@@ -8,8 +8,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 
 @Log4j2
 @Service
@@ -21,23 +19,21 @@ public class BookingValidationService {
     private final ProviderService providerService;
 
     public void validateBooking(CreateBookingRequest req) {
-        Long userId = req.getUserId();
+        Long userId = req.getCustomerId();
         Long providerId = req.getProviderId();
 
         userService.canBook(userId);
         userService.canBeBooked(providerId);
         providerService.canBeBooked(providerId, req.getServiceType());
-        validateTime(providerId, req.getBookingTime());
+        validateTime(providerId, req.getBookingDate());
     }
 
     private void validateTime(
             Long providerId,
-            ZonedDateTime bookingTime) {
+            LocalDateTime bookingTime) {
         if (!bookingRepository.existsByProviderId(providerId)) return;
-        LocalDateTime localDateTime = bookingTime.withZoneSameInstant(ZoneOffset.UTC)
-                .toLocalDateTime();
-        if (bookingRepository.hasOverlappingBookings(providerId, localDateTime))
-            throw new BookingTimeOverlapException(localDateTime);
+        if (bookingRepository.hasOverlappingBookings(providerId, bookingTime))
+            throw new BookingTimeOverlapException(bookingTime);
     }
 }
 

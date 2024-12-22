@@ -1,7 +1,9 @@
 package dev.zbib.bookingservice.entity;
 
 import dev.zbib.shared.enums.BookingStatus;
+import dev.zbib.shared.enums.ServiceType;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -9,33 +11,30 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @Table(name = "bookings")
+@Builder
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "customer_id")
     private Long customerId;
 
-    @Column(name = "provider_id")
     private Long providerId;
 
-    @Column(name = "booking_date")
     private LocalDateTime bookingDate;
 
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
 
-
-    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     private String paymentStatus;
 
     private Double amount;
 
-    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    private ServiceType serviceType;
 
     @PrePersist
     protected void onCreate() {
