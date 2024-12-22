@@ -8,7 +8,7 @@ services:
       - POSTGRES_USER=guest
       - POSTGRES_PASSWORD=guest
     volumes:
-      - provider-service-data:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - propal
@@ -29,8 +29,13 @@ services:
       - "5672:5672"
       - "15672:15672"
     environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASSWORD: guest
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - rabbitmq_logs:/var/log/rabbitmq
+    networks:
+      - propal
 
 
 networks:
@@ -38,4 +43,9 @@ networks:
     driver: bridge
 
 volumes:
-  provider-service-data:
+  rabbitmq_data:
+    name: rabbitmq_data
+  rabbitmq_logs:
+    name: rabbitmq_logs
+  db-data:
+    name: provider-service-data

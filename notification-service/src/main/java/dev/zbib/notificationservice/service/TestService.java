@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,9 +11,8 @@ import org.springframework.stereotype.Component;
 @Log4j2
 public class TestService {
 
-    private JavaMailSender emailSender;
 
-    @RabbitListener(queues = "test_queue")
+    @RabbitListener(queues = "notification")
     public void receiveMessage(String message) {
         log.info(message);
         sendEmail("mohammad.habib.zbib@gmail.com", "NEW NOTF", message);
@@ -30,7 +28,6 @@ public class TestService {
         message.setSubject(subject);
         message.setText(text);
 
-        emailSender.send(message);
         log.info("message sent");
     }
 }
