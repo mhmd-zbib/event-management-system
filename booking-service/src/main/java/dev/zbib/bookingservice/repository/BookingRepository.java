@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    Optional<BookingResponse> findResponseById(Long id);
+    Optional<BookingResponse> findBookingById(Long id);
 
     @Query(value = "SELECT COUNT(*) > 0 FROM bookings b " +
             "WHERE b.provider_id = :providerId " +

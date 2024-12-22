@@ -6,19 +6,13 @@ import java.time.LocalDateTime;
 
 public record BookingResponse(
         Long id,
-        Long userId,
+        Long customerId,
         Long providerId,
+        LocalDateTime bookingDate,
         BookingStatus status,
-        LocalDateTime scheduledStartTime,
-        LocalDateTime scheduledEndTime,
-        LocalDateTime actualStartTime,
-        LocalDateTime actualEndTime,
-        String serviceAddress,
-        String description,
-        Double totalCost,
-        Double rating,
-        String feedback,
         LocalDateTime createdAt,
+        String paymentStatus,
+        Double amount,
         LocalDateTime updatedAt
 ) {
 }

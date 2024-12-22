@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserClient userClient;
 
-    public void canBook(Long id) {
+    protected void canBook(Long id) {
         try {
             EligibilityResponse userEligibility = userClient.getCustomerBookingEligibility(id);
             if (!userEligibility.isEligible()) throw new CustomerCantBookException(userEligibility.getReasons());
@@ -24,7 +24,7 @@ public class UserService {
     }
 
 
-    public void canBeBooked(Long id) {
+    protected void canBeBooked(Long id) {
         try {
             EligibilityResponse providerEligibility = userClient.getProviderBookingEligibility(id);
             if (!providerEligibility.isEligible())

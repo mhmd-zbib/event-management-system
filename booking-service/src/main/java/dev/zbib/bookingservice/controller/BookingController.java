@@ -15,12 +15,12 @@ public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
-    public ResponseEntity<BookingResponse> createBooking(@RequestParam CreateBookingRequest request) {
+    public ResponseEntity<BookingResponse> createBooking(@RequestBody CreateBookingRequest request) {
         return ResponseEntity.ok(bookingService.createBooking(request));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<BookingResponse> getBookingById(@PathVariable Long id) {
-        return ResponseEntity.ok(bookingService.getBooking(id));
+        return ResponseEntity.ok(bookingService.getBookingById(id));
     }
 }

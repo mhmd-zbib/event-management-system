@@ -16,7 +16,7 @@ public class ProviderService {
 
     private final ProviderClient providerClient;
 
-    public void canBeBooked(
+    protected void canBeBooked(
             Long id,
             ServiceType serviceType) throws CustomerCantBookException {
         try {
@@ -27,5 +27,4 @@ public class ProviderService {
             throw new ProviderNotFoundException(id);
         }
     }
-
 }

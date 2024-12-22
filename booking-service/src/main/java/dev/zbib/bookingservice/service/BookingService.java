@@ -29,8 +29,8 @@ public class BookingService {
         return bookingMapper.toBookingResponse(createBooking);
     }
 
-    public BookingResponse getBooking(Long id) {
-        return bookingRepository.findResponseById(id)
+    public BookingResponse getBookingById(Long id) {
+        return bookingRepository.findBookingById(id)
                 .orElseThrow(() -> new BookingNotFoundException(id));
     }
 }

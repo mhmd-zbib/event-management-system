@@ -1,7 +1,10 @@
 package dev.zbib.bookingservice.exception;
 
-public class CustomerNotFoundException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+
+public class CustomerNotFoundException extends BookingException {
     public CustomerNotFoundException(Long id) {
-        super("Customer with id " + id + " not found");
+        super(HttpStatus.NOT_FOUND , "Customer with id " + id + " not found");
     }
 }

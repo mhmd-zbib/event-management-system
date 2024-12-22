@@ -1,6 +1,6 @@
 package dev.zbib.bookingservice.dto.response;
 
-import dev.zbib.bookingservice.model.BookingStatus;
+import dev.zbib.shared.enums.BookingStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
