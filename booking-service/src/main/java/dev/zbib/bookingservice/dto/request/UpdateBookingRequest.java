@@ -1,7 +1,6 @@
 package dev.zbib.bookingservice.dto.request;
 
-import dev.zbib.bookingservice.model.BookingStatus;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Future;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

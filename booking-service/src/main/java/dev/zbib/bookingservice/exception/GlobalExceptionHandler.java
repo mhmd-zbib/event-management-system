@@ -1,140 +1,86 @@
-package dev.zbib.bookingservice.exception;
+package dev.zbib.userservice.exception;
 
-import dev.zbib.shared.exception.ErrorResponse;
-import dev.zbib.shared.exception.ServiceException;
-import feign.FeignException;
+import dev.zbib.bookingservice.exception.BookingException;
+import dev.zbib.shared.dto.ErrorResponse;
 import jakarta.validation.ConstraintViolationException;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Collectors;
 
-@Slf4j
-@RestControllerAdvice
+@ControllerAdvice
+@Log4j2
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach(error -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-
+    @ExceptionHandler(BookingException.class)
+    public ResponseEntity<ErrorResponse> handleUserExceptions(BookingException e) {
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.BAD_REQUEST.value())
-                .message("Validation failed")
-                .details(errors)
+                .message(e.getMessage())
+                .details(e.getDetails() == null || e.getDetails()
+                        .isEmpty() ? null : e.getDetails())
+
+                .timestamp(LocalDateTime.now())
                 .build();
 
+        return new ResponseEntity<>(errorResponse, e.getErrorCode());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException e) {
+        BindingResult bindingResult = e.getBindingResult();
+        List<ObjectError> errors = bindingResult.getAllErrors();
+
+        List<ErrorResponse.FieldValidationError> fieldValidationErrors = errors.stream()
+                .map(error -> ErrorResponse.FieldValidationError.builder()
+                        .field(error.getObjectName())
+                        .message(error.getDefaultMessage())
+                        .build())
+                .collect(Collectors.toList());
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message("Validation Error")
+                .timestamp(LocalDateTime.now())
+                .validation(fieldValidationErrors)
+                .build();
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ErrorResponse> handleConstraintViolation(ConstraintViolationException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getConstraintViolations().forEach(violation -> {
-            String fieldName = violation.getPropertyPath().toString();
-            String errorMessage = violation.getMessage();
-            errors.put(fieldName, errorMessage);
-        });
+    public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException e) {
+        List<ErrorResponse.FieldValidationError> validationErrors = e.getConstraintViolations()
+                .stream()
+                .map(violation -> ErrorResponse.FieldValidationError.builder()
+                        .field(violation.getPropertyPath()
+                                .toString())
+                        .message(violation.getMessage())
+                        .build())
+                .collect(Collectors.toList());
 
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.BAD_REQUEST.value())
                 .message("Validation failed")
-                .details(errors)
+                .timestamp(LocalDateTime.now())
+                .validation(validationErrors)
                 .build();
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(BookingNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleBookingNotFound(BookingNotFoundException ex) {
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException e) {
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.NOT_FOUND.value())
-                .message(ex.getMessage())
+                .message(e.getMessage())
+                .timestamp(LocalDateTime.now())
                 .build();
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException ex) {
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.NOT_FOUND.value())
-                .message(ex.getMessage())
-                .build();
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(ProviderNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleProviderNotFound(ProviderNotFoundException ex) {
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.NOT_FOUND.value())
-                .message(ex.getMessage())
-                .build();
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(BookingValidationException.class)
-    public ResponseEntity<ErrorResponse> handleBookingValidation(BookingValidationException ex) {
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.BAD_REQUEST.value())
-                .message(ex.getMessage())
-                .build();
-
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+}
 
-    @ExceptionHandler(InvalidBookingStateException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidBookingState(InvalidBookingStateException ex) {
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.CONFLICT.value())
-                .message(ex.getMessage())
-                .build();
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
-    }
-
-    @ExceptionHandler(ProviderUnavailableException.class)
-    public ResponseEntity<ErrorResponse> handleProviderUnavailable(ProviderUnavailableException ex) {
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.CONFLICT.value())
-                .message(ex.getMessage())
-                .build();
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
-    }
-
-    @ExceptionHandler(FeignException.class)
-    public ResponseEntity<ErrorResponse> handleFeignException(FeignException ex) {
-        log.error("External service error: ", ex);
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.SERVICE_UNAVAILABLE.value())
-                .message("External service error: " + ex.getMessage())
-                .build();
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.SERVICE_UNAVAILABLE);
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
-        log.error("Unexpected error: ", ex);
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .message("An unexpected error occurred")
-                .build();
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-} 

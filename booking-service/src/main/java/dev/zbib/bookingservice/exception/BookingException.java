@@ -3,30 +3,31 @@ package dev.zbib.bookingservice.exception;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 public class BookingException extends RuntimeException {
-    private HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+
+    private HttpStatus errorCode;
+    private LocalDateTime timestamp;
     private List<String> details;
 
-    public BookingException(String message) {
-        super(message);
-    }
 
     public BookingException(
-            HttpStatus status,
-            String message) {
-        super(message);
-        this.status = status;
-    }
-
-    public BookingException(
-            HttpStatus status,
+            HttpStatus errorCode,
             String message,
             List<String> details) {
         super(message);
-        this.status = status;
+        this.errorCode = errorCode;
         this.details = details;
+    }
+
+    public BookingException(
+            HttpStatus errorCode,
+            String message) {
+        super(message);
+        this.errorCode = errorCode;
     }
 }

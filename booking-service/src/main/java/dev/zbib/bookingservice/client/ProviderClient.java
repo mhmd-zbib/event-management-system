@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "provider-service")
 public interface ProviderClient {
 
-    @GetMapping("/providers/{providerId}/availability")
+    @GetMapping("/providers/{providerId}/can-be-booked")
     EligibilityResponse getProviderAvailability(
             @PathVariable Long providerId,
             @RequestBody ServiceType serviceType
