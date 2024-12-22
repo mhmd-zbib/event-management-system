@@ -38,7 +38,7 @@ public class ProviderController {
     public ResponseEntity<Page<ProviderListResponse>> getProviders(
             @ModelAttribute ProviderFilterRequest providerFilterRequest,
             Pageable pageable) {
-        Page<ProviderListResponse> providerDetails = providerService.getProviders(providerFilterRequest, pageable);
+        Page<ProviderListResponse> providerDetails = providerService.getProviderList(providerFilterRequest, pageable);
         return new ResponseEntity<>(providerDetails, HttpStatus.OK);
     }
 

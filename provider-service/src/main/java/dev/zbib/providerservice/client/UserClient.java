@@ -21,7 +21,7 @@ public interface UserClient {
             @RequestBody UserRole role);
 
     @GetMapping("/users/{id}/eligibility/can-be-provider")
-    EligibilityResponse getProviderEligibility(@PathVariable Long id);
+    EligibilityResponse canBeProvider(@PathVariable Long id);
 
     @GetMapping("/users")
     List<UserListResponse> getUsersById(@RequestParam List<Long> ids);
