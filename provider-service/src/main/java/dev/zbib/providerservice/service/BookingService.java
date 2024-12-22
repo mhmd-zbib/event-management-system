@@ -1,13 +1,10 @@
 package dev.zbib.providerservice.service;
 
-import dev.zbib.providerservice.client.UserClient;
 import dev.zbib.providerservice.dto.internal.ProviderValidationDTO;
-import dev.zbib.providerservice.exception.ProviderNotEligibleException;
 import dev.zbib.providerservice.exception.ProviderNotFoundException;
 import dev.zbib.providerservice.repository.ProviderRepository;
 import dev.zbib.shared.dto.EligibilityResponse;
 import dev.zbib.shared.enums.ServiceType;
-import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +13,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ProviderEligibilityService {
+public class BookingService {
 
     private final ProviderRepository providerRepository;
-    private final UserClient userClient;
 
 
-    public EligibilityResponse validateProviderBooking(
+    public EligibilityResponse canBeBooked(
             Long id,
             ServiceType serviceType) {
 
@@ -38,5 +34,4 @@ public class ProviderEligibilityService {
                 .eligible(!reasons.isEmpty())
                 .build();
     }
-
 }

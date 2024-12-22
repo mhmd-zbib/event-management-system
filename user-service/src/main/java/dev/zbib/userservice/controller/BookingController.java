@@ -1,7 +1,7 @@
 package dev.zbib.userservice.controller;
 
 import dev.zbib.shared.dto.EligibilityResponse;
-import dev.zbib.userservice.service.EligibilityService;
+import dev.zbib.userservice.service.BookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,27 +10,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/users/{id}/eligibility")
+@RequestMapping("/users/{id}/booking")
 @RequiredArgsConstructor
-public class EligibilityController {
+public class BookingController {
 
-    private final EligibilityService eligibilityService;
+    private final BookingService bookingService;
 
     @GetMapping("/can-book")
     public ResponseEntity<EligibilityResponse> canCustomerBook(@PathVariable Long id) {
         return ResponseEntity.ok()
-                .body(eligibilityService.canCustomerBook(id));
+                .body(bookingService.canBook(id));
     }
 
     @GetMapping("/can-be-booked")
     public ResponseEntity<EligibilityResponse> canProviderBeBooked(@PathVariable Long id) {
         return ResponseEntity.ok()
-                .body(eligibilityService.canProviderBeBooked(id));
+                .body(bookingService.canBeBooked(id));
     }
-
-    @GetMapping("/can-be-provider")
-    public ResponseEntity<EligibilityResponse> canBecomeProvider(@PathVariable Long id) {
-        return ResponseEntity.ok(eligibilityService.canBecomeProvider(id));
-    }
-
 }

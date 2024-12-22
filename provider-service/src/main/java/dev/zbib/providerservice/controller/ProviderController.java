@@ -6,8 +6,6 @@ import dev.zbib.providerservice.dto.response.DetailsResponse;
 import dev.zbib.providerservice.dto.response.ProviderListResponse;
 import dev.zbib.providerservice.dto.response.ProviderResponse;
 import dev.zbib.providerservice.service.ProviderService;
-import dev.zbib.shared.dto.EligibilityResponse;
-import dev.zbib.shared.enums.ServiceType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,24 +27,16 @@ public class ProviderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProviderResponse> getProvider(@PathVariable Long id) {
+    public ResponseEntity<ProviderResponse> getProviderById(@PathVariable Long id) {
         ProviderResponse response = providerService.getProviderById(id);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProviderListResponse>> getProviders(
+    public ResponseEntity<Page<ProviderListResponse>> getProviderList(
             @ModelAttribute ProviderFilterRequest providerFilterRequest,
             Pageable pageable) {
         Page<ProviderListResponse> providerDetails = providerService.getProviderList(providerFilterRequest, pageable);
         return new ResponseEntity<>(providerDetails, HttpStatus.OK);
-    }
-
-    @PostMapping("/{id}/validate-booking")
-    public ResponseEntity<EligibilityResponse> validateProvider(
-            @PathVariable Long id,
-            @RequestBody ServiceType service) {
-        return ResponseEntity.ok()
-                .body(providerService.validateProviderBooking(id, service));
     }
 }

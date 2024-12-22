@@ -22,15 +22,15 @@ import java.util.stream.Collectors;
 @Log4j2
 public class ProviderService {
     private final ProviderMapper providerMapper;
-    private final UserService userService;
+    private final UserService userManagement;
     private final DetailsService detailsService;
     private final UserClient userClient;
 
     @Transactional
     public DetailsResponse createProvider(CreateProviderRequest request) {
         Long id = request.getId();
-        userService.canBeProvider(id);
-        userService.assignProviderRole(id);
+        userManagement.canBeProvider(id);
+        userManagement.assignProviderRole(id);
         return detailsService.createDetails(request);
     }
 
@@ -38,7 +38,7 @@ public class ProviderService {
     public ProviderResponse getProviderById(Long id) {
         DetailsResponse details = detailsService.getDetailsById(id);
         UserResponse user;
-        user = userService.getUserById(id);
+        user = userManagement.getUserById(id);
         return providerMapper.toProviderResponse(user, details);
     }
 
@@ -69,7 +69,7 @@ public class ProviderService {
                     return new ProviderListResponse(
                             provider.getId(),
                             user.firstName(),
-                            user.firstName(),
+                            user.lastName(),
                             user.profilePicture(),
                             provider.getServiceType(),
                             provider.getHourlyRate(),

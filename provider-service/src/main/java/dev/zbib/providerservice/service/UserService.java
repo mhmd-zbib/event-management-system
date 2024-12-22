@@ -16,7 +16,7 @@ public class UserService {
 
     private final UserClient userClient;
 
-    
+
     public UserResponse getUserById(Long id) {
         try {
             return userClient.getUser(id);

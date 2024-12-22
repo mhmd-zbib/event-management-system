@@ -12,11 +12,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class EligibilityService {
+public class BookingService {
 
     private final UserService userService;
 
-    public EligibilityResponse canCustomerBook(Long id) {
+    public EligibilityResponse canBook(Long id) {
         User user = userService.getUserById(id);
         List<String> reasons = new ArrayList<>();
         if (!user.isVerified()) reasons.add("Your account is not verified");
@@ -29,25 +29,13 @@ public class EligibilityService {
     }
 
 
-    public EligibilityResponse canProviderBeBooked(Long id) {
+    public EligibilityResponse canBeBooked(Long id) {
         User user = userService.getUserById(id);
         List<String> reasons = new ArrayList<>();
         if (user.getRole() == UserRole.CUSTOMER) reasons.add("User is not a provider");
         if (!user.isVerified()) reasons.add("Provider account is not verified");
         if (user.getAccountStatus() != AccountStatus.ACTIVE) reasons.add("Provider account is not active");
 
-        return EligibilityResponse.builder()
-                .eligible(reasons.isEmpty())
-                .reasons(reasons)
-                .build();
-    }
-
-    public EligibilityResponse canBecomeProvider(Long id) {
-        User user = userService.getUserById(id);
-        List<String> reasons = new ArrayList<>();
-        if (user.getRole() == UserRole.PROVIDER) reasons.add("You already are a provider");
-        if (!user.isVerified()) reasons.add("Provider account is not verified");
-        if (user.getAccountStatus() != AccountStatus.ACTIVE) reasons.add("Provider account is not active");
         return EligibilityResponse.builder()
                 .eligible(reasons.isEmpty())
                 .reasons(reasons)

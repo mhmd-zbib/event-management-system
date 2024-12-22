@@ -18,7 +18,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final ValidationService validation;
+    private final UserValidationService validation;
 
     public UserResponse createUser(CreateUserRequest request) {
         validation.validateUserCreation(request);
