@@ -1,61 +1,28 @@
 package dev.zbib.providerservice.client;
 
-import dev.zbib.providerservice.model.enums.UserRoles;
-import dev.zbib.providerservice.model.response.UserClientResponse;
-import dev.zbib.providerservice.model.response.UserListClientResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
+import dev.zbib.providerservice.dto.response.UserListResponse;
+import dev.zbib.providerservice.dto.response.UserResponse;
+import dev.zbib.shared.dto.EligibilityResponse;
+import dev.zbib.shared.enums.UserRole;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
-@Service
-@RequiredArgsConstructor
-public class UserClient {
+@FeignClient(name = "user-service")
+public interface UserClient {
 
-    private final WebClient.Builder webClientBuilder;
+    @GetMapping("/users/{id}")
+    UserResponse getUser(@PathVariable Long id);
 
-    public List<UserListClientResponse> getUserListClientResponseByIdList(List<Long> ids) {
-        return webClientBuilder.baseUrl("http://user-service")
-                .build()
-                .get()
-                .uri(uriBuilder -> uriBuilder.path("/users")
-                        .queryParam("ids", String.join(
-                                ",",
-                                ids.stream()
-                                        .map(String::valueOf)
-                                        .toArray(String[]::new)))
-                        .build())
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<UserListClientResponse>>() {
-                })
-                .block();
-    }
+    @PutMapping("/users/{id}/role")
+    void setRole(
+            @PathVariable Long id,
+            @RequestBody UserRole role);
 
-    public UserClientResponse getUserClientResponseById(Long id) {
-        return webClientBuilder.baseUrl("http://user-service")
-                .build()
-                .get()
-                .uri(uriBuilder -> uriBuilder.path("/users/{id}")
-                        .build(id))
-                .retrieve()
-                .bodyToMono(UserClientResponse.class)
-                .block();
-    }
+    @GetMapping("/users/{id}/providers/can-be-provider")
+    EligibilityResponse canBeProvider(@PathVariable Long id);
 
-    public void changeUserRole(
-            Long id,
-            UserRoles role) {
-        webClientBuilder.baseUrl("http://user-service")
-                .build()
-                .put()
-                .uri(uri -> uri.path("/users/roles/{id}")
-                        .build(id))
-                .bodyValue(Collections.singletonMap("role", role))
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
-    }
+    @GetMapping("/users")
+    List<UserListResponse> getUsersById(@RequestParam List<Long> ids);
 }

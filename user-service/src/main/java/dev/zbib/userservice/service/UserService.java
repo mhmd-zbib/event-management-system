@@ -1,67 +1,43 @@
 package dev.zbib.userservice.service;
 
-import dev.zbib.userservice.client.ProviderClient;
-import dev.zbib.userservice.model.entity.User;
-import dev.zbib.userservice.model.enums.UserRoles;
-import dev.zbib.userservice.model.mappers.UserMapper;
-import dev.zbib.userservice.model.request.CreateUserRequest;
-import dev.zbib.userservice.model.response.UserListResponse;
-import dev.zbib.userservice.model.response.UserResponse;
+import dev.zbib.userservice.dto.request.CreateUserRequest;
+import dev.zbib.userservice.dto.response.UserListResponse;
+import dev.zbib.userservice.dto.response.UserResponse;
+import dev.zbib.userservice.entity.User;
+import dev.zbib.userservice.exception.UserNotFoundException;
+import dev.zbib.userservice.mapper.UserMapper;
 import dev.zbib.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static dev.zbib.userservice.model.mappers.UserMapper.toUser;
-import static dev.zbib.userservice.model.mappers.UserMapper.toUserResponse;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-    private final ProviderClient providerClient;
+    private final UserMapper userMapper;
+    private final UserValidationService validation;
 
-    public Long createUser(CreateUserRequest request) {
-        User user = toUser(request);
-        user.setRole(UserRoles.USER);
-        return userRepository.save(user)
-                .getId();
+    public UserResponse createUser(CreateUserRequest request) {
+        validation.validateUserCreation(request);
+        User user = userMapper.toUser(request);
+        userRepository.save(user);
+        return userMapper.toUserResponse(user);
     }
 
     public UserResponse getUserResponseById(Long id) {
-        User user = getUserById(id);
-        return toUserResponse(user);
+        return userRepository.findUserResponseById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    public List<UserListResponse> getUserListByIds(List<Long> ids) {
+        return userRepository.findByIdIn(ids);
     }
 
     public User getUserById(Long id) {
-        User user = userRepository.findById(id)
-                .orElse(null);
-        return user;
-    }
-
-    public void deleteUserById(long id) {
-        User user = getUserById(id);
-        userRepository.deleteById(user.getId());
-        if (UserRoles.PROVIDER.equals(user.getRole())) {
-            providerClient.deleteProvider(id);
-        }
-    }
-
-    public List<UserListResponse> getUserListResponseByIdList(List<Long> id) {
-        List<User> userList = userRepository.findUsersByIdIn(id);
-        return userList.stream()
-                .map(UserMapper::toUserListResponse)
-                .collect(Collectors.toList());
-    }
-
-    public void setRole(
-            Long id,
-            UserRoles role) {
-        User user = getUserById(id);
-        user.setRole(role);
-        userRepository.save(user);
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 }

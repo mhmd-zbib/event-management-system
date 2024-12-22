@@ -1,94 +1,82 @@
 package dev.zbib.providerservice.service;
 
 import dev.zbib.providerservice.client.UserClient;
-import dev.zbib.providerservice.model.entity.Provider;
-import dev.zbib.providerservice.model.enums.ServiceType;
-import dev.zbib.providerservice.model.enums.UserRoles;
-import dev.zbib.providerservice.model.request.RegisterProviderRequest;
-import dev.zbib.providerservice.model.response.*;
-import dev.zbib.providerservice.repository.ProviderRepository;
-import dev.zbib.providerservice.specification.ProviderSpecification;
+import dev.zbib.providerservice.dto.request.CreateProviderRequest;
+import dev.zbib.providerservice.dto.request.ProviderFilterRequest;
+import dev.zbib.providerservice.dto.response.*;
+import dev.zbib.providerservice.mapper.ProviderMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import static dev.zbib.providerservice.model.mapper.DetailsMapper.toDetailsListResponse;
-import static dev.zbib.providerservice.model.mapper.ProviderMapper.*;
-
-@Log4j2
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class ProviderService {
-
-    private final ProviderRepository providerRepository;
+    private final ProviderMapper providerMapper;
+    private final UserService userManagement;
+    private final DetailsService detailsService;
     private final UserClient userClient;
 
-
-    public void registerProvider(
-
-            RegisterProviderRequest request) {
-        if (checkProviderExists(request.getId())) {
-            throw new IllegalArgumentException("User with id " + request.getId() + " is already a provider");
-        }
-        userClient.changeUserRole(request.getId(), UserRoles.PROVIDER);
-        Provider provider = toProvider(request);
-        providerRepository.save(provider);
+    @Transactional
+    public DetailsResponse createProvider(CreateProviderRequest request) {
+        Long id = request.getId();
+        userManagement.canBeProvider(id);
+        userManagement.assignProviderRole(id);
+        return detailsService.createDetails(request);
     }
 
-    public boolean checkProviderExists(Long id) {
-        return providerRepository.existsById(id);
+
+    public ProviderResponse getProviderById(Long id) {
+        DetailsResponse details = detailsService.getDetailsById(id);
+        UserResponse user;
+        user = userManagement.getUserById(id);
+        return providerMapper.toProviderResponse(user, details);
     }
 
-    public Provider getProviderById(Long id) {
-        return providerRepository.findById(id)
-                .orElse(null);
-    }
 
-    public ProviderResponse getProviderResponseById(Long id) {
-        Provider provider = getProviderById(id);
-        UserClientResponse userClientResponse = userClient.getUserClientResponseById(id);
-        return toProviderResponse(provider, userClientResponse);
-    }
-
-    public void deleteProviderByUserId(Long userId) {
-        Provider provider = getProviderById(userId);
-        if (provider != null) {
-            providerRepository.delete(provider);
-        }
-    }
-
-    public Page<ProviderListResponse> getProviderPage(
-            ServiceType serviceType,
-            Boolean available,
-            Double hourlyRate,
-            String serviceArea,
-            Pageable pageable) {
-        var specification = ProviderSpecification.createFilter(serviceType, available, hourlyRate, serviceArea);
-        Page<Provider> providerPage = providerRepository.findAll(specification, pageable);
-        List<Long> userIds = providerPage.stream()
-                .map(Provider::getId)
+    public Page<ProviderListResponse> getProviderList(
+            ProviderFilterRequest filter,
+            Pageable page) {
+        Page<DetailsListResponse> details = detailsService.getDetailList(filter, page);
+        List<Long> providerIds = details.getContent()
+                .stream()
+                .map(DetailsListResponse::getId)
                 .toList();
-        List<UserListClientResponse> users = userClient.getUserListClientResponseByIdList(userIds);
-        List<ProviderListResponse> providerList = toProviderListResponse(providerPage.getContent(), users);
 
-        return new PageImpl<>(providerList, pageable, providerPage.getTotalElements());
+        List<UserListResponse> users = userClient.getUsersById(providerIds);
+        List<ProviderListResponse> combinedList = combineDetailsWithUsers(details.getContent(), users);
+        return new PageImpl<>(combinedList, details.getPageable(), details.getTotalElements());
     }
 
-    public List<DetailsListResponse> getDetailListById(List<Long> ids) {
-        List<Provider> providerList = providerRepository.findProvidersByIdIn(ids);
-        return toDetailsListResponse(providerList);
-    }
 
-    public void setAvailability(
-            Long id,
-            boolean availability) {
-        Provider provider = getProviderById(id);
-        provider.setAvailable(availability);
-        providerRepository.save(provider);
+    private List<ProviderListResponse> combineDetailsWithUsers(
+            List<DetailsListResponse> details,
+            List<UserListResponse> users) {
+        Map<Long, UserListResponse> userMap = users.stream()
+                .collect(Collectors.toMap(UserListResponse::id, user -> user));
+        return details.stream()
+                .map(provider -> {
+                    UserListResponse user = userMap.get(provider.getId());
+                    return new ProviderListResponse(
+                            provider.getId(),
+                            user.firstName(),
+                            user.lastName(),
+                            user.profilePicture(),
+                            provider.getServiceType(),
+                            provider.getHourlyRate(),
+                            provider.getServiceArea(),
+                            provider.getRating(),
+                            provider.isAvailable());
+                })
+                .collect(Collectors.toList());
     }
 }
