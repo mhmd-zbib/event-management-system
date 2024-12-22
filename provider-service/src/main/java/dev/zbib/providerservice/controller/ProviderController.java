@@ -7,6 +7,8 @@ import dev.zbib.providerservice.dto.response.ProviderListResponse;
 import dev.zbib.providerservice.dto.response.ProviderResponse;
 import dev.zbib.providerservice.service.ProviderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ProviderController {
 
+    private final RabbitTemplate rabbitTemplate;
+    private final Queue notificationQueue;
     private final ProviderService providerService;
 
     @PostMapping
@@ -38,5 +42,11 @@ public class ProviderController {
             Pageable pageable) {
         Page<ProviderListResponse> providerDetails = providerService.getProviderList(providerFilterRequest, pageable);
         return new ResponseEntity<>(providerDetails, HttpStatus.OK);
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        rabbitTemplate.convertAndSend(notificationQueue.getName(), "TESTING WENT WELL");
+        return "Message sent";
     }
 }
