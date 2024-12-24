@@ -19,13 +19,15 @@ public class BookingService {
 
     private final BookingValidationService validation;
     private final BookingRepository bookingRepository;
+    private final NotificationService notificationService;
 
 
     @Transactional
     public BookingResponse createBooking(CreateBookingRequest req) {
-        validation.validateBooking(req);
+//        validation.validateBooking(req);
         Booking booking = toBooking(req);
         Booking createBooking = bookingRepository.save(booking);
+        notificationService.sendBookingCreationNotification(createBooking);
         return getBookingById(createBooking.getId());
     }
 

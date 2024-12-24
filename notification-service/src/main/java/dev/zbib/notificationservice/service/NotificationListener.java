@@ -11,8 +11,19 @@ public class NotificationListener {
 
     private final NotificationDispatcher notificationDispatcher;
 
-    @RabbitListener(queues = {"notification.queue"})
-    public void handleNotification(NotificationRequest request) {
+    @RabbitListener(queues = "booking.queue", concurrency = "5-10")
+    public void handleBookingNotification(NotificationRequest request) {
         notificationDispatcher.dispatch(request);
     }
+
+    @RabbitListener(queues = "provider.queue", concurrency = "3-5")
+    public void handleProviderNotification(NotificationRequest request) {
+        notificationDispatcher.dispatch(request);
+    }
+
+    @RabbitListener(queues = "user.queue", concurrency = "3-5")
+    public void handleUserNotification(NotificationRequest request) {
+        notificationDispatcher.dispatch(request);
+    }
+
 }

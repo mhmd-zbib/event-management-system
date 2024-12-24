@@ -10,7 +10,7 @@ import java.util.Map;
 @Service
 public class NotificationFactory {
 
-    private final Map<String, iNotificationStrategy> notificationStrategyMap;
+    private final Map<NotificationChannels, iNotificationStrategy> notificationStrategyMap;
 
     public iNotificationStrategy getNotificationStrategy(NotificationChannels channel) {
         return notificationStrategyMap.get(channel);
