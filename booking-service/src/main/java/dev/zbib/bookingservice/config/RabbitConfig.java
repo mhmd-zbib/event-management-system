@@ -1,4 +1,4 @@
-package dev.zbib.bookingservice;
+package dev.zbib.bookingservice.config;
 
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
