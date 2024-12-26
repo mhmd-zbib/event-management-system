@@ -49,7 +49,7 @@ services:
       KEYCLOAK_ADMIN: guest
       KEYCLOAK_ADMIN_PASSWORD: guest
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres:5432/auth-service
+      KC_DB_URL: jdbc:postgresql://postgres:5432/auth_service
       KC_DB_USERNAME: guest
       KC_DB_PASSWORD: guest
       KC_HEALTH_ENABLED: true

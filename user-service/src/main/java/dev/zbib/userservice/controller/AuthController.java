@@ -1,7 +1,6 @@
 package dev.zbib.userservice.controller;
 
 import dev.zbib.userservice.dto.request.CreateUserRequest;
-import dev.zbib.userservice.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.http.ResponseEntity;

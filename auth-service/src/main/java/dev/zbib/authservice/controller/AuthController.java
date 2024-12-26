@@ -2,6 +2,7 @@ package dev.zbib.authservice.controller;
 
 import dev.zbib.authservice.dto.request.LoginRequest;
 import dev.zbib.authservice.dto.request.RegisterRequest;
+import dev.zbib.authservice.dto.response.TokenResponse;
 import dev.zbib.authservice.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +19,12 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest req) {
-        authService.register(req);
-        return ResponseEntity.ok("Success");
+    public ResponseEntity<TokenResponse> register(@RequestBody RegisterRequest req) {
+        return ResponseEntity.ok(authService.register(req));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest req) {
-        authService.login(req);
-        return ResponseEntity.ok("Success");
+    public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest req) {
+        return ResponseEntity.ok(authService.login(req));
     }
 }
