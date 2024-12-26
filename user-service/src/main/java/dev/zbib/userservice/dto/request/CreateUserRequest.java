@@ -16,4 +16,10 @@ public class CreateUserRequest {
     private String profilePicture;
     private Address address;
 
+
+    //test
+
+    private String username;
+    private String email;
+
 }

@@ -22,6 +22,7 @@
         <module>booking-service</module>
         <module>shared</module>
         <module>notification-service</module>
+        <module>auth-service</module>
     </modules>
 
 

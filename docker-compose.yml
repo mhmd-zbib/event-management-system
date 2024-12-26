@@ -1,12 +1,13 @@
 services:
   postgres:
     image: postgres:latest
-    container_name: postgres-server
+    container_name: postgres
     ports:
       - "5544:5432"
     environment:
       - POSTGRES_USER=guest
       - POSTGRES_PASSWORD=guest
+      - POSTGRES_DB=auth-service
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -21,8 +22,9 @@ services:
       - "9411:9411"
     networks:
       - propal
+    restart: unless-stopped
 
-  rabbitMq:
+  rabbitmq:
     image: "rabbitmq:management"
     container_name: rabbitmq
     ports:
@@ -36,7 +38,28 @@ services:
       - rabbitmq_logs:/var/log/rabbitmq
     networks:
       - propal
+    restart: unless-stopped
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.7
+    container_name: keycloak
+    command:
+      [ "start-dev", "--import-realm" ]
+    environment:
+      KEYCLOAK_ADMIN: guest
+      KEYCLOAK_ADMIN_PASSWORD: guest
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/auth-service
+      KC_DB_USERNAME: guest
+      KC_DB_PASSWORD: guest
+      KC_HEALTH_ENABLED: true
+    ports:
+      - "8800:8080"
+    volumes:
+      - ./docker/keycloak/realms/:/opt/keycloak/data/import/
+    networks:
+      - propal
+    restart: unless-stopped
 
 networks:
   propal:
@@ -48,4 +71,4 @@ volumes:
   rabbitmq_logs:
     name: rabbitmq_logs
   db-data:
-    name: provider-service-data
+    name: keycloak_data
