@@ -3,6 +3,9 @@ package dev.zbib.authservice.service;
 import dev.zbib.authservice.dto.request.LoginRequest;
 import dev.zbib.authservice.dto.request.RegisterRequest;
 import dev.zbib.authservice.dto.response.TokenResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
@@ -79,5 +82,36 @@ public class AuthService {
                 .refreshToken(refreshToken)
                 .expiresIn(expiresIn)
                 .build();
+    }
+
+    public void logout(HttpServletRequest request) {
+        String token = extractTokenFromRequest(request);
+        if (token == null) {
+            return;
+        }
+
+        keycloak.tokenManager()
+                .invalidate(token);
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                cookie.setMaxAge(0);
+                cookie.setValue(null);
+                cookie.setPath("/");
+            }
+        }
+    }
+
+    private String extractTokenFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
+            return null;
+        }
+        return bearerToken.substring(7);
     }
 }
