@@ -37,8 +37,6 @@ public class AuthService {
         UserRepresentation user = new UserRepresentation();
         user.setUsername(req.getUsername());
         user.setEmail(req.getEmail());
-        user.setFirstName(req.getFirstName());
-        user.setLastName(req.getLastName());
         user.setEnabled(true);
 
         CredentialRepresentation cred = new CredentialRepresentation();
