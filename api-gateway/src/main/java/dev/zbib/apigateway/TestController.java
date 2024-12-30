@@ -1,4 +1,4 @@
-package dev.zbib.apigateway.controller;
+package dev.zbib.apigateway;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,17 +8,22 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/test")
-public class AuthController {
-
-    @GetMapping("/provider")
-    @PreAuthorize("hasRole('provider')")
-    public Mono<String> testProvider() {
-        return Mono.just("provider");
-    }
+public class TestController {
 
     @GetMapping
-    public String test() {
-        return "Hello";
+    public Mono<String> test() {
+        return Mono.just("WORKING!!!");
     }
 
+    @PreAuthorize("hasRole('ROLE_PROVIDER')")
+    @GetMapping("/provider")
+    public Mono<String> testProvider() {
+        return Mono.just("WORKING!!!");
+    }
+
+    @PreAuthorize("hasRole('customer')")
+    @GetMapping("/customer")
+    public Mono<String> testCustomer() {
+        return Mono.just("WORKING!!!");
+    }
 }
