@@ -1,8 +1,8 @@
 package dev.zbib.authservice.service;
 
-import dev.zbib.authservice.dto.request.LoginRequest;
-import dev.zbib.authservice.dto.request.RegisterRequest;
-import dev.zbib.authservice.dto.response.TokenResponse;
+import dev.zbib.authservice.dto.LoginRequest;
+import dev.zbib.authservice.dto.RegisterRequest;
+import dev.zbib.authservice.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

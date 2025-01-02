@@ -1,6 +1,6 @@
 package dev.zbib.authservice.service;
 
-import dev.zbib.authservice.dto.request.RegisterRequest;
+import dev.zbib.authservice.dto.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.UserResource;
@@ -16,8 +16,8 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class UserService {
 
-
     private final Keycloak keycloak;
+    private final ProfileService profileService;
     @Value("${keycloak.realm}")
     private String realm;
 
@@ -34,6 +34,7 @@ public class UserService {
         user.setCredentials(Collections.singletonList(cred));
 
         getUserResource().create(user);
+        profileService.createProfile(req);
     }
 
     public UserResource getUser(String id) {

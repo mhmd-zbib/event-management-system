@@ -1,4 +1,4 @@
-package dev.zbib.authservice.dto.request;
+package dev.zbib.authservice.dto;
 
 import lombok.Builder;
 import lombok.Data;

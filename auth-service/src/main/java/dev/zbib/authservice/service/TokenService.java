@@ -1,6 +1,6 @@
 package dev.zbib.authservice.service;
 
-import dev.zbib.authservice.dto.response.TokenResponse;
+import dev.zbib.authservice.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
