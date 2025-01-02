@@ -4,88 +4,21 @@ import dev.zbib.authservice.dto.request.LoginRequest;
 import dev.zbib.authservice.dto.request.RegisterRequest;
 import dev.zbib.authservice.dto.response.TokenResponse;
 import lombok.RequiredArgsConstructor;
-import org.keycloak.OAuth2Constants;
-import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.KeycloakBuilder;
-import org.keycloak.admin.client.resource.UserResource;
-import org.keycloak.admin.client.resource.UsersResource;
-import org.keycloak.representations.AccessTokenResponse;
-import org.keycloak.representations.idm.CredentialRepresentation;
-import org.keycloak.representations.idm.UserRepresentation;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final Keycloak keycloak;
-
-    @Value("${keycloak.server-url}")
-    private String serverUrl;
-
-    @Value("${keycloak.realm}")
-    private String realm;
-
-    @Value("${keycloak.client-id}")
-    private String clientId;
-
-    @Value("${keycloak.client-secret}")
-    private String clientSecret;
+    private final TokenService tokenService;
+    private final UserService userService;
 
     public TokenResponse register(RegisterRequest req) {
-        UserRepresentation user = new UserRepresentation();
-        user.setUsername(req.getUsername());
-        user.setEmail(req.getEmail());
-        user.setEnabled(true);
-
-        CredentialRepresentation cred = new CredentialRepresentation();
-        cred.setTemporary(false);
-        cred.setType(CredentialRepresentation.PASSWORD);
-        cred.setValue(req.getPassword());
-
-        user.setCredentials(Collections.singletonList(cred));
-        getUsersResource().create(user);
-
-        LoginRequest loginRequest = LoginRequest.builder()
-                .email(req.getEmail())
-                .password(req.getPassword())
-                .build();
-        return login(loginRequest);
+        userService.createUser(req);
+        return tokenService.generateToken(req.getEmail(), req.getPassword());
     }
 
     public TokenResponse login(LoginRequest req) {
-        Keycloak loginKeycloak = KeycloakBuilder.builder()
-                .realm(realm)
-                .serverUrl(serverUrl)
-                .clientId(clientId)
-                .clientSecret(clientSecret)
-                .username(req.getEmail())
-                .password(req.getPassword())
-                .grantType(OAuth2Constants.PASSWORD)
-                .build();
-
-        AccessTokenResponse tokenManager = loginKeycloak.tokenManager()
-                .getAccessToken();
-        String accessToken = tokenManager.getToken();
-        String refreshToken = tokenManager.getRefreshToken();
-        Long expiresIn = tokenManager.getExpiresIn();
-        return TokenResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .expiresIn(expiresIn)
-                .build();
-    }
-
-    public UserResource getUser(String id) {
-        UsersResource resource = getUsersResource();
-        return resource.get(id);
-    }
-
-    private UsersResource getUsersResource() {
-        return keycloak.realm(realm)
-                .users();
+        return tokenService.generateToken(req.getEmail(), req.getPassword());
     }
 }
