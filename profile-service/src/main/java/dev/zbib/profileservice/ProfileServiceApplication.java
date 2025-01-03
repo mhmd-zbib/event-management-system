@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableFeignClients
-@ComponentScan(basePackages = {"dev.zbib.shared", "dev.zbib.userservice"})
+@ComponentScan(basePackages = {"dev.zbib.shared", "dev.zbib.profileservice"})
 public class ProfileServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(ProfileServiceApplication.class, args);

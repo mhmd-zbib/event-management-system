@@ -19,19 +19,21 @@ public class ProfileController {
 
     @PostMapping
     public ResponseEntity<ProfileResponse> createProfile(@RequestBody CreateProfileRequest request) {
-        ProfileResponse response = profileService.createProfile(request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(profileService.createProfile(request));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProfileResponse> getProfileById(@PathVariable String id) {
-        ProfileResponse response = profileService.getProfileById(id);
-        return ResponseEntity.ok(response);
+    @GetMapping
+    public ResponseEntity<ProfileResponse> getProfile() {
+        return ResponseEntity.ok(profileService.getProfile());
     }
 
     @GetMapping
     public ResponseEntity<List<ProfileListResponse>> getProfilesByIds(@RequestParam List<String> ids) {
-        List<ProfileListResponse> responses = profileService.getProfileListByIds(ids);
-        return ResponseEntity.ok(responses);
+        return ResponseEntity.ok(profileService.getProfileListByIds(ids));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProfileResponse> getProfileById(@PathVariable String id) {
+        return ResponseEntity.ok(profileService.getProfileById(id));
     }
 }
