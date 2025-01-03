@@ -15,13 +15,15 @@
     <packaging>pom</packaging>
     <modules>
         <module>discovery-server</module>
-        <module>user-service</module>
+        <module>profile-service</module>
         <module>provider-service</module>
         <module>config-server</module>
         <module>api-gateway</module>
         <module>booking-service</module>
         <module>shared</module>
         <module>notification-service</module>
+        <module>profile-service</module>
+        <module>listing-service</module>
     </modules>
 
 

@@ -3,21 +3,5 @@ spring:
     name: api-gateway
   config:
     import: optional:configserver:http://localhost:8888
-  cloud:
-    gateway:
-      routes:
-        - id: provider-service
-          uri: lb://provider-service
-          predicates:
-            - Path=/providers/**
-        - id: user-service
-          uri: lb://user-service
-          predicates:
-            - Path=/users/**
-        - id: booking-service
-          uri: lb://booking-service
-          predicates:
-            - Path=/bookings/**
-
 server:
   port: 8000

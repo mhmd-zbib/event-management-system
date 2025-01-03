@@ -5,6 +5,7 @@ import dev.zbib.bookingservice.dto.response.BookingResponse;
 import dev.zbib.bookingservice.service.BookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -22,5 +23,11 @@ public class BookingController {
     @GetMapping("/{id}")
     public ResponseEntity<BookingResponse> getBookingById(@PathVariable Long id) {
         return ResponseEntity.ok(bookingService.getBookingById(id));
+    }
+
+    @PreAuthorize("hasRole('provider')")
+    @GetMapping("/accept")
+    public ResponseEntity<String> acceptBooking() {
+        return ResponseEntity.ok("Booking accepted");
     }
 }

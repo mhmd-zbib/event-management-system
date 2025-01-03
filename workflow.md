@@ -45,7 +45,7 @@
 ## Cross-Service Communication
 - User Service validates all authenticated requests
 - Provider Service checks availability before booking confirmation
-- Booking Service coordinates between user and provider
+- Booking Service coordinates between profile and provider
 - Event-based notifications for status changes
 - Centralized logging and monitoring
 

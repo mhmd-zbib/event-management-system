@@ -1,43 +1,47 @@
 package dev.zbib.userservice.service;
 
-import dev.zbib.userservice.dto.request.CreateUserRequest;
-import dev.zbib.userservice.dto.response.UserListResponse;
-import dev.zbib.userservice.dto.response.UserResponse;
-import dev.zbib.userservice.entity.User;
-import dev.zbib.userservice.exception.UserNotFoundException;
-import dev.zbib.userservice.mapper.UserMapper;
-import dev.zbib.userservice.repository.UserRepository;
+import dev.zbib.userservice.dto.RegisterRequest;
 import lombok.RequiredArgsConstructor;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.resource.UserResource;
+import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.representations.idm.CredentialRepresentation;
+import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
-    private final UserValidationService validation;
+    private final Keycloak keycloak;
+    private final ProfileService profileService;
+    @Value("${keycloak.realm}")
+    private String realm;
 
-    public UserResponse createUser(CreateUserRequest request) {
-        validation.validateUserCreation(request);
-        User user = userMapper.toUser(request);
-        userRepository.save(user);
-        return userMapper.toUserResponse(user);
+    public void createUser(RegisterRequest req) {
+        UserRepresentation user = new UserRepresentation();
+        user.setUsername(req.getUsername());
+        user.setEmail(req.getEmail());
+        user.setEnabled(true);
+
+        CredentialRepresentation cred = new CredentialRepresentation();
+        cred.setTemporary(false);
+        cred.setType(CredentialRepresentation.PASSWORD);
+        cred.setValue(req.getPassword());
+        user.setCredentials(Collections.singletonList(cred));
+
+        getUserResource().create(user);
+        profileService.createProfile(req);
     }
 
-    public UserResponse getUserResponseById(Long id) {
-        return userRepository.findUserResponseById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+    public UserResource getUser(String id) {
+        return getUserResource().get(id);
     }
 
-    public List<UserListResponse> getUserListByIds(List<Long> ids) {
-        return userRepository.findByIdIn(ids);
-    }
-
-    public User getUserById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+    private UsersResource getUserResource() {
+        return keycloak.realm(realm).users();
     }
 }
