@@ -1,6 +1,5 @@
 package dev.zbib.userservice.dto;
 
-import dev.zbib.shared.entity.Address;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +18,4 @@ public class CreateProfileRequest {
     private String phoneNumber;
     private LocalDate birthDate;
     private String profilePicture;
-    private Address address;
 }

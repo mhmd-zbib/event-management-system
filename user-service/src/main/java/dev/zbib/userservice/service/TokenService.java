@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TokenService {
 
-    private final Keycloak keycloak;
-
     @Value("${keycloak.server-url}")
     private String serverUrl;
 
@@ -47,5 +45,4 @@ public class TokenService {
                 .expiresIn(tokenResponse.getExpiresIn())
                 .build();
     }
-
 }

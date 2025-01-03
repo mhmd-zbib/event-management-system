@@ -9,7 +9,6 @@ import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -30,6 +29,7 @@ public class UserService {
         user.setUsername(req.getUsername());
         user.setEmail(req.getEmail());
         user.setEnabled(true);
+        user.setEmailVerified(true);
 
         CredentialRepresentation cred = new CredentialRepresentation();
         cred.setTemporary(false);
@@ -50,10 +50,12 @@ public class UserService {
     private String getUserIdByUsername(String username) {
         List<UserRepresentation> users = getUserResource().search(username);
         if (users.isEmpty()) {
-            throw new UsernameNotFoundException("User not found for username: " + username);
+            log.error("No user found with username: {}", username);
+            return "default-id"; // Return a default ID or any other default value
         }
         return users.get(0).getId();
     }
+
 
     private UsersResource getUserResource() {
         return keycloak.realm(realm).users();

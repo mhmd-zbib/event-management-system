@@ -4,8 +4,12 @@ import dev.zbib.userservice.dto.LoginRequest;
 import dev.zbib.userservice.dto.RegisterRequest;
 import dev.zbib.userservice.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -15,10 +19,14 @@ public class AuthService {
 
     public TokenResponse register(RegisterRequest req) {
         userService.createUser(req);
-        return tokenService.generateAccessToken(req.getEmail(), req.getPassword());
+        TokenResponse tokenResponse = tokenService.generateAccessToken(req.getEmail(), req.getPassword());
+        log.info("User {} registered at {}.", req.getEmail(), LocalDateTime.now());
+        return tokenResponse;
     }
 
     public TokenResponse login(LoginRequest req) {
-        return tokenService.generateAccessToken(req.getEmail(), req.getPassword());
+        TokenResponse tokenResponse = tokenService.generateAccessToken(req.getEmail(), req.getPassword());
+        log.info("User {} logged in at {}.", req.getEmail(), LocalDateTime.now());
+        return tokenResponse;
     }
 }

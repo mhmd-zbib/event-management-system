@@ -20,7 +20,6 @@ public class ProfileService {
                 .firstName(req.getFirstName())
                 .lastName(req.getLastName())
                 .phoneNumber(req.getPhoneNumber())
-                .address(req.getAddress())
                 .profilePicture(req.getProfilePicture())
                 .birthDate(req.getBirthDate())
                 .build();

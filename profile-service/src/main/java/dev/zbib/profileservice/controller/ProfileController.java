@@ -5,11 +5,15 @@ import dev.zbib.profileservice.dto.ProfileListResponse;
 import dev.zbib.profileservice.dto.ProfileResponse;
 import dev.zbib.profileservice.service.ProfileService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Log4j2
 @RestController
 @RequestMapping("/profiles")
 @RequiredArgsConstructor
@@ -22,9 +26,11 @@ public class ProfileController {
         return ResponseEntity.ok(profileService.createProfile(request));
     }
 
-    @GetMapping
-    public ResponseEntity<ProfileResponse> getProfile() {
-        return ResponseEntity.ok(profileService.getProfile());
+    @GetMapping("/me")
+    public ResponseEntity<ProfileResponse> getProfile(@AuthenticationPrincipal OAuth2User jwt) {
+        String userId = jwt.getAttribute("sub");
+        log.info("user id: {} ", userId);
+        return ResponseEntity.ok(profileService.getProfileById(userId));
     }
 
     @GetMapping

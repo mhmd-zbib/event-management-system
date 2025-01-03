@@ -1,6 +1,5 @@
 package dev.zbib.userservice.dto;
 
-import dev.zbib.shared.entity.Address;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -15,5 +14,4 @@ public class RegisterRequest {
     private String phoneNumber;
     private LocalDate birthDate;
     private String profilePicture;
-    private Address address;
 }

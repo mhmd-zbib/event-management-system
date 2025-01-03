@@ -14,7 +14,6 @@ import java.util.List;
 
 import static dev.zbib.profileservice.mapper.ProfileBuilder.buildProfile;
 import static dev.zbib.profileservice.mapper.ProfileBuilder.buildProfileResponse;
-import static dev.zbib.shared.utils.JwtUtil.getUserId;
 
 @Log4j2
 @Service
@@ -29,11 +28,6 @@ public class ProfileService {
         ProfileResponse res = buildProfileResponse(profile);
         log.info("Created profile for user {} ", request.getId());
         return res;
-    }
-
-    public ProfileResponse getProfile() {
-        String id = getUserId();
-        return profileRepository.findProfileResponseById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     public ProfileResponse getProfileById(String id) {
