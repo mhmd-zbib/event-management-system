@@ -17,7 +17,7 @@ The Booking Service manages service requests, scheduling, and booking status upd
   - Returns: Complete booking information
 
 - `GET /api/v1/bookings`
-  - Lists user's bookings
+  - Lists profile's bookings
   - Required: JWT token
   - Query parameters: status, dateRange
   - Returns: List of bookings

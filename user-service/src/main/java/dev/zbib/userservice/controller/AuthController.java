@@ -1,12 +1,15 @@
 package dev.zbib.userservice.controller;
 
-import dev.zbib.userservice.dto.request.CreateUserRequest;
+import dev.zbib.userservice.dto.LoginRequest;
+import dev.zbib.userservice.dto.RegisterRequest;
+import dev.zbib.userservice.dto.TokenResponse;
+import dev.zbib.userservice.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
@@ -16,15 +19,12 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(
-            @RequestBody CreateUserRequest req) {
-        return ResponseEntity.ok()
-                .body(authService.createUser(req));
+    public ResponseEntity<TokenResponse> register(@RequestBody RegisterRequest req) {
+        return ResponseEntity.ok(authService.register(req));
     }
 
-    @GetMapping()
-    public ResponseEntity<List<UserRepresentation>> getUsers() {
-        return ResponseEntity.ok()
-                .body(authService.getUsers());
+    @PostMapping("/login")
+    public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest req) {
+        return ResponseEntity.ok(authService.login(req));
     }
 }

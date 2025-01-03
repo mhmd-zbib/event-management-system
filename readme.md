@@ -6,7 +6,7 @@ tiling, and more.
 
 ## Key Features
 
-- **User Service**: Manages user profiles and roles, including service providers.
+- **User Service**: Manages profile profiles and roles, including service providers.
 - **Provider Service**: Stores detailed information about service providers, such as their skills and schedules.
 - **Booking Service**: Handles the booking workflow between users and providers, ensuring smooth coordination.
 
@@ -15,8 +15,8 @@ tiling, and more.
 This project utilizes a **microservices architecture**, dividing responsibilities into distinct components:
 
 1. **User Service**:
-    - Maintains user data, differentiating standard users from service providers through role assignments.
-    - Stores basic user information, while provider-specific details are housed in the Provider Service database.
+    - Maintains profile data, differentiating standard users from service providers through role assignments.
+    - Stores basic profile information, while provider-specific details are housed in the Provider Service database.
 
 2. **Provider Service**:
     - Manages provider profiles, including qualifications, skills, and availability.
