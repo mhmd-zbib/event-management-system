@@ -2,16 +2,20 @@ package dev.zbib.userservice.service;
 
 import dev.zbib.userservice.dto.RegisterRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -34,11 +38,21 @@ public class UserService {
         user.setCredentials(Collections.singletonList(cred));
 
         getUserResource().create(user);
-        profileService.createProfile(req);
+        String userId = getUserIdByUsername(req.getUsername());
+        profileService.createProfile(userId, req);
+        log.info("Successfully created user: {}", req.getUsername());
     }
 
-    public UserResource getUser(String id) {
+    public UserResource getUserById(String id) {
         return getUserResource().get(id);
+    }
+
+    private String getUserIdByUsername(String username) {
+        List<UserRepresentation> users = getUserResource().search(username);
+        if (users.isEmpty()) {
+            throw new UsernameNotFoundException("User not found for username: " + username);
+        }
+        return users.get(0).getId();
     }
 
     private UsersResource getUserResource() {

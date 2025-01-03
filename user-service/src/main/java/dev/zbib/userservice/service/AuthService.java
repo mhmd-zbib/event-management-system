@@ -15,10 +15,10 @@ public class AuthService {
 
     public TokenResponse register(RegisterRequest req) {
         userService.createUser(req);
-        return tokenService.generateToken(req.getEmail(), req.getPassword());
+        return tokenService.generateAccessToken(req.getEmail(), req.getPassword());
     }
 
     public TokenResponse login(LoginRequest req) {
-        return tokenService.generateToken(req.getEmail(), req.getPassword());
+        return tokenService.generateAccessToken(req.getEmail(), req.getPassword());
     }
 }

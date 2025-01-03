@@ -1,4 +1,4 @@
-package dev.zbib.profileservice.dto.response;
+package dev.zbib.profileservice.dto;
 
 import dev.zbib.shared.entity.Address;
 import lombok.AllArgsConstructor;

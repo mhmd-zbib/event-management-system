@@ -1,4 +1,4 @@
-package dev.zbib.profileservice.dto.response;
+package dev.zbib.profileservice.dto;
 
 public record ProfileListResponse(
         Long id,

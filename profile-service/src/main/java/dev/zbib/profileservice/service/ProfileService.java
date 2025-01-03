@@ -1,8 +1,8 @@
 package dev.zbib.profileservice.service;
 
-import dev.zbib.profileservice.dto.request.CreateProfileDTO;
-import dev.zbib.profileservice.dto.response.ProfileListResponse;
-import dev.zbib.profileservice.dto.response.ProfileResponse;
+import dev.zbib.profileservice.dto.CreateProfileRequest;
+import dev.zbib.profileservice.dto.ProfileListResponse;
+import dev.zbib.profileservice.dto.ProfileResponse;
 import dev.zbib.profileservice.entity.Profile;
 import dev.zbib.profileservice.exception.UserNotFoundException;
 import dev.zbib.profileservice.mapper.ProfileBuilder;
@@ -22,21 +22,18 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
     private final ProfileBuilder profileBuilder;
 
-    public ProfileResponse createProfile(CreateProfileDTO request) {
+    public ProfileResponse createProfile(CreateProfileRequest request) {
         Profile profile = buildProfile(request);
         profileRepository.save(profile);
         return buildProfileResponse(profile);
     }
 
-    public ProfileResponse getProfileResponseById(Long id) {
-        return profileRepository.findUserResponseById(id).orElseThrow(() -> new UserNotFoundException(id));
+    public ProfileResponse getProfileById(String id) {
+        return profileRepository.findProfileResponseById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    public List<ProfileListResponse> getProfileListByIds(List<Long> ids) {
+    public List<ProfileListResponse> getProfileListByIds(List<String> ids) {
         return profileRepository.findByIdIn(ids);
     }
 
-    public Profile getUserById(Long id) {
-        return profileRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-    }
 }

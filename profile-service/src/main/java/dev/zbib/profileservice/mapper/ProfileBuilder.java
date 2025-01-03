@@ -1,12 +1,12 @@
 package dev.zbib.profileservice.mapper;
 
-import dev.zbib.profileservice.dto.request.CreateProfileDTO;
-import dev.zbib.profileservice.dto.response.ProfileResponse;
+import dev.zbib.profileservice.dto.CreateProfileRequest;
+import dev.zbib.profileservice.dto.ProfileResponse;
 import dev.zbib.profileservice.entity.Profile;
 
 public class ProfileBuilder {
 
-    public static Profile buildProfile(CreateProfileDTO dto) {
+    public static Profile buildProfile(CreateProfileRequest dto) {
         return Profile.builder()
                 .id(dto.getId())
                 .firstName(dto.getFirstName())

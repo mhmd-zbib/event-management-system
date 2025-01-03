@@ -1,13 +1,19 @@
-package dev.zbib.profileservice.dto.request;
+package dev.zbib.userservice.dto;
 
 import dev.zbib.shared.entity.Address;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
-public class CreateProfileDTO {
-    private String id;
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class CreateProfileRequest {
+    private String userId;
     private String firstName;
     private String lastName;
     private String phoneNumber;

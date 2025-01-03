@@ -27,7 +27,7 @@ public class TokenService {
     @Value("${keycloak.client-secret}")
     private String clientSecret;
 
-    public TokenResponse generateToken(
+    public TokenResponse generateAccessToken(
             String email,
             String password) {
         Keycloak keycloak = KeycloakBuilder.builder()

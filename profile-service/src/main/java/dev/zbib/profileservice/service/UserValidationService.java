@@ -1,6 +1,6 @@
 package dev.zbib.profileservice.service;
 
-import dev.zbib.profileservice.dto.request.CreateProfileDTO;
+import dev.zbib.profileservice.dto.CreateProfileRequest;
 import dev.zbib.profileservice.exception.PhoneNumberAlreadyExistsException;
 import dev.zbib.profileservice.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ public class UserValidationService {
 
     private final ProfileRepository profileRepository;
 
-    protected void validateUserCreation(CreateProfileDTO req) {
+    protected void validateUserCreation(CreateProfileRequest req) {
         validatePhoneNumber(req.getPhoneNumber());
     }
 
