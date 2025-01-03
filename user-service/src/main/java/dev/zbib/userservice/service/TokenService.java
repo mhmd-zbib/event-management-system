@@ -45,4 +45,23 @@ public class TokenService {
                 .expiresIn(tokenResponse.getExpiresIn())
                 .build();
     }
+
+    public TokenResponse refreshAccessToken(String refreshToken) {
+        Keycloak keycloak = KeycloakBuilder.builder()
+                .realm(realm)
+                .serverUrl(serverUrl)
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .grantType(OAuth2Constants.REFRESH_TOKEN)
+                .refreshToken(refreshToken)
+                .build();
+
+        AccessTokenResponse tokenResponse = keycloak.tokenManager().getAccessToken();
+        return TokenResponse.builder()
+                .accessToken(tokenResponse.getToken())
+                .refreshToken(tokenResponse.getRefreshToken()) // New refresh token, if Keycloak issues it
+                .expiresIn(tokenResponse.getExpiresIn())
+                .build();
+    }
+
 }

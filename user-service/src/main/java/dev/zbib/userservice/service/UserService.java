@@ -51,9 +51,11 @@ public class UserService {
         List<UserRepresentation> users = getUserResource().search(username);
         if (users.isEmpty()) {
             log.error("No user found with username: {}", username);
-            return "default-id"; // Return a default ID or any other default value
+            return "default-id";
         }
-        return users.get(0).getId();
+        String id = users.get(0).getId();
+        log.info("Found user with id: {}", id);
+        return id;
     }
 
 

@@ -1,10 +1,7 @@
 package dev.zbib.profileservice.entity;
 
-import dev.zbib.profileservice.exception.ExceptionMessages;
 import dev.zbib.shared.entity.Address;
-import dev.zbib.shared.enums.UserRole;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -32,7 +29,6 @@ public class Profile {
     @Column(nullable = true)
     private String profilePicture;
 
-    @NotNull(message = ExceptionMessages.ADDRESS_REQUIRED)
     @Embedded
     private Address address;
 

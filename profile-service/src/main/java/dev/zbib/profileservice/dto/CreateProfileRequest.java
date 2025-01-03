@@ -13,5 +13,4 @@ public class CreateProfileRequest {
     private String phoneNumber;
     private LocalDate birthDate;
     private String profilePicture;
-    private Address address;
 }

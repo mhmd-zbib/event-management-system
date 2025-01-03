@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,14 +22,14 @@ public class ProfileController {
     private final ProfileService profileService;
 
     @PostMapping
-    public ResponseEntity<ProfileResponse> createProfile(@RequestBody CreateProfileRequest request) {
-        return ResponseEntity.ok(profileService.createProfile(request));
+    public ResponseEntity<String> createProfile(@RequestBody CreateProfileRequest request) {
+        profileService.createProfile(request);
+        return ResponseEntity.ok("Profile Created");
     }
 
     @GetMapping("/me")
-    public ResponseEntity<ProfileResponse> getProfile(@AuthenticationPrincipal OAuth2User jwt) {
-        String userId = jwt.getAttribute("sub");
-        log.info("user id: {} ", userId);
+    public ResponseEntity<ProfileResponse> getProfile(@AuthenticationPrincipal Jwt jwt) {
+        String userId = jwt.getSubject();
         return ResponseEntity.ok(profileService.getProfileById(userId));
     }
 

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "profile-service")
 public interface ProfileClient {
 
-    @PostMapping
+    @PostMapping("/profiles")
     void createProfile(@RequestBody CreateProfileRequest dto);
 
 }

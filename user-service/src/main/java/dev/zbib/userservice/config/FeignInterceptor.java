@@ -14,6 +14,11 @@ public class FeignInterceptor implements RequestInterceptor {
     public void apply(RequestTemplate template) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        if (template.url().startsWith("/profiles") && "POST".equals(template.method())) {
+            log.info("Ignoring Authorization header for POST /profiles request.");
+            return;
+        }
+
         log.info("token: {}", authentication.getCredentials().toString());
         if (authentication.getCredentials() != null) {
             String token = (String) authentication.getCredentials();

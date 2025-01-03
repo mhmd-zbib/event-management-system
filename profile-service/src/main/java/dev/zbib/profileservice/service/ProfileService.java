@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static dev.zbib.profileservice.mapper.ProfileBuilder.buildProfile;
-import static dev.zbib.profileservice.mapper.ProfileBuilder.buildProfileResponse;
 
 @Log4j2
 @Service
@@ -22,12 +21,10 @@ public class ProfileService {
 
     private final ProfileRepository profileRepository;
 
-    public ProfileResponse createProfile(CreateProfileRequest request) {
+    public void createProfile(CreateProfileRequest request) {
         Profile profile = buildProfile(request);
         profileRepository.save(profile);
-        ProfileResponse res = buildProfileResponse(profile);
         log.info("Created profile for user {} ", request.getId());
-        return res;
     }
 
     public ProfileResponse getProfileById(String id) {

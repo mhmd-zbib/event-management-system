@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class CreateProfileRequest {
-    private String userId;
+    private String id;
     private String firstName;
     private String lastName;
     private String phoneNumber;
