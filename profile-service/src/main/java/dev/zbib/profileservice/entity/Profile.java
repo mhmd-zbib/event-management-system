@@ -22,7 +22,11 @@ import java.time.LocalDateTime;
 public class Profile {
 
     @Id
-    private Long id;
+    private String id;
+
+    private String firstName;
+
+    private String lastName;
 
     @NotNull(message = ExceptionMessages.BIRTH_DATE_REQUIRED)
     @Past(message = ExceptionMessages.INVALID_BIRTH_DATE)

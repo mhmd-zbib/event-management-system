@@ -2,7 +2,7 @@ package dev.zbib.profileservice.service;
 
 import dev.zbib.profileservice.dto.request.CreateProfileDTO;
 import dev.zbib.profileservice.dto.response.ProfileListResponse;
-import dev.zbib.profileservice.dto.response.UserResponse;
+import dev.zbib.profileservice.dto.response.ProfileResponse;
 import dev.zbib.profileservice.entity.Profile;
 import dev.zbib.profileservice.exception.UserNotFoundException;
 import dev.zbib.profileservice.mapper.ProfileBuilder;
@@ -12,22 +12,23 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static dev.zbib.profileservice.mapper.ProfileBuilder.buildProfile;
+import static dev.zbib.profileservice.mapper.ProfileBuilder.buildProfileResponse;
+
 @Service
 @RequiredArgsConstructor
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
     private final ProfileBuilder profileBuilder;
-    private final UserValidationService validation;
 
-    public UserResponse createProfile(CreateProfileDTO request) {
-        validation.validateUserCreation(request);
-        Profile profile = profileBuilder.buildProfile(request);
+    public ProfileResponse createProfile(CreateProfileDTO request) {
+        Profile profile = buildProfile(request);
         profileRepository.save(profile);
-        return profileBuilder.toUserResponse(profile);
+        return buildProfileResponse(profile);
     }
 
-    public UserResponse getProfileResponseById(Long id) {
+    public ProfileResponse getProfileResponseById(Long id) {
         return profileRepository.findUserResponseById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
