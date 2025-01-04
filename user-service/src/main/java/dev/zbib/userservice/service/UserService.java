@@ -1,6 +1,7 @@
 package dev.zbib.userservice.service;
 
 import dev.zbib.userservice.dto.RegisterRequest;
+import dev.zbib.userservice.exception.ServerException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.keycloak.representations.idm.CredentialRepresentation;
@@ -21,7 +22,13 @@ public class UserService {
         UserRepresentation user = createUserRepresentation(request);
         keycloakService.createUser(user);
         String userId = keycloakService.getUserIdByUsername(request.getEmail());
-        profileService.createProfile(userId, request);
+        try {
+            profileService.createProfile(userId, request);
+        } catch (Exception e) {
+            log.error("Profile creation failed for userId: {}. Rolling back user creation", userId);
+            rollBackUserCreation(userId);
+            throw new ServerException();
+        }
     }
 
     private UserRepresentation createUserRepresentation(RegisterRequest request) {
@@ -40,5 +47,14 @@ public class UserService {
         credential.setType(CredentialRepresentation.PASSWORD);
         credential.setValue(password);
         return credential;
+    }
+
+    public void rollBackUserCreation(String id) {
+        try {
+            keycloakService.deleteUser(id);
+            log.info("Rolled back successfully for userId: {}", id);
+        } catch (Exception e) {
+            log.error("Error while rolling back user creation for userId: {}", id, e);
+        }
     }
 }

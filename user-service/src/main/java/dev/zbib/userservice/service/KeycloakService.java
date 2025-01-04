@@ -44,4 +44,8 @@ public class KeycloakService {
     private UsersResource getUserResource() {
         return keycloak.realm(realm).users();
     }
+
+    public void deleteUser(String id) {
+        getUserResource().get(id).remove();
+    }
 }
