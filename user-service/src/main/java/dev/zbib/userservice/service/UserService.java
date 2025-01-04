@@ -1,7 +1,6 @@
 package dev.zbib.userservice.service;
 
 import dev.zbib.userservice.dto.RegisterRequest;
-import dev.zbib.userservice.exception.EmailAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.keycloak.representations.idm.CredentialRepresentation;
@@ -19,18 +18,10 @@ public class UserService {
     private final ProfileService profileService;
 
     public void createUser(RegisterRequest request) {
-        validateUserDoesNotExist(request.getEmail());
         UserRepresentation user = createUserRepresentation(request);
         keycloakService.createUser(user);
         String userId = keycloakService.getUserIdByUsername(request.getEmail());
         profileService.createProfile(userId, request);
-    }
-
-    public void validateUserDoesNotExist(String email) {
-        if (keycloakService.findByUsername(email).isPresent()) {
-            log.warn("Attempted to register existing user with email: {}", email);
-            throw new EmailAlreadyExistsException();
-        }
     }
 
     private UserRepresentation createUserRepresentation(RegisterRequest request) {

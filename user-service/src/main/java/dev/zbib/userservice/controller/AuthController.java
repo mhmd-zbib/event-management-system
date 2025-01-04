@@ -5,6 +5,7 @@ import dev.zbib.userservice.dto.RegisterRequest;
 import dev.zbib.userservice.dto.TokenResponse;
 import dev.zbib.userservice.service.AuthService;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<TokenResponse> register(@Valid @RequestBody RegisterRequest req) {
+    public ResponseEntity<Response> register(@Valid @RequestBody RegisterRequest req) {
         return ResponseEntity.ok(authService.register(req));
     }
 
