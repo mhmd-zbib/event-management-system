@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -16,8 +17,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@ControllerAdvice
 @Log4j2
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserException.class)
@@ -37,11 +38,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
-        List<ObjectError> errors = bindingResult.getAllErrors();
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
 
-        List<ErrorResponse.FieldValidationError> fieldValidationErrors = errors.stream()
+        List<ErrorResponse.FieldValidationError> fieldValidationErrors = fieldErrors.stream()
                 .map(error -> ErrorResponse.FieldValidationError.builder()
-                        .field(error.getObjectName())
+                        .field(error.getField())
                         .message(error.getDefaultMessage())
                         .build())
                 .collect(Collectors.toList());

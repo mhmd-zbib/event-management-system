@@ -1,15 +1,16 @@
 package dev.zbib.userservice.service;
 
 import dev.zbib.userservice.dto.RegisterRequest;
-import dev.zbib.userservice.exception.UserAlreadyExistsException;
+import dev.zbib.userservice.exception.EmailAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
-import org.keycloak.admin.client.resource.UserResource;
+import lombok.extern.log4j.Log4j2;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -18,14 +19,18 @@ public class UserService {
     private final ProfileService profileService;
 
     public void createUser(RegisterRequest request) {
-        if (keycloakService.getUserByUsername(request.getUsername()).isPresent()) {
-            throw new UserAlreadyExistsException();
-        }
+        validateUserDoesNotExist(request.getEmail());
         UserRepresentation user = createUserRepresentation(request);
-        UserResource userResource = keycloakService.createUser(user);
-
-        String userId = userResource.toRepresentation().getId();
+        keycloakService.createUser(user);
+        String userId = keycloakService.getUserIdByUsername(request.getEmail());
         profileService.createProfile(userId, request);
+    }
+
+    public void validateUserDoesNotExist(String email) {
+        if (keycloakService.findByUsername(email).isPresent()) {
+            log.warn("Attempted to register existing user with email: {}", email);
+            throw new EmailAlreadyExistsException();
+        }
     }
 
     private UserRepresentation createUserRepresentation(RegisterRequest request) {

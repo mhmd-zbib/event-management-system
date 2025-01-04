@@ -43,9 +43,5 @@ public class RegisterRequest {
     @Past(message = "Birth date must be a past date")
     private LocalDate birthDate;
 
-    @Pattern(
-            regexp = "^(http|https):\\/\\/.*\\.(jpg|jpeg|png)$",
-            message = "Profile picture URL must be a valid HTTP/HTTPS URL ending with .jpg, .jpeg, or .png"
-    )
     private String profilePicture;
 }
