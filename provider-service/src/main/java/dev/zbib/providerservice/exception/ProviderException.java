@@ -12,7 +12,7 @@ public class ProviderException extends RuntimeException {
 
     public ProviderException(
             HttpStatus statusCode,
-            String message,
+                String message,
             List<String> details
     ) {
         super(message);

@@ -27,6 +27,7 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(e.getMessage(), e.getStatusCode());
     }
 
+
     private ResponseEntity<ErrorResponse> buildErrorResponse(String message, HttpStatus status) {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .message(message)
