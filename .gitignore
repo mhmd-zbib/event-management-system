@@ -39,3 +39,6 @@ build/
 .DS_Store
 
 /config-server/src/main/resources/application.yml
+/docker
+/.idea
+/.vscode

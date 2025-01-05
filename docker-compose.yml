@@ -1,4 +1,17 @@
+version: '3.8'
+
 services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: guest
+      MONGO_INITDB_ROOT_PASSWORD: guest
+    volumes:
+      - ./docker/mongodb/data:/data/db
+
   postgres:
     image: postgres:latest
     container_name: postgres
@@ -9,8 +22,8 @@ services:
       - POSTGRES_PASSWORD=guest
       - POSTGRES_DB=auth-service
     volumes:
-      - db-data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker/postgres/data:/var/lib/postgresql/data
+      - ./docker/postgres/scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - booking-management
     restart: unless-stopped
@@ -34,8 +47,8 @@ services:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
     volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
-      - rabbitmq_logs:/var/log/rabbitmq
+      - ./docker/rabbitmq/data:/var/lib/rabbitmq
+      - ./docker/rabbitmq/logs:/var/log/rabbitmq
     networks:
       - booking-management
     restart: unless-stopped
@@ -49,14 +62,14 @@ services:
       KEYCLOAK_ADMIN: guest
       KEYCLOAK_ADMIN_PASSWORD: guest
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres:5432/auth_service
+      KC_DB_URL: jdbc:postgresql://postgres:5432/auth-service
       KC_DB_USERNAME: guest
       KC_DB_PASSWORD: guest
       KC_HEALTH_ENABLED: true
     ports:
       - "8800:8080"
     volumes:
-      - ./docker/keycloak/realms/:/opt/keycloak/data/import/
+      - ./docker/keycloak/data:/opt/keycloak/data/import/
     networks:
       - booking-management
     restart: unless-stopped
@@ -64,11 +77,3 @@ services:
 networks:
   booking-management:
     driver: bridge
-
-volumes:
-  rabbitmq_data:
-    name: rabbitmq_data
-  rabbitmq_logs:
-    name: rabbitmq_logs
-  db-data:
-    name: keycloak_data
