@@ -1,48 +1,39 @@
-### General ###
+### Build Directories ###
 /target/
-/build/
-/.DS_Store
+build/
 
-### Maven Wrapper ###
-!.mvn/wrapper/maven-wrapper.jar
+### Docker ###
+/docker/
 
-### Target Exceptions ###
-!**/src/main/**/target/
-!**/src/test/**/target/
+### Logs ###
+*.log
+**/logs/
 
-### IntelliJ IDEA ###
+### IDE and Editor Specific ###
 .idea/
-*.iws
 *.iml
 *.ipr
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-
-### Eclipse ###
-.apt_generated
+.vscode/
 .classpath
-.factorypath
 .project
 .settings/
-.springBeans
-.sts4-cache
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+### OS Specific ###
+.DS_Store
 
-### VS Code ###
-.vscode/
+### Build Artifacts ###
+*.jar
+*.war
 
-### Configurations ###
-/config-server/src/main/resources/application.yml
+### Service-Specific Directories ###
+**/target/
+**/build/
 
-### Docker and IDE Metadata ###
-/docker
-/.idea
-/.vscode
+### Node.js or Frontend (if applicable) ###
+node_modules/
+npm-debug.log
+yarn-error.log
+
+### Miscellaneous ###
+*.bak
+*.swp
