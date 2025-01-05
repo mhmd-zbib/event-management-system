@@ -1,10 +1,12 @@
 CREATE
-DATABASE auth_service;
+    DATABASE auth_service;
 CREATE
-DATABASE user_service;
+    DATABASE user_service;
 CREATE
-DATABASE provider_service;
+    DATABASE provider_service;
 CREATE
-DATABASE booking_service;
+    DATABASE booking_service;
 CREATE
-DATABASE profile_service;
+    DATABASE profile_service;
+CREATE
+    DATABASE profile_service;

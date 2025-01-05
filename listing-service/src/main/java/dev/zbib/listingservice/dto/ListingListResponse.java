@@ -12,24 +12,17 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ListingResponse {
+public class ListingListResponse {
 
     private UUID id;
 
     private String name;
 
-    private String description;
-
     private BigDecimal price;
-
-    private Integer reservedStock;
-
-    private String userId;
 
     private Integer stock;
 
     private boolean available;
 
     private String category;
-
 }

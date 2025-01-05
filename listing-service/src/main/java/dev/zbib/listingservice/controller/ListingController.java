@@ -1,6 +1,8 @@
 package dev.zbib.listingservice.controller;
 
 import dev.zbib.listingservice.dto.CreateListingRequest;
+import dev.zbib.listingservice.dto.ListingFilter;
+import dev.zbib.listingservice.dto.ListingListResponse;
 import dev.zbib.listingservice.dto.ListingResponse;
 import dev.zbib.listingservice.service.ListingService;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +20,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ListingController {
 
-    private final ListingService listingService;    
+    private final ListingService listingService;
 
     @PostMapping
     public ResponseEntity<String> createListing(
-            @AuthenticationPrincipal Jwt jwt,
-            CreateListingRequest req) {
+            @AuthenticationPrincipal Jwt jwt, @RequestBody CreateListingRequest req) {
         String userId = jwt.getSubject();
         listingService.createListing(userId, req);
         return ResponseEntity.ok("Listing created");
@@ -35,15 +36,13 @@ public class ListingController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ListingResponse>> getListings(Pageable pageable) {
-        return ResponseEntity.ok(listingService.getListings(pageable));
+    public ResponseEntity<Page<ListingListResponse>> getListings(
+            @ModelAttribute ListingFilter filter, Pageable pageable) {
+        return ResponseEntity.ok(listingService.getListings(filter, pageable));
     }
 
     @GetMapping("/{id}/available")
-    public ResponseEntity<Boolean> getAvailability(@PathVariable UUID id){
+    public ResponseEntity<Boolean> getAvailability(@PathVariable UUID id) {
         return ResponseEntity.ok(listingService.getAvailability(id));
     }
-
-
-
 }

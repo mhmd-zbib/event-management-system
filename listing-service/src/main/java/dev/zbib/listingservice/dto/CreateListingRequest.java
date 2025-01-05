@@ -1,10 +1,10 @@
 package dev.zbib.listingservice.dto;
 
-import lombok.Getter;
+import lombok.Data;
 
 import java.math.BigDecimal;
 
-@Getter
+@Data
 public class CreateListingRequest {
 
     private String name;

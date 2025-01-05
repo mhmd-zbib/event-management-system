@@ -1,15 +1,14 @@
 package dev.zbib.listingservice.builder;
 
 import dev.zbib.listingservice.dto.CreateListingRequest;
+import dev.zbib.listingservice.dto.ListingListResponse;
 import dev.zbib.listingservice.dto.ListingResponse;
 import dev.zbib.listingservice.entity.Listing;
 
 public class ListingBuilder {
 
 
-    public static Listing buildListing(
-            String userId,
-            CreateListingRequest req) {
+    public static Listing buildListing(String userId, CreateListingRequest req) {
         return Listing.builder()
                 .userId(userId)
                 .name(req.getName())
@@ -33,8 +32,8 @@ public class ListingBuilder {
                 .build();
     }
 
-    public static ListingResponse buildListingListResponse(Listing listing) {
-        return ListingResponse.builder()
+    public static ListingListResponse buildListingListResponse(Listing listing) {
+        return ListingListResponse.builder()
                 .id(listing.getId())
                 .name(listing.getName())
                 .price(listing.getPrice())
