@@ -17,23 +17,37 @@ build/
 .classpath
 .project
 .settings/
+.idea/modules.xml
+.idea/*.iml
+.idea/workspace.xml
 
 ### OS Specific ###
 .DS_Store
+Thumbs.db
+.directory
 
 ### Build Artifacts ###
 *.jar
 *.war
+*.ear
 
 ### Service-Specific Directories ###
 **/target/
 **/build/
 
-### Node.js or Frontend (if applicable) ###
-node_modules/
-npm-debug.log
-yarn-error.log
-
 ### Miscellaneous ###
 *.bak
 *.swp
+*~
+*.swo
+
+### Maven Specific ###
+# Maven local repository
+/.mvn/
+# Maven wrapper
+/mvnw
+/mvnw.cmd
+# Maven build configuration files
+/.idea/.name
+/pom.xml.*
+/target/
