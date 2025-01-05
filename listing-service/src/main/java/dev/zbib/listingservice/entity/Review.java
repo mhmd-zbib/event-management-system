@@ -1,15 +1,13 @@
 package dev.zbib.listingservice.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.UUID;
 
 @Data
-@Entity
+@Document(collection = "reviews")
 public class Review {
 
     @Id
@@ -21,8 +19,6 @@ public class Review {
 
     private Integer rating;
 
-    @ManyToOne
-    @JoinColumn(name = "listing_id", nullable = false)
     private Listing listing;
 
 }

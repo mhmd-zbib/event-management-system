@@ -1,29 +1,23 @@
+server:
+  port: 8003
 spring:
   application:
     name: listing-service
-  datasource:
-    url: jdbc:postgresql://localhost:5544/listing_service
-    username: guest
-    password: guest
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/listing_service
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8800/realms/booking-management
-
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
-server:
-  port: 8003
+
+
+
 
 management:
   tracing:

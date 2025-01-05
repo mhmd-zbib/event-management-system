@@ -2,8 +2,6 @@ package dev.zbib.listingservice.dto;
 
 import lombok.Data;
 
-import java.math.BigDecimal;
-
 @Data
 public class CreateListingRequest {
 
@@ -11,7 +9,7 @@ public class CreateListingRequest {
 
     private String description;
 
-    private BigDecimal price;
+    private Double price;
 
     private Integer stock;
 

@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mongodb:
     image: mongo:latest
@@ -11,6 +9,9 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: guest
     volumes:
       - ./docker/mongodb/data:/data/db
+    networks:
+      - booking-management
+    restart: unless-stopped
 
   postgres:
     image: postgres:latest
@@ -20,10 +21,10 @@ services:
     environment:
       - POSTGRES_USER=guest
       - POSTGRES_PASSWORD=guest
-      - POSTGRES_DB=auth-service
+      - POSTGRES_DB=auth_service
     volumes:
       - ./docker/postgres/data:/var/lib/postgresql/data
-      - ./docker/postgres/scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker/postgres/scripts:/docker-entrypoint-initdb.d/
     networks:
       - booking-management
     restart: unless-stopped
@@ -62,7 +63,7 @@ services:
       KEYCLOAK_ADMIN: guest
       KEYCLOAK_ADMIN_PASSWORD: guest
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres:5432/auth-service
+      KC_DB_URL: jdbc:postgresql://postgres:5432/auth_service
       KC_DB_USERNAME: guest
       KC_DB_PASSWORD: guest
       KC_HEALTH_ENABLED: true

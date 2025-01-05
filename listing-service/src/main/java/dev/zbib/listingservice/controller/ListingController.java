@@ -13,8 +13,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/listings")
 @RequiredArgsConstructor
@@ -31,18 +29,17 @@ public class ListingController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ListingResponse> getListing(@PathVariable UUID id) {
+    public ResponseEntity<ListingResponse> getListing(@PathVariable String id) {
         return ResponseEntity.ok(listingService.getListing(id));
     }
 
     @GetMapping
-    public ResponseEntity<Page<ListingListResponse>> getListings(
-            @ModelAttribute ListingFilter filter, Pageable pageable) {
+    public ResponseEntity<Page<ListingListResponse>> getListings( @ModelAttribute ListingFilter filter, Pageable pageable) {
         return ResponseEntity.ok(listingService.getListings(filter, pageable));
     }
 
     @GetMapping("/{id}/available")
-    public ResponseEntity<Boolean> getAvailability(@PathVariable UUID id) {
+    public ResponseEntity<Boolean> getAvailability(@PathVariable String id) {
         return ResponseEntity.ok(listingService.getAvailability(id));
     }
 }

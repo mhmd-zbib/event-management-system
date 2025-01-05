@@ -20,4 +20,4 @@ keycloak:
   server-url: http://localhost:8800
   realm: booking-management
   client-id: web-app
-  client-secret: 7TdiLzPHJZCnOA2Ai14sHpdWctNCHPqV
+  client-secret: eszl0KAPoZp0AsVoT2YP8avdAn5CPDky

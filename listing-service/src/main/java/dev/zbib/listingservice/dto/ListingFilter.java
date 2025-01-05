@@ -1,18 +1,17 @@
 package dev.zbib.listingservice.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Getter
+@Setter
 public class ListingFilter {
 
-    private UUID userId;
+    private Double minPrice;
 
-    private BigDecimal minPrice;
-
-    private BigDecimal maxPrice;
+    private Double maxPrice;
 
     private String category;
 

@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -14,11 +13,11 @@ import java.util.UUID;
 @Builder
 public class ListingListResponse {
 
-    private UUID id;
+    private String id;
 
     private String name;
 
-    private BigDecimal price;
+    private Double price;
 
     private Integer stock;
 

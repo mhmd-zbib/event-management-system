@@ -18,9 +18,9 @@ public class UserListingController {
 
     private final ListingService listingService;
 
-    @GetMapping
-    public ResponseEntity<Page<ListingListResponse>> getUserListings(
-            @PathVariable String userId, Pageable pageable) {
-        return ResponseEntity.ok(listingService.getListingsByUserId(userId, pageable));
-    }
+//    @GetMapping
+//    public ResponseEntity<Page<ListingListResponse>> getUserListings(
+//            @PathVariable String userId, Pageable pageable) {
+//        return ResponseEntity.ok(listingService.getListingsByUserId(userId, pageable));
+//    }
 }
