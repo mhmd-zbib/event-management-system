@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: profile-service
+  datasource:
+    url: jdbc:postgresql://localhost:5544/profile_service
+    username: guest
+    password: guest
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8800/realms/booking-management
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+server:
+  port: 8002
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+    enabled: true
+    propagation:
+      type: B3
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+keycloak:
+  server-url: http://localhost:8800
+  realm: booking-management
+  client-id: web-app
+  client-secret: 7TdiLzPHJZCnOA2Ai14sHpdWctNCHPqV
