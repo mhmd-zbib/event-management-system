@@ -20,7 +20,7 @@ public class ReviewController {
 
     @PostMapping
     public ResponseEntity<String> createReview(
-            @PathVariable String listingId, @AuthenticationPrincipal Jwt jwt, @RequestBody CreateReviewRequest req,) {
+            @PathVariable String listingId, @AuthenticationPrincipal Jwt jwt, @RequestBody CreateReviewRequest req) {
         String userId = jwt.getSubject();
         reviewService.createReview(listingId, userId, req);
         return ResponseEntity.ok("Review added");
