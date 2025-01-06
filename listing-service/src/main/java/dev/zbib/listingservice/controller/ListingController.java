@@ -4,6 +4,7 @@ import dev.zbib.listingservice.dto.CreateListingRequest;
 import dev.zbib.listingservice.dto.ListingListResponse;
 import dev.zbib.listingservice.dto.ListingQuery;
 import dev.zbib.listingservice.dto.ListingResponse;
+import dev.zbib.listingservice.service.ListingQueryService;
 import dev.zbib.listingservice.service.ListingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,7 +19,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ListingController {
 
+    //  TODO: search
+    //  TODO: analytics
+    //  TODO: review management
+    //  TODO: interest notification
+
     private final ListingService listingService;
+    private final ListingQueryService listingQueryService;
 
     @PostMapping
     public ResponseEntity<String> createListing(
@@ -35,13 +42,7 @@ public class ListingController {
 
     @GetMapping
     public ResponseEntity<Page<ListingListResponse>> getListings(
-            @ModelAttribute ListingQuery filter,
-            Pageable pageable) {
-        return ResponseEntity.ok(listingService.getListings(filter, pageable));
-    }
-
-    @GetMapping("/{id}/available")
-    public ResponseEntity<Boolean> getAvailability(@PathVariable String id) {
-        return ResponseEntity.ok(listingService.getAvailability(id));
+            @ModelAttribute ListingQuery filter, Pageable pageable) {
+        return ResponseEntity.ok(listingQueryService.getListings(filter, pageable));
     }
 }

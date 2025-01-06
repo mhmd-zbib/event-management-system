@@ -1,7 +1,7 @@
 package dev.zbib.listingservice.controller;
 
 import dev.zbib.listingservice.dto.ListingListResponse;
-import dev.zbib.listingservice.service.ListingService;
+import dev.zbib.listingservice.service.ListingQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserListingController {
 
-    private final ListingService listingService;
+    private final ListingQueryService listingService;
 
     @GetMapping
     public ResponseEntity<Page<ListingListResponse>> getUserListings(

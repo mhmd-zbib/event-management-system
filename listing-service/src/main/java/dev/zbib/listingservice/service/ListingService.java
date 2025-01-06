@@ -29,12 +29,7 @@ public class ListingService {
         return buildListingResponse(listing);
     }
 
-    public Boolean getAvailability(String id) {
-        Listing listing = getListingEntity(id);
-        return listing.isAvailable() && listing.getStock() > 0;
-    }
-
-    private Listing getListingEntity(String id) {
+    public Listing getListingEntity(String id) {
         return listingRepository.findById(id).orElseThrow(() -> new ListingNotFoundException(id));
     }
 }
