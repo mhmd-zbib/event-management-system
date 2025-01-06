@@ -1,8 +1,8 @@
 package dev.zbib.venueservice.controller;
 
-import dev.zbib.venueservice.dto.VenueRequest;
 import dev.zbib.venueservice.dto.VenueListResponse;
 import dev.zbib.venueservice.dto.VenueQuery;
+import dev.zbib.venueservice.dto.VenueRequest;
 import dev.zbib.venueservice.dto.VenueResponse;
 import dev.zbib.venueservice.service.VenueQueryService;
 import dev.zbib.venueservice.service.VenueService;
@@ -15,7 +15,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/listings")
+@RequestMapping("/venues")
 @RequiredArgsConstructor
 public class VenueController {
 
@@ -23,7 +23,7 @@ public class VenueController {
     private final VenueQueryService venueQueryService;
 
     @PostMapping
-    public ResponseEntity<String> createListing(
+    public ResponseEntity<String> createVenue(
             @AuthenticationPrincipal Jwt jwt, @RequestBody VenueRequest req) {
         String userId = jwt.getSubject();
         venueService.createVenue(userId, req);
@@ -31,13 +31,13 @@ public class VenueController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VenueResponse> getListing(@PathVariable String id) {
+    public ResponseEntity<VenueResponse> getVenue(@PathVariable String id) {
         return ResponseEntity.ok(venueService.getVenue(id));
     }
 
     @GetMapping
-    public ResponseEntity<Page<VenueListResponse>> getListings(
+    public ResponseEntity<Page<VenueListResponse>> getVenues(
             @ModelAttribute VenueQuery filter, Pageable pageable) {
-        return ResponseEntity.ok(venueQueryService.getListings(filter, pageable));
+        return ResponseEntity.ok(venueQueryService.getVenues(filter, pageable));
     }
 }

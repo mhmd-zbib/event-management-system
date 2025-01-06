@@ -23,12 +23,12 @@ public class VenueQueryService {
     private final VenueQueryRepository venueQueryRepository;
 
 
-    public Page<VenueListResponse> getListings(VenueQuery filter, Pageable pageable) {
+    public Page<VenueListResponse> getVenues(VenueQuery filter, Pageable pageable) {
         Query query = venueQueryRepository.createFilterQuery(filter, pageable);
         return executeQuery(query, pageable);
     }
 
-    public Page<VenueListResponse> getListingsByUserId(String userId, Pageable pageable) {
+    public Page<VenueListResponse> getVenuesByOwnerId(String userId, Pageable pageable) {
         Query query = venueQueryRepository.createUserQuery(userId);
         return executeQuery(query, pageable);
     }
@@ -37,7 +37,7 @@ public class VenueQueryService {
         List<Venue> venues = mongoTemplate.find(query, Venue.class);
         long count = mongoTemplate.count(query, Venue.class);
         PageImpl<Venue> page = new PageImpl<>(venues, pageable, count);
-        return page.map(VenueBuilder::buildListingListResponse);
+        return page.map(VenueBuilder::buildVenueListResponse);
     }
 
 }

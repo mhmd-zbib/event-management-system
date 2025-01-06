@@ -30,6 +30,32 @@ public class VenueQueryRepository {
         if (filter.getCategory() != null && !filter.getCategory().isEmpty()) {
             criteriaList.add(Criteria.where("category").is(filter.getCategory()));
         }
+        if (filter.getMinCapacity() != null || filter.getMaxCapacity() != null) {
+            Criteria capacityCriteria = Criteria.where("capacity");
+            if (filter.getMinCapacity() != null) {
+                capacityCriteria.gte(filter.getMinCapacity());
+            }
+            if (filter.getMaxCapacity() != null) {
+                capacityCriteria.lte(filter.getMaxCapacity());
+            }
+            criteriaList.add(capacityCriteria);
+        }
+        if (filter.getMinRating() != null || filter.getMaxRating() != null) {
+            Criteria ratingCriteria = Criteria.where("rating");
+            if (filter.getMinRating() != null) {
+                ratingCriteria.gte(filter.getMinRating());
+            }
+            if (filter.getMaxRating() != null) {
+                ratingCriteria.lte(filter.getMaxRating());
+            }
+            criteriaList.add(ratingCriteria);
+        }
+        if (filter.getAvailable() != null) {
+            criteriaList.add(Criteria.where("available").is(filter.getAvailable()));
+        }
+        if (filter.getIsFeatured() != null) {
+            criteriaList.add(Criteria.where("isFeatured").is(filter.getIsFeatured()));
+        }
         Query query = new Query();
         if (!criteriaList.isEmpty()) {
             query.addCriteria(new Criteria().andOperator(criteriaList.toArray(new Criteria[0])));
@@ -37,7 +63,7 @@ public class VenueQueryRepository {
         return query.with(pageable);
     }
 
-    public Query createUserQuery(String userId) {
-        return new Query(Criteria.where("userId").is(userId));
+    public Query createUserQuery(String ownerId) {
+        return new Query(Criteria.where("ownerId").is(ownerId));
     }
 }
