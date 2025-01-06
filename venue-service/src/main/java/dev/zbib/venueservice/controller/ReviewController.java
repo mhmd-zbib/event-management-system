@@ -22,7 +22,7 @@ public class ReviewController {
     public ResponseEntity<String> createReview(
             @PathVariable String venueId, @AuthenticationPrincipal Jwt jwt, @RequestBody ReviewRequest req) {
         String userId = jwt.getSubject();
-        reviewService.createReview(venueId, userId, req);
+        reviewService.createReview(userId, venueId, req);
         return ResponseEntity.ok("Review added");
     }
 

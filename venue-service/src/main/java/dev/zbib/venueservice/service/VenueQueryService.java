@@ -39,5 +39,4 @@ public class VenueQueryService {
         PageImpl<Venue> page = new PageImpl<>(venues, pageable, count);
         return page.map(VenueBuilder::buildVenueListResponse);
     }
-
 }

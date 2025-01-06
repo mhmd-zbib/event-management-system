@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/users/{userId}/venues")
+@RequestMapping("/users/{userId}")
 @RequiredArgsConstructor
-public class UserVenueController {
+public class UserController {
 
     private final VenueQueryService listingService;
 
-    @GetMapping
+    @GetMapping("/venues")
     public ResponseEntity<Page<VenueListResponse>> getUserListings(
             @PathVariable String userId, Pageable pageable) {
         return ResponseEntity.ok(listingService.getVenuesByOwnerId(userId, pageable));

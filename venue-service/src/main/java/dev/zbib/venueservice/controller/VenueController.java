@@ -1,9 +1,7 @@
 package dev.zbib.venueservice.controller;
 
-import dev.zbib.venueservice.dto.VenueListResponse;
-import dev.zbib.venueservice.dto.VenueQuery;
-import dev.zbib.venueservice.dto.VenueRequest;
-import dev.zbib.venueservice.dto.VenueResponse;
+import dev.zbib.venueservice.dto.*;
+import dev.zbib.venueservice.service.ReviewService;
 import dev.zbib.venueservice.service.VenueQueryService;
 import dev.zbib.venueservice.service.VenueService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +19,7 @@ public class VenueController {
 
     private final VenueService venueService;
     private final VenueQueryService venueQueryService;
+    private final ReviewService reviewService;
 
     @PostMapping
     public ResponseEntity<String> createVenue(
@@ -40,4 +39,9 @@ public class VenueController {
             @ModelAttribute VenueQuery filter, Pageable pageable) {
         return ResponseEntity.ok(venueQueryService.getVenues(filter, pageable));
     }
+
+    public ResponseEntity<Page<ReviewListResponse>> getReviews(String venueId, Pageable pageable) {
+        return ResponseEntity.ok(reviewService.getReviews(venueId, pageable));
+    }
+
 }

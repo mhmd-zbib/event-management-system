@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface ReviewRepository extends MongoRepository<Review, String> {
-    Page<Review> findByListingId(String listingId, Pageable pageable);
+    Page<Review> findByVenueId(String listingId, Pageable pageable);
 }

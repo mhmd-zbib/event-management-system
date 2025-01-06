@@ -16,11 +16,11 @@ public class VenueBuilder {
                 .capacity(venueRequest.getCapacity())
                 .category(venueRequest.getCategory())
                 .ownerId(ownerId)
-                .availability(venueRequest.getAvailabilities())
                 .location(venueRequest.getLocation())
                 .images(venueRequest.getImages())
                 .tags(venueRequest.getTags())
                 .available(true)
+                .price(venueRequest.getPrice())
                 .isFeatured(false)
                 .build();
     }

@@ -37,11 +37,7 @@ public class Venue {
 
     private boolean available;
 
-    private List<Availability> availability;
-
     private Location location;
-
-    private List<Review> reviews;
 
     private List<String> images;
 

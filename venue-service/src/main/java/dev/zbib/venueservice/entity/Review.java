@@ -23,6 +23,6 @@ public class Review {
 
     private Integer rating;
 
-    private Venue venue;
+    private String venueId;
 
 }

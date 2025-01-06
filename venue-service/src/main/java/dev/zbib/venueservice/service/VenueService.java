@@ -27,4 +27,8 @@ public class VenueService {
         Venue venue = venueRepository.findById(id).orElseThrow(null);
         return buildVenueResponse(venue);
     }
+
+    public boolean existsById(String venueId) {
+        return venueRepository.existsById(venueId);
+    }
 }

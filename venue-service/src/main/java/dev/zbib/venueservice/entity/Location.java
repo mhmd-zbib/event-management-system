@@ -1,5 +1,12 @@
 package dev.zbib.venueservice.entity;
 
+import lombok.*;
+
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Location {
 
     private String address;
