@@ -19,11 +19,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ListingController {
 
-    //  TODO: search
-    //  TODO: analytics
-    //  TODO: review management
-    //  TODO: interest notification
-
     private final ListingService listingService;
     private final ListingQueryService listingQueryService;
 

@@ -13,4 +13,8 @@ public class ListingQuery {
 
     private String category;
 
+    private String name;
+
+    private String description;
+
 }

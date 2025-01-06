@@ -1,20 +1,17 @@
-package dev.zbib.listingservice.entity;
+package dev.zbib.listingservice.dto;
 
+import dev.zbib.listingservice.entity.Listing;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Document(collection = "reviews")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Review {
+public class ReviewListResponse {
 
-    @Id
     private String id;
 
     private String userId;
@@ -23,6 +20,6 @@ public class Review {
 
     private Integer rating;
 
-    private Listing listing;
+    private Listing listingId;
 
 }

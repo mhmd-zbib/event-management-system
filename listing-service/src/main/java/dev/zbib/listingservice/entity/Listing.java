@@ -35,5 +35,5 @@ public class Listing {
 
     private String category;
 
-
+    private List<Review> reviews;
 }
