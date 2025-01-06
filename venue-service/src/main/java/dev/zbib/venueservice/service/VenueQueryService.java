@@ -1,6 +1,6 @@
 package dev.zbib.venueservice.service;
 
-import dev.zbib.venueservice.builder.ListingBuilder;
+import dev.zbib.venueservice.builder.VenueBuilder;
 import dev.zbib.venueservice.dto.VenueListResponse;
 import dev.zbib.venueservice.dto.VenueQuery;
 import dev.zbib.venueservice.entity.Venue;
@@ -37,7 +37,7 @@ public class VenueQueryService {
         List<Venue> venues = mongoTemplate.find(query, Venue.class);
         long count = mongoTemplate.count(query, Venue.class);
         PageImpl<Venue> page = new PageImpl<>(venues, pageable, count);
-        return page.map(ListingBuilder::buildListingListResponse);
+        return page.map(VenueBuilder::buildListingListResponse);
     }
 
 }

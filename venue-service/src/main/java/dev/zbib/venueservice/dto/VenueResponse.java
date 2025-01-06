@@ -1,9 +1,12 @@
 package dev.zbib.venueservice.dto;
 
+import dev.zbib.venueservice.entity.Location;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -17,16 +20,24 @@ public class VenueResponse {
 
     private String description;
 
+    private String type;
+
+    private int capacity;
+
+    private String category;
+
+    private double rating;
+
     private Double price;
 
-    private Integer reservedStock;
-
-    private String userId;
-
-    private Integer stock;
+    private String ownerId;
 
     private boolean available;
 
-    private String category;
+    private Location location;
+
+    private List<String> tags;
+
+    private boolean isFeatured;
 
 }

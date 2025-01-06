@@ -26,13 +26,13 @@ public class VenueController {
     public ResponseEntity<String> createListing(
             @AuthenticationPrincipal Jwt jwt, @RequestBody VenueRequest req) {
         String userId = jwt.getSubject();
-        venueService.createListing(userId, req);
+        venueService.createVenue(userId, req);
         return ResponseEntity.ok("Listing created");
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<VenueResponse> getListing(@PathVariable String id) {
-        return ResponseEntity.ok(venueService.getListing(id));
+        return ResponseEntity.ok(venueService.getVenue(id));
     }
 
     @GetMapping

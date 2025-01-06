@@ -2,10 +2,10 @@ package dev.zbib.venueservice.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class ListingException extends RuntimeException {
+public class VenueException extends RuntimeException {
     private HttpStatus httpStatus;
 
-    public ListingException(
+    public VenueException(
             HttpStatus httpStatus,
             String message) {
         super(message);

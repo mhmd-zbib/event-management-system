@@ -1,6 +1,10 @@
 package dev.zbib.venueservice.dto;
 
+import dev.zbib.venueservice.entity.Availability;
+import dev.zbib.venueservice.entity.Location;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class VenueRequest {
@@ -9,10 +13,18 @@ public class VenueRequest {
 
     private String description;
 
-    private Double price;
+    private String type;
 
-    private Integer stock;
+    private int capacity;
 
     private String category;
+
+    private List<Availability> availabilities;
+
+    private Location location;
+
+    private List<String> images;
+
+    private List<String> tags;
 
 }
