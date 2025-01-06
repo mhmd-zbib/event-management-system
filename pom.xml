@@ -10,13 +10,12 @@
         <relativePath/>
     </parent>
     <groupId>dev.zbib</groupId>
-    <artifactId>propal</artifactId>
+    <artifactId>booking-management</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
         <module>discovery-server</module>
         <module>profile-service</module>
-        <module>provider-service</module>
         <module>config-server</module>
         <module>api-gateway</module>
         <module>booking-service</module>

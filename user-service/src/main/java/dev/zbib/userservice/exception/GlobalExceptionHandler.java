@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,9 +26,16 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(e.getMessage(), e.getStatus());
     }
 
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleAllException(Exception e) {
+        log.error("Provider exception: {}", e.getMessage(), e);
+        return buildErrorResponse("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
     private ResponseEntity<ErrorResponse> buildErrorResponse(
-            String message,
-            HttpStatus status) {
+            String message, HttpStatus status) {
         ErrorResponse errorResponse = ErrorResponse.builder().message(message).timestamp(LocalDateTime.now()).build();
         return new ResponseEntity<>(errorResponse, status);
     }
@@ -61,8 +67,7 @@ public class GlobalExceptionHandler {
         List<ErrorResponse.FieldValidationError> validationErrors = e.getConstraintViolations()
                 .stream()
                 .map(violation -> ErrorResponse.FieldValidationError.builder()
-                        .field(violation.getPropertyPath()
-                                .toString())
+                        .field(violation.getPropertyPath().toString())
                         .message(violation.getMessage())
                         .build())
                 .collect(Collectors.toList());

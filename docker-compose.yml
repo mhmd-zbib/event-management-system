@@ -1,4 +1,18 @@
 services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: guest
+      MONGO_INITDB_ROOT_PASSWORD: guest
+    volumes:
+      - ./docker/mongodb/data:/data/db
+    networks:
+      - booking-management
+    restart: unless-stopped
+
   postgres:
     image: postgres:latest
     container_name: postgres
@@ -7,12 +21,12 @@ services:
     environment:
       - POSTGRES_USER=guest
       - POSTGRES_PASSWORD=guest
-      - POSTGRES_DB=auth-service
+      - POSTGRES_DB=auth_service
     volumes:
-      - db-data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker/postgres/data:/var/lib/postgresql/data
+      - ./docker/postgres/scripts:/docker-entrypoint-initdb.d/
     networks:
-      - propal
+      - booking-management
     restart: unless-stopped
 
   zipkin:
@@ -21,7 +35,7 @@ services:
     ports:
       - "9411:9411"
     networks:
-      - propal
+      - booking-management
     restart: unless-stopped
 
   rabbitmq:
@@ -34,10 +48,10 @@ services:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
     volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
-      - rabbitmq_logs:/var/log/rabbitmq
+      - ./docker/rabbitmq/data:/var/lib/rabbitmq
+      - ./docker/rabbitmq/logs:/var/log/rabbitmq
     networks:
-      - propal
+      - booking-management
     restart: unless-stopped
 
   keycloak:
@@ -56,19 +70,11 @@ services:
     ports:
       - "8800:8080"
     volumes:
-      - ./docker/keycloak/realms/:/opt/keycloak/data/import/
+      - ./docker/keycloak/data:/opt/keycloak/data/import/
     networks:
-      - propal
+      - booking-management
     restart: unless-stopped
 
 networks:
-  propal:
+  booking-management:
     driver: bridge
-
-volumes:
-  rabbitmq_data:
-    name: rabbitmq_data
-  rabbitmq_logs:
-    name: rabbitmq_logs
-  db-data:
-    name: keycloak_data
