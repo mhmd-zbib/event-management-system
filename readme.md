@@ -45,5 +45,18 @@ This project utilizes a **microservices architecture**, dividing responsibilitie
 3. **Track Bookings**:
     - Both users and providers can view and manage booking statuses using the Booking Service.
 
- 
- 
+# Refactor:
+
+- User Management Service
+- Venue Management Service
+- Provider Management Service
+- Event Management Service
+- Booking and Reservation Service
+- Ticketing Service
+- Payment Service
+- Notification Service
+- Review and Rating Service
+- Analytics Service
+- Marketing and Promotion Service
+- Admin Panel Service
+- Logistics and Delivery Service

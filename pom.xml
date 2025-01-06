@@ -22,7 +22,8 @@
         <module>shared</module>
         <module>notification-service</module>
         <module>profile-service</module>
-        <module>listing-service</module>
+        <module>venue-service</module>
+        <module>user-service</module>
     </modules>
 
 
