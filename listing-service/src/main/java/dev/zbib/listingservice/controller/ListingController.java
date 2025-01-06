@@ -1,8 +1,8 @@
 package dev.zbib.listingservice.controller;
 
 import dev.zbib.listingservice.dto.CreateListingRequest;
-import dev.zbib.listingservice.dto.ListingFilter;
 import dev.zbib.listingservice.dto.ListingListResponse;
+import dev.zbib.listingservice.dto.ListingQuery;
 import dev.zbib.listingservice.dto.ListingResponse;
 import dev.zbib.listingservice.service.ListingService;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,9 @@ public class ListingController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ListingListResponse>> getListings( @ModelAttribute ListingFilter filter, Pageable pageable) {
+    public ResponseEntity<Page<ListingListResponse>> getListings(
+            @ModelAttribute ListingQuery filter,
+            Pageable pageable) {
         return ResponseEntity.ok(listingService.getListings(filter, pageable));
     }
 
