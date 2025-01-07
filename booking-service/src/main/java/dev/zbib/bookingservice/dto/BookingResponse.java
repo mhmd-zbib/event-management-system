@@ -1,10 +1,6 @@
-package dev.zbib.bookingservice.entity;
+package dev.zbib.bookingservice.dto;
 
 import dev.zbib.shared.enums.BookingStatus;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,16 +9,12 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity
+
 @Data
-@Table(name = "bookings")
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Booking {
-
-    @Id
-    @GeneratedValue
+@Builder
+public class BookingResponse {
     private UUID id;
     private String eventId;
     private String userId;
@@ -34,4 +26,4 @@ public class Booking {
     private String paymentStatus;
     private Double totalPrice;
     private String notes;
-} 
+}

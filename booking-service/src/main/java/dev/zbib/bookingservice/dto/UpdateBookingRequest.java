@@ -1,4 +1,4 @@
-package dev.zbib.bookingservice.dto.request;
+package dev.zbib.bookingservice.dto;
 
 import jakarta.validation.constraints.Future;
 import lombok.AllArgsConstructor;

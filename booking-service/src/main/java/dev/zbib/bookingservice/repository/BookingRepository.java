@@ -1,6 +1,6 @@
 package dev.zbib.bookingservice.repository;
 
-import dev.zbib.bookingservice.dto.response.BookingResponse;
+import dev.zbib.bookingservice.dto.BookingResponse;
 import dev.zbib.bookingservice.entity.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
