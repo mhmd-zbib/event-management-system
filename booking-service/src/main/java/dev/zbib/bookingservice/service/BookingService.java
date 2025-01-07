@@ -5,6 +5,7 @@ import dev.zbib.bookingservice.dto.BookingListResponse;
 import dev.zbib.bookingservice.dto.BookingRequest;
 import dev.zbib.bookingservice.dto.BookingResponse;
 import dev.zbib.bookingservice.entity.Booking;
+import dev.zbib.bookingservice.exception.BookingNotFoundException;
 import dev.zbib.bookingservice.repository.BookingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -21,19 +22,20 @@ import static dev.zbib.bookingservice.builder.BookingBuilder.buildBookingRespons
 public class BookingService {
 
     private final BookingRepository bookingRepository;
+    private final VenueService venueService;
 
     public BookingResponse createBooking(String userId, BookingRequest req) {
         //  validate user is authorized to book for this event
-        //  validate booking exists
+        venueService.checkVenueAvailability(req.getVenueId());
         Booking booking = bookingRepository.save(buildBooking(userId, req));
         return buildBookingResponse(booking);
     }
 
     public BookingResponse getBookingById(Long id) {
-        Booking booking = bookingRepository.findById(id).orElseThrow(null);
+        Booking booking = bookingRepository.findById(id).orElseThrow(() -> new BookingNotFoundException(id));
         return buildBookingResponse(booking);
     }
- 
+
     public Page<BookingListResponse> getBookings(Pageable pageable) {
         Page<Booking> bookingsList = bookingRepository.findAll(pageable);
         return bookingsList.map(BookingBuilder::buildBookingListResponse);

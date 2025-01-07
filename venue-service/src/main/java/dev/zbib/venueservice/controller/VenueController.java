@@ -1,6 +1,9 @@
 package dev.zbib.venueservice.controller;
 
-import dev.zbib.venueservice.dto.*;
+import dev.zbib.venueservice.dto.VenueListResponse;
+import dev.zbib.venueservice.dto.VenueQuery;
+import dev.zbib.venueservice.dto.VenueRequest;
+import dev.zbib.venueservice.dto.VenueResponse;
 import dev.zbib.venueservice.service.ReviewService;
 import dev.zbib.venueservice.service.VenueQueryService;
 import dev.zbib.venueservice.service.VenueService;
@@ -40,8 +43,9 @@ public class VenueController {
         return ResponseEntity.ok(venueQueryService.getVenues(filter, pageable));
     }
 
-    public ResponseEntity<Page<ReviewListResponse>> getReviews(String venueId, Pageable pageable) {
-        return ResponseEntity.ok(reviewService.getReviews(venueId, pageable));
+    @GetMapping("/{id}/booking-check")
+    public ResponseEntity<String> checkVenueAvailability(@PathVariable String id) {
+        venueService.checkVenueAvailability(id);
+        return ResponseEntity.ok("Venue validated");
     }
-
 }
