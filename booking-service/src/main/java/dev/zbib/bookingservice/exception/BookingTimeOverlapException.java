@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 public class BookingTimeOverlapException extends BookingException {
 
-    public BookingTimeOverlapException(LocalDateTime bookingTime) {
-        super(HttpStatus.CONFLICT, "The provider is not available at " + bookingTime);
+    public BookingTimeOverlapException(LocalDateTime starTime, LocalDateTime endTime) {
+        super(HttpStatus.CONFLICT, "The provider is not available from " + starTime + " to " + endTime);
     }
 }

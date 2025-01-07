@@ -22,11 +22,10 @@ import static dev.zbib.bookingservice.builder.BookingBuilder.buildBookingRespons
 public class BookingService {
 
     private final BookingRepository bookingRepository;
-    private final VenueService venueService;
+    private final BookingValidationService validationService;
 
     public BookingResponse createBooking(String userId, BookingRequest req) {
-        //  validate user is authorized to book for this event
-        venueService.checkVenueAvailability(req.getVenueId());
+        validationService.validateBookingCreation(req);
         Booking booking = bookingRepository.save(buildBooking(userId, req));
         return buildBookingResponse(booking);
     }
