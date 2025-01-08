@@ -6,7 +6,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class BookingRequest {
+public class BookingCreationRequest {
     private String eventId;
     private String venueId;
     private LocalDateTime startDate;

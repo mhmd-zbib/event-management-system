@@ -1,15 +1,14 @@
 package dev.zbib.bookingservice.repository;
 
-import dev.zbib.bookingservice.dto.BookingResponse;
 import dev.zbib.bookingservice.entity.Booking;
 import feign.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.UUID;
 
-public interface BookingRepository extends JpaRepository<Booking, Long> {
+public interface BookingRepository extends JpaRepository<Booking, UUID> {
 
     @Query(value = "SELECT COUNT(*) > 0 FROM bookings b "
             + "WHERE b.venue_id = :venueId "

@@ -1,13 +1,13 @@
 package dev.zbib.bookingservice.builder;
 
 import dev.zbib.bookingservice.dto.BookingListResponse;
-import dev.zbib.bookingservice.dto.BookingRequest;
+import dev.zbib.bookingservice.dto.BookingCreationRequest;
 import dev.zbib.bookingservice.dto.BookingResponse;
 import dev.zbib.bookingservice.entity.Booking;
 
 public class BookingBuilder {
 
-    public static Booking buildBooking(String userId, BookingRequest req) {
+    public static Booking buildBooking(String userId, BookingCreationRequest req) {
         return Booking.builder()
                 .userId(userId)
                 .eventId(req.getEventId())
