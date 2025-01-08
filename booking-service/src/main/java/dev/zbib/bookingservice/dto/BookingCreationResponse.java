@@ -1,6 +1,6 @@
 package dev.zbib.bookingservice.dto;
 
-import dev.zbib.shared.enums.BookingStatus;
+import dev.zbib.bookingservice.enums.BookingStatus;
 
 public class BookingCreationResponse {
     private String bookingId;

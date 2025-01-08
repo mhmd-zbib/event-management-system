@@ -1,6 +1,6 @@
 package dev.zbib.bookingservice.entity;
 
-import dev.zbib.shared.enums.BookingStatus;
+import dev.zbib.bookingservice.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +25,7 @@ public class Booking {
     private String eventId;
     private String userId;
     private String venueId;
+    private String venueOwnerId;
     private String reference;
     private LocalDateTime startDate;
     private LocalDateTime endDate;

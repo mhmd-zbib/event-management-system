@@ -3,7 +3,7 @@ package dev.zbib.bookingservice.service;
 import dev.zbib.bookingservice.entity.Booking;
 import dev.zbib.bookingservice.entity.BookingStatusHistory;
 import dev.zbib.bookingservice.repository.BookingStatusHistoryRepository;
-import dev.zbib.shared.enums.BookingStatus;
+import dev.zbib.bookingservice.enums.BookingStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

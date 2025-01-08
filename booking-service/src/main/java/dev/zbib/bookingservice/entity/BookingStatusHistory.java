@@ -1,6 +1,6 @@
 package dev.zbib.bookingservice.entity;
 
-import dev.zbib.shared.enums.BookingStatus;
+import dev.zbib.bookingservice.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
