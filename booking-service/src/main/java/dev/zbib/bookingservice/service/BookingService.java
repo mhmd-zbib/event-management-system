@@ -1,8 +1,8 @@
 package dev.zbib.bookingservice.service;
 
 import dev.zbib.bookingservice.builder.BookingBuilder;
-import dev.zbib.bookingservice.dto.BookingListResponse;
 import dev.zbib.bookingservice.dto.BookingCreationRequest;
+import dev.zbib.bookingservice.dto.BookingListResponse;
 import dev.zbib.bookingservice.dto.BookingResponse;
 import dev.zbib.bookingservice.entity.Booking;
 import dev.zbib.bookingservice.exception.BookingNotFoundException;
@@ -25,10 +25,12 @@ public class BookingService {
 
     private final BookingRepository bookingRepository;
     private final BookingValidationService validationService;
+    private final BookingStatusHistoryService bookingStatusHistoryService;
 
     public BookingResponse createBooking(String userId, BookingCreationRequest req) {
         validationService.validateBookingCreation(req);
         Booking booking = bookingRepository.save(buildBooking(userId, req));
+        bookingStatusHistoryService.logCreatedStatus(booking, userId);
         return buildBookingResponse(booking);
     }
 
@@ -37,14 +39,14 @@ public class BookingService {
         return buildBookingResponse(booking);
     }
 
-    public Booking getBookingEntity()
+    public Booking getBookingEntity(UUID id) {
+        return bookingRepository.findById(id).orElseThrow(() -> new BookingNotFoundException(id));
+    }
 
     public Page<BookingListResponse> getBookings(Pageable pageable) {
         Page<Booking> bookingsList = bookingRepository.findAll(pageable);
         return bookingsList.map(BookingBuilder::buildBookingListResponse);
     }
 
-    public void confirmBooking(String id) {
 
-    }
 }
