@@ -2,66 +2,90 @@ package dev.zbib.bookingservice.service;
 
 import dev.zbib.bookingservice.entity.Booking;
 import dev.zbib.bookingservice.enums.BookingStatus;
-import dev.zbib.bookingservice.exception.BookingTimeOverlapException;
 import dev.zbib.bookingservice.repository.BookingRepository;
-import dev.zbib.shared.enums.UserRole;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Log4j2
 public class BookingStatusService {
+
+    private static final BookingStatus ACCEPTED = BookingStatus.ACCEPTED;
+    private static final BookingStatus REJECTED = BookingStatus.REJECTED;
+    private static final BookingStatus CANCELLED_BY_BOOKER = BookingStatus.CANCELLED_BY_BOOKER;
+    private static final BookingStatus CANCELLED_BY_OWNER = BookingStatus.CANCELLED_BY_OWNER;
+    private static final BookingStatus CONFIRMED = BookingStatus.CONFIRMED;
 
     private final BookingRepository bookingRepository;
     private final BookingService bookingService;
     private final BookingStatusHistoryService statusHistoryService;
 
-
     public void setBookingStatus(UUID bookingId, BookingStatus newStatus, String userId, String note) {
         Booking booking = bookingService.getBookingEntity(bookingId);
-        BookingStatus currentStatus = booking.getStatus();
+        if (booking.getStatus() == newStatus) throw new IllegalArgumentException("Invalid action: " + newStatus);
+        if (!booking.getStatus().canTransitionTo(newStatus))
+            throw new IllegalArgumentException("Invalid action: " + newStatus);
 
-        UserRole userRole = getUserRole(booking, userId);
-        validateStatusTransition(currentStatus, newStatus, bookingId, userRole);
-        if (currentStatus == newStatus) {
-            log.debug("No status change needed for booking: {}", bookingId);
-            return;
-        }
-        statusHistoryService.logStatusChange(booking, currentStatus, newStatus, userId, note);
-        updateBookingStatus(booking, newStatus);
+        Booking updatedBooking = switch (newStatus) {
+            case PENDING -> null;
+            case ACCEPTED -> handleAccept(booking, userId);
+            case REJECTED -> handleReject(booking, userId, note);
+            case CANCELLED_BY_OWNER -> handleCancelledByOwner(booking, userId, note);
+            case CANCELLED_BY_BOOKER -> handleCancelledByBooker(booking, userId, note);
+            case CONFIRMED -> handleConfirm(booking, userId);
+            case COMPLETED -> handleCompleted(booking, userId);
+            default -> throw new IllegalArgumentException("Invalid action: " + newStatus);
+        };
+
+        statusHistoryService.logStatusChange(updatedBooking, booking.getStatus(), newStatus, userId, note);
     }
 
-    private UserRole getUserRole(Booking booking, String userId) {
-        if (booking.getUserId().equals(userId)) {
-            return UserRole.CUSTOMER;
-        }
-        if (booking.getVenueOwnerId().equals(userId)) {
-            return UserRole.CUSTOMER;
-        }
-        throw new UserNotAssociatedWithBookingException();
+    private Booking handleCompleted(Booking booking, String userId) {
+        validateOwner(booking, userId);
+        booking.setStatus(BookingStatus.COMPLETED);
+        return bookingRepository.save(booking);
     }
 
-    private void validateStatusTransition(BookingStatus currentStatus, BookingStatus newStatus, UUID bookingId, UserRole userRole) {
-        if (!currentStatus.canTransitionTo(newStatus, userRole)) {
-            throw new BookingStatusChangeException(bookingId);
-        }
+    private Booking handleAccept(Booking booking, String userId) {
+        validateOwner(booking, userId);
+        booking.setStatus(ACCEPTED);
+        return bookingRepository.save(booking);
     }
 
-    private void updateBookingStatus(Booking booking, BookingStatus newStatus) {
-        booking.setStatus(newStatus);
-        bookingRepository.save(booking);
-        String responsibleUserId = getResponsibleUserId(booking, newStatus);
+    private Booking handleReject(Booking booking, String userId, String note) {
+        validateOwner(booking, userId);
+        booking.setStatus(REJECTED);
+        return bookingRepository.save(booking);
     }
 
-    private String getResponsibleUserId(Booking booking, BookingStatus newStatus) {
-        if (newStatus == BookingStatus.CANCELLED_BY_BOOKER || newStatus == BookingStatus.PENDING) {
-            return booking.getUserId();
-        } else {
-            return booking.getVenueId();
-        }
+    private Booking handleCancelledByOwner(Booking booking, String userId, String note) {
+        validateOwner(booking, userId);
+        booking.setStatus(CANCELLED_BY_OWNER);
+        return bookingRepository.save(booking);
+    }
+
+    private Booking handleCancelledByBooker(Booking booking, String userId, String note) {
+        validateBooker(booking, userId);
+        booking.setStatus(CANCELLED_BY_BOOKER);
+        return bookingRepository.save(booking);
+    }
+
+    private Booking handleConfirm(Booking booking, String userId) {
+        validateOwner(booking, userId);
+        booking.setStatus(CONFIRMED);
+        return bookingRepository.save(booking);
+    }
+
+    private void validateOwner(Booking booking, String userId) {
+        if (!Objects.equals(booking.getVenueOwnerId(), userId))
+            throw new IllegalArgumentException("Invalid owner: " + booking.getVenueOwnerId());
+    }
+
+    private void validateBooker(Booking booking, String userId) {
+        if (!Objects.equals(booking.getUserId(), userId))
+            throw new IllegalArgumentException("Invalid user: " + booking.getUserId());
     }
 }
