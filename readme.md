@@ -79,22 +79,22 @@ The Event Management Platform is a comprehensive solution that facilitates the e
 
 ### Backend
 - Java 17
-- Spring Boot 3.x
+- Spring Boot 3
 - Spring Cloud
 - Spring Security
+- Keycloak 
 
 ### Database
-- PostgreSQL (transactional data)
-- MongoDB (event/venue content)
-- Redis (caching)
+- PostgreSQL
+- MongoDB 
+- Redis
+- Elastic Search
 
 ### Message Queue
 - RabbitMQ
 
 ### Infrastructure
 - Docker
-- Kubernetes
-- AWS/Azure Cloud
 
 ## Key Features
 
