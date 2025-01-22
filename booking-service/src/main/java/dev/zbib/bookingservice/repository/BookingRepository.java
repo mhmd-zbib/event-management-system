@@ -6,19 +6,20 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public interface BookingRepository extends JpaRepository<Booking, UUID> {
 
-    @Query(value = "SELECT COUNT(*) > 0 FROM bookings b "
-            + "WHERE b.venue_id = :venueId "
+    @Query("SELECT b FROM Booking b WHERE b.venueId = :venueId "
             + "AND ("
-            + "    :newStartTime BETWEEN b.start_time AND b.end_time "
-            + "    OR :newEndTime BETWEEN b.start_time AND b.end_time "
-            + "    OR :newStartTime <= b.start_time AND :newEndTime >= b.end_time"
-            + ")", nativeQuery = true)
-    boolean isBookingAvailable(@Param("venueId") String venueId,
+            + "    :newStartTime BETWEEN b.startDate AND b.endDate "
+            + "    OR :newEndTime BETWEEN b.startDate AND b.endDate "
+            + "    OR :newStartTime <= b.startDate AND :newEndTime >= b.endDate"
+            + ")")
+    List<Booking> findOverlappingBookings(@Param("venueId") String venueId,
             @Param("newStartTime") LocalDateTime newStartTime,
             @Param("newEndTime") LocalDateTime newEndTime);
+
 
 }

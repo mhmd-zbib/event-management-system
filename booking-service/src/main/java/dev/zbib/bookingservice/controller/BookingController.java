@@ -3,7 +3,7 @@ package dev.zbib.bookingservice.controller;
 import dev.zbib.bookingservice.dto.BookingCreationRequest;
 import dev.zbib.bookingservice.dto.BookingListResponse;
 import dev.zbib.bookingservice.dto.BookingResponse;
-import dev.zbib.bookingservice.enums.BookingStatus;
+import dev.zbib.bookingservice.dto.BookingStatusRequest;
 import dev.zbib.bookingservice.service.BookingService;
 import dev.zbib.bookingservice.service.BookingStatusService;
 import lombok.RequiredArgsConstructor;
@@ -43,12 +43,9 @@ public class BookingController {
 
     @PutMapping("/{bookingId}/status")
     public ResponseEntity<String> setBookingStatus(
-            @AuthenticationPrincipal Jwt jwt,
-            @PathVariable UUID bookingId,
-            @RequestBody BookingStatus status,
-            @RequestBody String note) {
+            @AuthenticationPrincipal Jwt jwt, @PathVariable UUID bookingId, @RequestBody BookingStatusRequest request) {
         String userId = jwt.getSubject();
-        bookingStatusService.setBookingStatus(bookingId, status, userId, note);
+        bookingStatusService.setBookingStatus(bookingId, request.getStatus(), userId, request.getNote());
         return ResponseEntity.ok("Status changed");
     }
 }

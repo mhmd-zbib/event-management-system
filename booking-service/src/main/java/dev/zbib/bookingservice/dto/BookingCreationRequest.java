@@ -1,6 +1,5 @@
 package dev.zbib.bookingservice.dto;
 
-import dev.zbib.bookingservice.enums.BookingStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -11,7 +10,5 @@ public class BookingCreationRequest {
     private String venueId;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private BookingStatus status;
-    private String bookingReference;
     private String notes;
 } 

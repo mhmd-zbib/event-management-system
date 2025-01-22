@@ -74,19 +74,20 @@ public class LoggingAspect {
                         .append("\"");
             } else if (arg instanceof Collection<?> || arg instanceof Map) {
                 formattedArgs.append(arg.getClass()
-                                .getSimpleName())
+                                             .getSimpleName())
                         .append("[")
                         .append(((arg instanceof Collection) ? ((Collection<?>) arg).size() : ((Map<?, ?>) arg).size()))
                         .append(" elements]");
             } else if (arg.getClass()
                     .isArray()) {
                 formattedArgs.append(arg.getClass()
-                                .getSimpleName())
+                                             .getSimpleName())
                         .append("[length=")
                         .append(Array.getLength(arg))
                         .append("]");
             } else {
-                formattedArgs.append(arg.toString());
+                formattedArgs.append(arg.getClass()
+                                             .getName() + "@" + Integer.toHexString(System.identityHashCode(arg)));
             }
             formattedArgs.append(", ");
         }
@@ -107,7 +108,8 @@ public class LoggingAspect {
             return result.getClass()
                     .getSimpleName() + "[size=" + ((Collection<?>) result).size() + "]";
         }
-        return result.toString();
+        return result.getClass()
+                .getName() + "@" + Integer.toHexString(System.identityHashCode(result));
     }
 
     private String getMethodName(JoinPoint joinPoint) {

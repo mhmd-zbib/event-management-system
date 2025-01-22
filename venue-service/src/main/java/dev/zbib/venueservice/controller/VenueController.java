@@ -8,6 +8,7 @@ import dev.zbib.venueservice.service.ReviewService;
 import dev.zbib.venueservice.service.VenueQueryService;
 import dev.zbib.venueservice.service.VenueService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+@Log4j2
 @RestController
 @RequestMapping("/venues")
 @RequiredArgsConstructor
@@ -45,6 +47,7 @@ public class VenueController {
 
     @GetMapping("/{id}/booking-check")
     public ResponseEntity<String> checkVenueAvailability(@PathVariable String id) {
+        log.info(id);
         venueService.checkVenueAvailability(id);
         return ResponseEntity.ok("Venue validated");
     }

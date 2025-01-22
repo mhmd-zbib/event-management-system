@@ -35,4 +35,4 @@ public class Booking {
     private String notes;
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookingStatusHistory> statusHistory;
-} 
+}

@@ -1,7 +1,7 @@
 package dev.zbib.bookingservice.builder;
 
-import dev.zbib.bookingservice.dto.BookingListResponse;
 import dev.zbib.bookingservice.dto.BookingCreationRequest;
+import dev.zbib.bookingservice.dto.BookingListResponse;
 import dev.zbib.bookingservice.dto.BookingResponse;
 import dev.zbib.bookingservice.entity.Booking;
 
@@ -14,7 +14,6 @@ public class BookingBuilder {
                 .venueId(req.getVenueId())
                 .startDate(req.getStartDate())
                 .endDate(req.getEndDate())
-                .status(req.getStatus())
                 .notes(req.getNotes())
                 .build();
     }

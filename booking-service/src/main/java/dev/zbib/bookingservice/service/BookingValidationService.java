@@ -20,7 +20,8 @@ public class BookingValidationService {
     }
 
     private void validateAvailability(BookingCreationRequest req) {
-        if (!bookingRepository.isBookingAvailable(req.getVenueId(), req.getStartDate(), req.getEndDate())) {
+        if (!bookingRepository.findOverlappingBookings(req.getVenueId(), req.getStartDate(), req.getEndDate())
+                .isEmpty()) {
             throw new BookingTimeOverlapException(req.getStartDate(), req.getEndDate());
         }
     }

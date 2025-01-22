@@ -3,11 +3,12 @@ package dev.zbib.bookingservice.service;
 import dev.zbib.bookingservice.client.VenueClient;
 import dev.zbib.bookingservice.exception.VenueNotAvailableException;
 import dev.zbib.bookingservice.exception.VenueNotFoundException;
-import jakarta.ws.rs.ForbiddenException;
-import jakarta.ws.rs.NotFoundException;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class VenueService {
@@ -15,11 +16,12 @@ public class VenueService {
     private final VenueClient venueClient;
 
     public void checkVenueAvailability(String venueId) {
+        log.info("ID IS {}", venueId);
         try {
             venueClient.checkVenueAvailability(venueId);
-        } catch (NotFoundException e) {
+        } catch (FeignException.NotFound e) {
             throw new VenueNotFoundException();
-        } catch (ForbiddenException e) {
+        } catch (FeignException.Forbidden e) {
             throw new VenueNotAvailableException();
         }
     }
