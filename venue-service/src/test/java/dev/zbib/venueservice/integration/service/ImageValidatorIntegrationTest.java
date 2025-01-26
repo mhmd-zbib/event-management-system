@@ -1,16 +1,16 @@
-package dev.zbib.venueservice.unit.service;
+package dev.zbib.venueservice.integration.service;
 
 import dev.zbib.venueservice.dto.ImageCreationRequest;
+import dev.zbib.venueservice.entity.Image;
 import dev.zbib.venueservice.enums.EntityType;
 import dev.zbib.venueservice.exception.MaxImageCountException;
 import dev.zbib.venueservice.repository.ImageRepository;
 import dev.zbib.venueservice.service.ImageValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,17 +18,15 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
-class ImageValidatorTest {
+@SpringBootTest
+@ActiveProfiles("test")
+class ImageValidatorIntegrationTest {
 
-    @Mock
+    @Autowired
     private ImageRepository imageRepository;
 
-    @InjectMocks
+    @Autowired
     private ImageValidator imageValidator;
 
     private UUID entityId;
@@ -37,6 +35,9 @@ class ImageValidatorTest {
 
     @BeforeEach
     void setUp() {
+        // Clean up the database before each test
+        imageRepository.deleteAll();
+
         entityId = UUID.randomUUID();
         entityType = EntityType.VENUE;
         imageRequests = new ArrayList<>();
@@ -45,35 +46,27 @@ class ImageValidatorTest {
     @Test
     void validateImageCreation_Success() {
         addImageRequests(5);
-        when(imageRepository.countByEntityIdAndEntityType(any(),
-                anyList(),
-                any())).thenReturn(3L);
+        createExistingImages(3);
         assertDoesNotThrow(() -> imageValidator.validateImageCreation(entityId, imageRequests, entityType));
     }
 
     @Test
     void validateImageCreation_ExactlyMaxImages() {
         addImageRequests(5);
-        when(imageRepository.countByEntityIdAndEntityType(any(),
-                anyList(),
-                any())).thenReturn(5L);
-
+        createExistingImages(5);
         assertDoesNotThrow(() -> imageValidator.validateImageCreation(entityId, imageRequests, entityType));
     }
 
     @Test
     void validateImageCreation_ExceedsMaxImages() {
         addImageRequests(6);
-        when(imageRepository.countByEntityIdAndEntityType(any(),
-                anyList(),
-                any())).thenReturn(5L);
+        createExistingImages(5);
         assertThrows(MaxImageCountException.class,
                 () -> imageValidator.validateImageCreation(entityId, imageRequests, entityType));
     }
 
     @Test
     void validateImageCreation_EmptyList() {
-        when(imageRepository.countByEntityIdAndEntityType(any(), anyList(), any())).thenReturn(0L);
         assertDoesNotThrow(() -> imageValidator.validateImageCreation(entityId, new ArrayList<>(), entityType));
     }
 
@@ -87,5 +80,23 @@ class ImageValidatorTest {
             request.setHeight(600);
             imageRequests.add(request);
         }
+    }
+
+    private void createExistingImages(int count) {
+        List<Image> images = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            Image image = Image
+                    .builder()
+                    .entityId(entityId)
+                    .entityType(entityType)
+                    .url("https://example.com/existing" + i + ".jpg")
+                    .order(i + 1)
+                    .size(1024)
+                    .width(800)
+                    .height(600)
+                    .build();
+            images.add(image);
+        }
+        imageRepository.saveAll(images);
     }
 }
