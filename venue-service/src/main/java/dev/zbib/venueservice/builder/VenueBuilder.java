@@ -22,6 +22,7 @@ public class VenueBuilder {
         return VenueCreationResponse
                 .builder()
                 .id(venue.getId())
+                .ownerId(venue.getOwnerId())
                 .name(venue.getName())
                 .bookingTimeline(venue.getBookingTimeline())
                 .status(venue

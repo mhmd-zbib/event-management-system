@@ -16,6 +16,5 @@ public class VenueCreationResponse {
     private String status;
     private int totalCapacity;
     private int bookingTimeline;
-    private int minBookingDuration;
-    private int maxBookingDuration;
+
 }

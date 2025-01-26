@@ -1,12 +1,14 @@
 package dev.zbib.venueservice.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class VenueCreationRequest {
     private String name;
     private String description;
