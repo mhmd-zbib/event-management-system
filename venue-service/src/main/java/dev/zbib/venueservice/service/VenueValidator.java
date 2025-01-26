@@ -3,7 +3,9 @@ package dev.zbib.venueservice.service;
 import dev.zbib.venueservice.dto.VenueCreationRequest;
 import dev.zbib.venueservice.repository.VenueRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+@Service
 @RequiredArgsConstructor
 public class VenueValidator {
 

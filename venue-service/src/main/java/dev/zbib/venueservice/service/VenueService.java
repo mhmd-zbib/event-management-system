@@ -17,11 +17,12 @@ import static dev.zbib.venueservice.builder.VenueBuilder.buildVenueResponse;
 public class VenueService {
 
     private final VenueRepository venueRepository;
+    private final VenueValidator venueValidator;
 
     public VenueCreationResponse createVenue(UUID userId, VenueCreationRequest request) {
+        venueValidator.validateVenueCreation(request);
         Venue venue = buildVenue(userId, request);
         Venue savedVenue = venueRepository.save(venue);
         return buildVenueResponse(savedVenue);
     }
-
 }
