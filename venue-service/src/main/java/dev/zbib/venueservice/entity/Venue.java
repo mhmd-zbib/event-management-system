@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -30,11 +31,14 @@ public class Venue {
     @Column(nullable = false)
     private String name;
 
+    @Size(max = 500, message = "Description cannot exceed 500 characters")
+    private String description;
+
     @NotNull(message = "Total capacity is required")
     @Min(value = 1, message = "Total capacity must be at least 1")
     @Max(value = 100000, message = "Total capacity cannot exceed 100,000")
     @Column(name = "total_capacity", nullable = false)
-    private int totalCapacity;
+    private int maxCapacity;
 
     @NotNull(message = "Booking timeline is required")
     @Min(value = 1, message = "Booking timeline must be at least 1")
@@ -47,16 +51,5 @@ public class Venue {
     @JoinColumn(name = "status_id", nullable = false)
     private StatusTypes status;
 
-    @NotNull(message = "Minimum booking duration is required")
-    @Min(value = 1, message = "Minimum booking duration must be at least 1")
-    @Max(value = 72, message = "Minimum booking duration cannot exceed 72 hours")
-    @Column(name = "min_booking_duration", nullable = false)
-    private int minBookingDuration;
-
-    @NotNull(message = "Maximum booking duration is required")
-    @Min(value = 1, message = "Maximum booking duration must be at least 1")
-    @Max(value = 168, message = "Maximum booking duration cannot exceed 168 hours (1 week)")
-    @Column(name = "max_booking_duration", nullable = false)
-    private int maxBookingDuration;
-
+    private BigDecimal rating;
 }

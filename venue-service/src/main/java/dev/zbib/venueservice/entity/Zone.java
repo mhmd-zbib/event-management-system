@@ -84,11 +84,24 @@ public class Zone {
     @Column(name = "excess_fee", precision = 8, scale = 2, nullable = false)
     private BigDecimal excessFee;
 
+    @NotNull(message = "Minimum booking duration is required")
+    @Min(value = 1, message = "Minimum booking duration must be at least 1")
+    @Max(value = 72, message = "Minimum booking duration cannot exceed 72 hours")
+    @Column(name = "min_booking_duration", nullable = false)
+    private int minBookingDuration;
+
+    @NotNull(message = "Maximum booking duration is required")
+    @Min(value = 1, message = "Maximum booking duration must be at least 1")
+    @Max(value = 168, message = "Maximum booking duration cannot exceed 168 hours (1 week)")
+    @Column(name = "max_booking_duration", nullable = false)
+    private int maxBookingDuration;
+
     @PrePersist
     @PreUpdate
     private void calculateArea() {
         if (length != null && width != null) {
-            this.area = length.multiply(width)
+            this.area = length
+                    .multiply(width)
                     .setScale(2, RoundingMode.HALF_UP);
         }
     }
