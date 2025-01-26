@@ -26,7 +26,7 @@ public class Image {
 
     private String url;
 
-    private int sort_order;
+    private int order;
 
     private int size;
 
