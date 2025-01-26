@@ -1,0 +1,61 @@
+sequenceDiagram
+    autonumber
+    actor C as Client
+    participant VC as VenueZoneController
+    participant ZS as ZoneService
+    participant ZV as ZoneValidator
+    participant ZB as ZoneBuilder
+    participant ZR as ZoneRepository
+    participant IS as ImageService
+    participant IV as ImageValidator
+    participant IB as ImageBuilder
+    participant IR as ImageRepository
+    C ->> VC: POST /venues/{venueId}/zones (ZoneRequest)
+    activate VC
+    VC ->> ZS: createZone(venueId, request)
+    activate ZS
+    ZS ->> ZV: validateZoneCreation(venueId, request)
+    activate ZV
+    alt Validation Failed
+        ZV --x ZS: throw ZoneValidationException
+        ZS --x VC: throw ZoneValidationException
+        VC -->> C: HTTP 400 Bad Request
+    else Validation Passed
+        ZV -->> ZS: validation result
+        deactivate ZV
+        ZS ->> ZB: buildZone(request)
+        activate ZB
+        ZB -->> ZS: zone
+        deactivate ZB
+        ZS ->> ZR: save(zone)
+        activate ZR
+        ZR -->> ZS: savedZone
+        deactivate ZR
+        ZS ->> IS: saveImages(savedZone, request.images)
+        activate IS
+        IS ->> IV: validateImages(images)
+        activate IV
+        alt Image Validation Failed
+            IV --x IS: throw ImageValidationException
+            IS --x ZS: throw ImageValidationException
+            ZS --x VC: throw ImageValidationException
+            VC -->> C: HTTP 400 Bad Request
+        else Image Validation Passed
+            IV -->> IS: validation result
+            deactivate IV
+            IS ->> IB: buildImages(images)
+            activate IB
+            IB -->> IS: imagesList
+            deactivate IB
+            IS ->> IR: saveAll(imagesList)
+            activate IR
+            IR -->> IS: savedImages
+            deactivate IR
+            IS -->> ZS: imageResults
+            deactivate IS
+            ZS -->> VC: ZoneResponse
+            deactivate ZS
+            VC -->> C: HTTP 201 Created (ZoneResponse)
+            deactivate VC
+        end
+    end
