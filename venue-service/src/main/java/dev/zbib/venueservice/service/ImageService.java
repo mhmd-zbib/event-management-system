@@ -1,6 +1,6 @@
 package dev.zbib.venueservice.service;
 
-import dev.zbib.venueservice.dto.ImageRequest;
+import dev.zbib.venueservice.dto.ImageCreationRequest;
 import dev.zbib.venueservice.entity.Image;
 import dev.zbib.venueservice.enums.EntityType;
 import dev.zbib.venueservice.repository.ImageRepository;
@@ -17,8 +17,10 @@ import static dev.zbib.venueservice.builder.ImageBuilder.buildImage;
 public class ImageService {
 
     private final ImageRepository imageRepository;
+    private final ImageValidator imageValidator;
 
-    public void saveImages(UUID entityId, List<ImageRequest> requests, EntityType entityType) {
+    public void createImages(UUID entityId, List<ImageCreationRequest> requests, EntityType entityType) {
+        imageValidator.validateImageCreation(entityId, requests, entityType);
         List<Image> images = requests
                 .stream()
                 .map(request -> buildImage(entityId, request, entityType))

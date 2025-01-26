@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class ImageRequest {
+public class ImageCreationRequest {
     private UUID entityId;
     private String url;
     private int order;

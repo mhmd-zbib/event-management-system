@@ -12,5 +12,5 @@ public class VenueCreationRequest {
     private String description;
     private int maxCapacity;
     private int bookingTimeline;
-    private List<ImageRequest> images;
+    private List<ImageCreationRequest> images;
 }

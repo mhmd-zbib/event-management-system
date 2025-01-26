@@ -26,7 +26,7 @@ public class VenueService {
         Venue venue = buildVenue(userId, request);
         Venue savedVenue = venueRepository.save(venue);
         VenueCreationResponse res = buildVenueResponse(savedVenue);
-        imageService.saveImages(savedVenue.getId(), request.getImages(), EntityType.VENUE);
+        imageService.createImages(savedVenue.getId(), request.getImages(), EntityType.VENUE);
         return res;
     }
 }
