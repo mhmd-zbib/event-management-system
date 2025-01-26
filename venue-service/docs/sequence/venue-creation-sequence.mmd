@@ -1,0 +1,73 @@
+
+sequenceDiagram
+    autonumber
+    actor C as Client
+    participant VC as VenueController
+    participant VS as VenueService
+    participant VV as VenueValidator
+    participant VB as VenueBuilder
+    participant VR as VenueRepository
+    participant IS as ImageService
+    participant IV as ImageValidator
+    participant IB as ImageBuilder
+    participant IR as ImageRepository
+
+    C->>VC: POST /venues (VenueRequest)
+    activate VC
+    VC->>VS: createVenue(userId, request)
+    activate VS
+
+    VS->>VV: validateVenueCreation(request)
+    activate VV
+    alt Validation Failed
+        VV--xVS: throw VenueValidationException
+        VS--xVC: throw VenueValidationException
+        VC-->>C: HTTP 400 Bad Request
+    else Validation Passed
+        VV-->>VS: validation result
+        deactivate VV
+
+        VS->>VB: buildVenue(request)
+        activate VB
+        VB-->>VS: venue
+        deactivate VB
+
+        VS->>VR: save(venue)
+        activate VR
+        VR-->>VS: savedVenue
+        deactivate VR
+
+        VS->>IS: saveImages(savedVenue, request.images)
+        activate IS
+
+        IS->>IV: validateImages(images)
+        activate IV
+        alt Image Validation Failed
+            IV--xIS: throw ImageValidationException
+            IS--xVS: throw ImageValidationException
+            VS--xVC: throw ImageValidationException
+            VC-->>C: HTTP 400 Bad Request
+        else Image Validation Passed
+            IV-->>IS: validation result
+            deactivate IV
+
+            IS->>IB: buildImages(images)
+            activate IB
+            IB-->>IS: imagesList
+            deactivate IB
+
+            IS->>IR: saveAll(imagesList)
+            activate IR
+            IR-->>IS: savedImages
+            deactivate IR
+
+            IS-->>VS: imageResults
+            deactivate IS
+
+            VS-->>VC: VenueResponse
+            deactivate VS
+
+            VC-->>C: HTTP 201 Created (VenueResponse)
+            deactivate VC
+        end
+    end

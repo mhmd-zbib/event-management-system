@@ -1,47 +1,55 @@
 package dev.zbib.venueservice.entity;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.experimental.SuperBuilder;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.UUID;
 
-@Document(collection = "venues")
+@Entity
 @Data
+@Table(name = "venues")
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 public class Venue {
 
     @Id
-    private String id;
+    @GeneratedValue
+    private UUID id;
 
+    @NotNull
+    @Column(name = "owner_id", nullable = false)
+    private UUID ownerId;
+
+    @NotBlank(message = "Venue name is required")
+    @Size(min = 2, max = 100, message = "Venue name must be between 2 and 100 characters")
+    @Column(nullable = false)
     private String name;
 
+    @Size(max = 500, message = "Description cannot exceed 500 characters")
     private String description;
 
-    private String type;
+    @NotNull(message = "Total capacity is required")
+    @Min(value = 1, message = "Total capacity must be at least 1")
+    @Max(value = 100000, message = "Total capacity cannot exceed 100,000")
+    @Column(name = "total_capacity", nullable = false)
+    private int maxCapacity;
 
-    private int capacity;
+    @NotNull(message = "Booking timeline is required")
+    @Min(value = 1, message = "Booking timeline must be at least 1")
+    @Max(value = 365, message = "Booking timeline cannot exceed 365 days")
+    @Column(name = "booking_timeline", nullable = false)
+    private int bookingTimeline;
 
-    private String category;
+    @NotNull(message = "Status is required")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "status_id", nullable = false)
+    private StatusTypes status;
 
-    private double rating;
-
-    private Double price;
-
-    private String ownerId;
-
-    private boolean available;
-
-    private Location location;
-
-    private List<String> images;
-
-    private List<String> tags;
-
-    private boolean isFeatured;
+    private BigDecimal rating;
 }

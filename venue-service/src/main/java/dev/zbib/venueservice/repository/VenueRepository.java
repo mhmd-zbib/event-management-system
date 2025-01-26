@@ -1,7 +1,10 @@
 package dev.zbib.venueservice.repository;
 
 import dev.zbib.venueservice.entity.Venue;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface VenueRepository extends MongoRepository<Venue, String> {
+import java.util.UUID;
+
+public interface VenueRepository extends JpaRepository<Venue, UUID> {
+    boolean existsByName(String name);
 }
