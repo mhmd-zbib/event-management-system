@@ -7,9 +7,7 @@ import lombok.Setter;
 @Setter
 public class VenueCreationRequest {
     private String name;
-    private int totalCapacity;
+    private String description;
+    private int maxCapacity;
     private int bookingTimeline;
-    private int capacity;
-    private int minBookingDuration;
-    private int maxBookingDuration;
 }

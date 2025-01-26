@@ -12,10 +12,9 @@ public class VenueBuilder {
         return Venue
                 .builder()
                 .name(request.getName())
+                .description(request.getDescription())
                 .ownerId(ownerId)
                 .bookingTimeline(request.getBookingTimeline())
-                .maxBookingDuration(request.getMaxBookingDuration())
-                .minBookingDuration(request.getMinBookingDuration())
                 .build();
     }
 
@@ -25,12 +24,10 @@ public class VenueBuilder {
                 .id(venue.getId())
                 .name(venue.getName())
                 .bookingTimeline(venue.getBookingTimeline())
-                .maxBookingDuration(venue.getMaxBookingDuration())
-                .minBookingDuration(venue.getMinBookingDuration())
                 .status(venue
                         .getStatus()
                         .getDisplayName())
-                .totalCapacity(venue.getTotalCapacity())
+                .totalCapacity(venue.getMaxCapacity())
                 .build();
     }
 }
