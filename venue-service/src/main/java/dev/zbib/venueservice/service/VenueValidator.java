@@ -1,6 +1,8 @@
 package dev.zbib.venueservice.service;
 
 import dev.zbib.venueservice.dto.VenueCreationRequest;
+import dev.zbib.venueservice.exception.VenueAlreadyExistException;
+import dev.zbib.venueservice.exception.VenueMaxCapacityException;
 import dev.zbib.venueservice.repository.VenueRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,13 +23,13 @@ public class VenueValidator {
 
     private void validateUniqueName(VenueCreationRequest request) {
         if (venueRepository.existsByName(request.getName())) {
+            throw new VenueAlreadyExistException();
         }
     }
 
     private void validateCapacity(VenueCreationRequest request) {
-        if (request.getMaxCapacity() < MIN_CAPACITY) {
-        }
-        if (request.getMaxCapacity() > MAX_CAPACITY) {
+        if (request.getMaxCapacity() < MIN_CAPACITY || request.getMaxCapacity() > MAX_CAPACITY) {
+            throw new VenueMaxCapacityException();
         }
     }
 }
