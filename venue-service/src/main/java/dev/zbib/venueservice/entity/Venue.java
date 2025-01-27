@@ -48,7 +48,9 @@ public class Venue {
     private int bookingTimeline;
 
     @NotNull(message = "Status is required")
-    private VenueStatus status;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "status_id", nullable = false)
+    private StatusTypes status;
 
     private BigDecimal rating;
 }

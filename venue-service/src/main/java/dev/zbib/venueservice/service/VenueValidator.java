@@ -11,6 +11,8 @@ import dev.zbib.venueservice.repository.ZoneRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class VenueValidator {
@@ -44,7 +46,11 @@ public class VenueValidator {
     }
 
     private void validateVenueEligibility(Venue venue) {
-        if (venue.getStatus() != VenueStatus.ACTIVE && venue.getStatus() != VenueStatus.UNDER_MAINTENANCE) {
+        if (!Objects.equals(venue
+                .getStatus()
+                .getName(), VenueStatus.ACTIVE.name()) && !Objects.equals(venue
+                .getStatus()
+                .getName(), VenueStatus.UNDER_MAINTENANCE.name())) {
             throw new VenueStatusInvalidForZonesException();
         }
     }
