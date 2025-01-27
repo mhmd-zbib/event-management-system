@@ -1,5 +1,6 @@
 package dev.zbib.venueservice.entity;
 
+import dev.zbib.venueservice.enums.VenueStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -47,9 +48,7 @@ public class Venue {
     private int bookingTimeline;
 
     @NotNull(message = "Status is required")
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "status_id", nullable = false)
-    private StatusTypes status;
+    private VenueStatus status;
 
     private BigDecimal rating;
 }

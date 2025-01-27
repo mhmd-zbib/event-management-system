@@ -19,9 +19,11 @@ public class ZoneService {
 
     private final ZoneRepository zoneRepository;
     private final VenueService venueService;
+    private final ZoneValidator zoneValidator;
 
     public ZoneCreationResponse createZone(UUID venueId, ZoneCreationRequest request) {
         Venue venue = venueService.getVenueById(venueId);
+        zoneValidator.validateZoneCreation(request, venue);
         Zone zone = buildZone(request, venue);
         Zone savedZone = zoneRepository.save(zone);
         return buildZoneCreationResponse(savedZone);

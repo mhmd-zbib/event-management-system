@@ -1,5 +1,6 @@
 package dev.zbib.venueservice.entity;
 
+import dev.zbib.venueservice.enums.ZoneStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -38,9 +39,7 @@ public class Zone {
     private int capacity;
 
     @NotNull(message = "Status is required")
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "status_id", nullable = false)
-    private StatusTypes status;
+    private ZoneStatus status;
 
     @NotNull(message = "Length is required")
     @DecimalMin(value = "0.01", inclusive = true, message = "Length must be greater than 0")
