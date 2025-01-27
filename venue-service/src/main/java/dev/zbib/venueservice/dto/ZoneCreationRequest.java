@@ -3,6 +3,7 @@ package dev.zbib.venueservice.dto;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class ZoneCreationRequest {
@@ -16,4 +17,5 @@ public class ZoneCreationRequest {
     private BigDecimal excessFee;
     private int minBookingDuration;
     private int maxBookingDuration;
+    private List<ImageCreationRequest> images;
 }
