@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+import static dev.zbib.venueservice.builder.ZoneBuilder.buildZone;
+import static dev.zbib.venueservice.builder.ZoneBuilder.buildZoneCreationResponse;
+
 @Service
 @RequiredArgsConstructor
 public class ZoneService {
@@ -19,18 +22,8 @@ public class ZoneService {
 
     public ZoneCreationResponse createZone(UUID venueId, ZoneCreationRequest request) {
         Venue venue = venueService.getVenueById(venueId);
-        Zone zone = Zone
-                .builder()
-                .name(request.getName())
-                .description(request.getDescription())
-                .venue(venue)
-                .build();
+        Zone zone = buildZone(request, venue);
         Zone savedZone = zoneRepository.save(zone);
-        return ZoneCreationResponse
-                .builder()
-                .id(savedZone.getId())
-                .name(savedZone.getName())
-                .description(savedZone.getDescription())
-                .build();
+        return buildZoneCreationResponse(savedZone);
     }
 }
