@@ -1,0 +1,78 @@
+sequenceDiagram
+    autonumber
+    actor C as Client
+    participant VC as VenueZoneController
+    participant ZS as ZoneService
+    participant VS as VenueService
+    participant ZV as ZoneValidator
+    participant VV as VenueValidator
+    participant ZB as ZoneBuilder
+    participant ZR as ZoneRepository
+    participant IS as ImageService
+
+    C ->> VC: POST /venues/{venueId}/zones (ZoneRequest)
+    activate VC
+
+    VC ->> ZS: createZone(venueId, request)
+    activate ZS
+
+    ZS ->> VS: getVenueById(venueId)
+    activate VS
+    alt Venue Not Found
+        VS --x ZS: throw VenueNotFoundException
+        ZS --x VC: throw VenueNotFoundException
+        VC -->> C: HTTP 404 Not Found
+    else Venue Found
+        VS -->> ZS: venue
+        deactivate VS
+
+        ZS ->> ZV: validateZoneCreation(request, venue)
+        activate ZV
+
+        ZV ->> VV: validateVenueForZoneCreation(venue)
+        activate VV
+        alt Venue Validation Failed
+            VV --x ZV: throw VenueException
+            ZV --x ZS: throw VenueException
+            ZS --x VC: throw VenueException
+            VC -->> C: HTTP 400 Bad Request
+        else Venue Validation Passed
+            VV -->> ZV: validation result
+            deactivate VV
+
+            alt Zone Validation Failed
+                ZV --x ZS: throw ZoneValidationException
+                ZS --x VC: throw ZoneValidationException
+                VC -->> C: HTTP 400 Bad Request
+            else Zone Validation Passed
+                ZV -->> ZS: validation result
+                deactivate ZV
+
+                ZS ->> ZB: buildZone(request, venue)
+                activate ZB
+                ZB -->> ZS: zone
+                deactivate ZB
+
+                ZS ->> ZR: save(zone)
+                activate ZR
+                ZR -->> ZS: savedZone
+                deactivate ZR
+
+                ZS ->> IS: createImages(savedZone.getId(), request.getImages(), EntityType.ZONE)
+                activate IS
+                alt Image Creation Failed
+                    IS --x ZS: throw ImageException
+                    ZS --x VC: throw ImageException
+                    VC -->> C: HTTP 400 Bad Request
+                else Images Created Successfully
+                    IS -->> ZS: imageResults
+                    deactivate IS
+
+                    ZS -->> VC: ZoneResponse
+                    deactivate ZS
+                    VC -->> C: HTTP 201 Created (ZoneResponse)
+                    deactivate VC
+                end
+            end
+        end
+    end

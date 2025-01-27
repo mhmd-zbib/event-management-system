@@ -96,6 +96,10 @@ public class Zone {
     @Column(name = "max_booking_duration", nullable = false)
     private int maxBookingDuration;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "venue_id", nullable = false)
+    private Venue venue;
+
     @PrePersist
     @PreUpdate
     private void calculateArea() {

@@ -1,5 +1,6 @@
 package dev.zbib.venueservice.entity;
 
+import dev.zbib.venueservice.enums.VenueStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;

@@ -29,4 +29,10 @@ public class VenueService {
         imageService.createImages(savedVenue.getId(), request.getImages(), EntityType.VENUE);
         return res;
     }
+
+    public Venue getVenueById(UUID venueId) {
+        return venueRepository
+                .findById(venueId)
+                .orElse(null);
+    }
 }

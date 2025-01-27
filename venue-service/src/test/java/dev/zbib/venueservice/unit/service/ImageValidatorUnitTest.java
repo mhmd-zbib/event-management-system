@@ -2,7 +2,7 @@ package dev.zbib.venueservice.unit.service;
 
 import dev.zbib.venueservice.dto.ImageCreationRequest;
 import dev.zbib.venueservice.enums.EntityType;
-import dev.zbib.venueservice.exception.MaxImageCountException;
+import dev.zbib.venueservice.exception.ImageMaxCountException;
 import dev.zbib.venueservice.repository.ImageRepository;
 import dev.zbib.venueservice.service.ImageValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,7 +67,7 @@ class ImageValidatorUnitTest {
         when(imageRepository.countByEntityIdAndEntityType(any(),
                 anyList(),
                 any())).thenReturn(5L);
-        assertThrows(MaxImageCountException.class,
+        assertThrows(ImageMaxCountException.class,
                 () -> imageValidator.validateImageCreation(entityId, imageRequests, entityType));
     }
 
