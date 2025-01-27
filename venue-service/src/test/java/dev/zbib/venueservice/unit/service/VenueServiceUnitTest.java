@@ -7,7 +7,7 @@ import dev.zbib.venueservice.entity.StatusTypes;
 import dev.zbib.venueservice.entity.Venue;
 import dev.zbib.venueservice.enums.EntityType;
 import dev.zbib.venueservice.enums.VenueStatus;
-import dev.zbib.venueservice.exception.VenueAlreadyExistException;
+import dev.zbib.venueservice.exception.VenueNameAlreadyExistException;
 import dev.zbib.venueservice.exception.VenueMaxCapacityException;
 import dev.zbib.venueservice.repository.VenueRepository;
 import dev.zbib.venueservice.service.ImageService;
@@ -128,10 +128,10 @@ class VenueServiceUnitTest {
 
     @Test
     void createVenue_ThrowsVenueAlreadyExistException() {
-        doThrow(new VenueAlreadyExistException())
+        doThrow(new VenueNameAlreadyExistException())
                 .when(venueValidator)
                 .validateVenueCreation(request);
-        assertThrows(VenueAlreadyExistException.class, () -> venueService.createVenue(userId, request));
+        assertThrows(VenueNameAlreadyExistException.class, () -> venueService.createVenue(userId, request));
         verify(venueValidator).validateVenueCreation(request);
         verify(venueRepository, never()).save(any(Venue.class));
         verify(imageService, never()).createImages(any(), any(), any());

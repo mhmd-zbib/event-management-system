@@ -1,7 +1,7 @@
 package dev.zbib.venueservice.unit.service;
 
 import dev.zbib.venueservice.dto.VenueCreationRequest;
-import dev.zbib.venueservice.exception.VenueAlreadyExistException;
+import dev.zbib.venueservice.exception.VenueNameAlreadyExistException;
 import dev.zbib.venueservice.exception.VenueMaxCapacityException;
 import dev.zbib.venueservice.repository.VenueRepository;
 import dev.zbib.venueservice.service.VenueValidator;
@@ -48,7 +48,7 @@ class VenueValidatorUnitTest {
     @Test
     void validateVenueCreation_NameAlreadyExists() {
         when(venueRepository.existsByName(anyString())).thenReturn(true);
-        assertThrows(VenueAlreadyExistException.class, () -> venueValidator.validateVenueCreation(request));
+        assertThrows(VenueNameAlreadyExistException.class, () -> venueValidator.validateVenueCreation(request));
     }
 
     @Test

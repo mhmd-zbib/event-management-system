@@ -3,8 +3,9 @@ package dev.zbib.venueservice.service;
 import dev.zbib.venueservice.dto.VenueCreationRequest;
 import dev.zbib.venueservice.entity.Venue;
 import dev.zbib.venueservice.enums.VenueStatus;
-import dev.zbib.venueservice.exception.VenueAlreadyExistException;
-import dev.zbib.venueservice.exception.VenueMaxCapacityException;
+import dev.zbib.venueservice.exception.VenueMaxZonesException;
+import dev.zbib.venueservice.exception.VenueNameAlreadyExistException;
+import dev.zbib.venueservice.exception.VenueStatusInvalidForZonesException;
 import dev.zbib.venueservice.repository.VenueRepository;
 import dev.zbib.venueservice.repository.ZoneRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,6 @@ public class VenueValidator {
     private final ZoneRepository zoneRepository;
 
     public void validateVenueCreation(VenueCreationRequest request) {
-        validateCapacity(request);
         validateUniqueName(request);
     }
 
@@ -32,26 +32,20 @@ public class VenueValidator {
 
     private void validateUniqueName(VenueCreationRequest request) {
         if (venueRepository.existsByName(request.getName())) {
-            throw new VenueAlreadyExistException();
-        }
-    }
-
-    private void validateCapacity(VenueCreationRequest request) {
-        if (request.getMaxCapacity() < MIN_CAPACITY || request.getMaxCapacity() > MAX_CAPACITY) {
-            throw new VenueMaxCapacityException();
+            throw new VenueNameAlreadyExistException();
         }
     }
 
     private void validateMaxZoneLimit(Venue venue) {
         long currentZoneCount = zoneRepository.countByVenueId(venue.getId());
         if (currentZoneCount > MAX_ZONES_PER_VENUE) {
-
+            throw new VenueMaxZonesException();
         }
     }
 
     private void validateVenueEligibility(Venue venue) {
         if (venue.getStatus() != VenueStatus.ACTIVE && venue.getStatus() != VenueStatus.UNDER_MAINTENANCE) {
-
+            throw new VenueStatusInvalidForZonesException();
         }
     }
 }

@@ -3,7 +3,7 @@ package dev.zbib.venueservice.unit.service;
 import dev.zbib.venueservice.dto.ImageCreationRequest;
 import dev.zbib.venueservice.entity.Image;
 import dev.zbib.venueservice.enums.EntityType;
-import dev.zbib.venueservice.exception.MaxImageCountException;
+import dev.zbib.venueservice.exception.ImageMaxCountException;
 import dev.zbib.venueservice.repository.ImageRepository;
 import dev.zbib.venueservice.service.ImageService;
 import dev.zbib.venueservice.service.ImageValidator;
@@ -78,10 +78,10 @@ class ImageServiceUnitTest {
 
     @Test
     void createImages_ValidationFailure() {
-        doThrow(new MaxImageCountException())
+        doThrow(new ImageMaxCountException())
                 .when(imageValidator)
                 .validateImageCreation(entityId, imageRequests, entityType);
-        assertThrows(MaxImageCountException.class,
+        assertThrows(ImageMaxCountException.class,
                 () -> imageService.createImages(entityId, imageRequests, entityType));
 
 

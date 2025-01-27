@@ -2,7 +2,7 @@ package dev.zbib.venueservice.integration.service;
 
 import dev.zbib.venueservice.dto.VenueCreationRequest;
 import dev.zbib.venueservice.entity.Venue;
-import dev.zbib.venueservice.exception.VenueAlreadyExistException;
+import dev.zbib.venueservice.exception.VenueNameAlreadyExistException;
 import dev.zbib.venueservice.exception.VenueMaxCapacityException;
 import dev.zbib.venueservice.repository.VenueRepository;
 import dev.zbib.venueservice.service.VenueValidator;
@@ -56,7 +56,7 @@ class VenueValidatorIntegrationTest {
                 .build();
         venueRepository.save(existingVenue);
 
-        assertThrows(VenueAlreadyExistException.class, () -> venueValidator.validateVenueCreation(request));
+        assertThrows(VenueNameAlreadyExistException.class, () -> venueValidator.validateVenueCreation(request));
     }
 
     @Test

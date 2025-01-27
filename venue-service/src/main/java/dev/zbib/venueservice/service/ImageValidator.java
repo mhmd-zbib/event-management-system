@@ -2,7 +2,7 @@ package dev.zbib.venueservice.service;
 
 import dev.zbib.venueservice.dto.ImageCreationRequest;
 import dev.zbib.venueservice.enums.EntityType;
-import dev.zbib.venueservice.exception.MaxImageCountException;
+import dev.zbib.venueservice.exception.ImageMaxCountException;
 import dev.zbib.venueservice.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class ImageValidator {
         long existingImagesCount = imageRepository.countByEntityIdAndEntityType(entityId, requests, entityType);
         long newImagesCount = requests.size();
         if (existingImagesCount + newImagesCount > MAX_IMAGES_COUNT) {
-            throw new MaxImageCountException();
+            throw new ImageMaxCountException();
         }
     }
 }

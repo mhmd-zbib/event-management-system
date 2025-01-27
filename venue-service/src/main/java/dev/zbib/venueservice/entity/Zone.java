@@ -33,7 +33,7 @@ public class Zone {
     private String description;
 
     @NotNull(message = "Capacity is required")
-    @Min(value = 1, message = "Capacity must be at least 1")
+    @Min(value = 10, message = "Capacity must be at least 10")
     @Max(value = 10000, message = "Capacity cannot exceed 10000")
     @Column(nullable = false)
     private int capacity;
