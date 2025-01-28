@@ -26,10 +26,15 @@ public class VenueController {
 
     @PostMapping
     @Operation(summary = "Create a new venue",
-               description = "Creates a new venue with the provided details. Requires authentication.")
-    public ResponseEntity<VenueCreationResponse> createVenue(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
-            @Parameter(description = "Venue creation details", required = true,
-                       schema = @Schema(implementation = VenueCreationRequest.class)) @RequestBody
+            description = "Creates a new venue with the provided details. Requires authentication.")
+    public ResponseEntity<VenueCreationResponse> createVenue(
+            @Parameter(hidden = true)
+            @AuthenticationPrincipal
+            Jwt jwt,
+            @Parameter(description = "Venue creation details",
+                    required = true,
+                    schema = @Schema(implementation = VenueCreationRequest.class))
+            @RequestBody
             VenueCreationRequest venueCreationRequest) {
         UUID userId = UUID.fromString(jwt.getSubject());
         VenueCreationResponse res = venueService.createVenue(userId, venueCreationRequest);
