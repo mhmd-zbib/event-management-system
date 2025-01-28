@@ -16,7 +16,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/venues/{id}/zones")
 @RequiredArgsConstructor
-@Tag(name = "Venue Zones", description = "Operations for managing zones within venues")
+@Tag(name = "Venue Zones",
+        description = "Operations for managing zones within venues")
 public class VenueZoneController {
 
     private final ZoneService zoneService;
@@ -30,7 +31,8 @@ public class VenueZoneController {
                     example = "123e4567-e89b-12d3-a456-426614174000")
             @PathVariable
             UUID id,
-            @Parameter(description = "Zone details including dimensions, capacity, and images", required = true)
+            @Parameter(description = "Zone details including dimensions, capacity, and images",
+                    required = true)
             @Valid
             @RequestBody
             ZoneCreationRequest zoneCreationRequest) {

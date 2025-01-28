@@ -6,6 +6,7 @@ import dev.zbib.venueservice.service.VenueService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/venues")
 @RequiredArgsConstructor
+@Tag(name = "Venues", description = "Operations for managing venues by owner")
 public class VenueController {
 
     private final VenueService venueService;
