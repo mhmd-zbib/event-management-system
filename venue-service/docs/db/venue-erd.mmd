@@ -1,0 +1,206 @@
+erDiagram
+%% Core Venue Relationships
+    VENUES ||--o{ ZONES: contains
+    VENUES ||--o{ FLOOR_PLANS: has
+    VENUES ||--o{ BUSINESS_HOURS: "operates on"
+    VENUES ||--o{ VENUE_TAGS: "tagged with"
+    VENUES ||--o{ STAFF_ASSIGNMENTS: employs
+    VENUES ||--o{ BLOCKED_PERIODS: schedules
+    VENUES ||--o{ WAITLIST: manages
+%% Reviews and Policies
+    VENUES ||--o{ REVIEWS: receives
+    VENUES ||--o{ CANCELLATION_POLICIES: enforces
+%% Amenity Management
+    AMENITY_CATEGORIES ||--o{ AMENITIES: contains
+    AMENITIES ||--o{ ZONE_AMENITIES: "available in"
+    ZONES ||--o{ ZONE_AMENITIES: has
+    AMENITIES }|--|| STATUS_TYPES: "has status"
+    ZONE_AMENITIES }|--|| STATUS_TYPES: "has status"
+%% Zone Management
+    ZONES ||--o{ ITEMS: contains
+    ZONES ||--o{ ZONE_AMENITIES: has
+    ZONES ||--o{ BLOCKED_PERIODS: blocks
+%% Status Management
+    VENUES }|--|| STATUS_TYPES: "has status"
+    ZONES }|--|| STATUS_TYPES: "has status"
+    AMENITIES }|--|| STATUS_TYPES: "has status"
+    ZONE_AMENITIES }|--|| STATUS_TYPES: "has status"
+    WAITLIST }|--|| STATUS_TYPES: "has status"
+%% Image Management (Polymorphic)
+    IMAGES }|--|| VENUES: "belongs to"
+    IMAGES }|--|| ZONES: "belongs to"
+
+    VENUES {
+        uuid id PK
+        uuid owner_id
+        bigint name
+        text description
+        integer max_capacity
+        decimal rating
+        smallint booking_timeline
+        uuid status_id FK
+    }
+
+    ZONES {
+        uuid id PK
+        uuid venue_id FK
+        text name
+        bigint description
+        integer capacity
+        uuid status_id FK
+        decimal length
+        decimal widt
+        decimal height
+        decimal area
+        decimal hourly_fee
+        decimal excess_fee
+        smallint min_booking_duration
+        smallint max_booking_duration
+    }
+
+    ITEMS {
+        uuid id PK
+        uuid zone_id FK
+        text name
+        text description
+        decimal price
+        uuid status_id FK
+        integer quantity
+        integer reserved
+    }
+
+    AMENITY_CATEGORIES {
+        uuid id PK
+        text name "e.g., Facilities, Equipment, Services"
+        text description
+        text icon
+        smallint sort_order
+        boolean is_filterable "Can users search/filter by this?"
+        boolean is_system "Is this system-defined?"
+        uuid status_id FK
+        timestamp created_at
+        uuid created_by
+    }
+
+    AMENITIES {
+        uuid id PK
+        uuid category_id FK
+        text name
+        text description
+        text icon
+        enum amenity_type "FIXED, MOVABLE, SERVICE"
+        boolean requires_quantity "Track quantity?"
+        boolean requires_scheduling "Need time slots?"
+        boolean requires_staff "Need staff?"
+        boolean is_featured "Show in search?"
+        boolean is_system "System-defined?"
+        uuid status_id FK
+        jsonb configuration "Flexible settings"
+        timestamp created_at
+        uuid created_by
+    }
+
+    ZONE_AMENITIES {
+        uuid id PK
+        uuid zone_id FK
+        uuid amenity_id FK
+        text note
+        enum availability_type "INCLUDED, PREMIUM, RENTABLE"
+        boolean is_complimentary "Free with zone?"
+        integer base_quantity "Included amount"
+        integer max_quantity "Total available"
+        decimal base_price "0 if complimentary"
+        enum pricing_type "FLAT, HOURLY, DAILY, UNIT"
+        decimal additional_unit_price "Price per extra unit"
+        jsonb conditions "Usage rules"
+        uuid status_id FK
+        timestamp created_at
+        uuid created_by
+    }
+
+    BUSINESS_HOURS {
+        uuid id PK
+        uuid venue_id FK
+        smallint day
+        time open_time
+        time close_time
+        boolean is_closed
+    }
+
+    BLOCKED_PERIODS {
+        uuid id PK
+        uuid venue_id FK
+        uuid zone_id FK
+        timestamp start_date
+        timestamp end_date
+        text reason
+        text description
+    }
+
+    WAITLIST {
+        uuid id PK
+        uuid venue_id FK
+        uuid user_id
+        smallint position
+        uuid status_id FK
+    }
+
+    REVIEWS {
+        uuid id PK
+        uuid venue_id FK
+        uuid user_id
+        text comment
+        smallint rating
+    }
+
+    STATUS_TYPES {
+        uuid id PK
+        text type
+        text name
+        text display_name
+        smallint sort
+    }
+
+    IMAGES {
+        uuid id PK
+        uuid entity_id
+        text url
+        smallint sort_order
+        text entity_type
+        text type
+        bigint size
+        integer width
+        integer height
+    }
+
+    STAFF_ASSIGNMENTS {
+        uuid id PK
+        uuid venue_id FK
+        uuid user_id
+        text position
+    }
+
+    VENUE_TAGS {
+        uuid id PK
+        uuid venue_id FK
+        text tag_name
+    }
+
+    CANCELLATION_POLICIES {
+        uuid id PK
+        uuid venue_id FK
+        uuid user_id
+        text booking_type
+        smallint cancellation_timeline
+        smallint refund_percantage
+        smallint refund_timeline
+        decimal processing_fee
+        text notes
+    }
+
+    FLOOR_PLANS {
+        uuid id PK
+        uuid venue_id FK
+        text image_url
+        text description
+    }
