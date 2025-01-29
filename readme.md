@@ -14,7 +14,7 @@ The Event Management Platform is a comprehensive solution that facilitates the e
 ## System Architecture
 
 <p align="center">
-  <img src="./docs/event-management-system.png" alt="Event Management System">
+  <img src="./docs/system-architecture.png" alt="Event Management System">
 </p>
 
 ### Core Services
