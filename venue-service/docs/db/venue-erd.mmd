@@ -13,8 +13,6 @@ erDiagram
 %% Status Management
     VENUES }|--|| STATUS_TYPES: "has status"
     ZONES }|--|| STATUS_TYPES: "has status"
-    AMENITIES }|--|| STATUS_TYPES: "has status"
-    ZONE_AMENITIES }|--|| STATUS_TYPES: "has status"
 
 %% Image Management
     IMAGES }|--|| VENUES: "belongs to"
@@ -65,7 +63,6 @@ erDiagram
         text name
         text description
         text icon_url
-        uuid status_id FK
         timestamp created_at
         uuid created_by
     }
@@ -75,7 +72,6 @@ erDiagram
         uuid zone_id FK
         uuid amenity_id FK
         text note
-        uuid status_id FK
         timestamp created_at
         uuid created_by
     }
