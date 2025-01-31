@@ -6,13 +6,10 @@ sequenceDiagram
     participant AV as AmenityCategoryValidator
     participant AB as AmenityCategoryBuilder
     participant AR as AmenityCategoryRepository
-
     C ->> AC: POST /amenity-categories (CategoryRequest)
     activate AC
-
     AC ->> AS: createCategory(request)
     activate AS
-
     AS ->> AV: validateCategoryCreation(request)
     activate AV
 
@@ -23,17 +20,14 @@ sequenceDiagram
     else Category Validation Passed
         AV -->> AS: validation result
         deactivate AV
-
-        AS ->> AB: buildCategory(request)
+        AS ->> AB: buildCategory(request.getCategories())
         activate AB
         AB -->> AS: category
         deactivate AB
-
-        AS ->> AR: save(category)
+        AS ->> AR: saveAll(categories)
         activate AR
-        AR -->> AS: savedCategory
+        AR -->> AS: savedCategories
         deactivate AR
-
         AS -->> AC: CategoryResponse
         deactivate AS
         AC -->> C: HTTP 201 Created (CategoryResponse)

@@ -28,7 +28,7 @@ public class AmenityCategory {
 
     private String description;
 
-    private String icon;
+    private String iconUrl;
 
     private int sortOrder;
 
