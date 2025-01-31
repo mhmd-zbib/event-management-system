@@ -8,10 +8,13 @@ sequenceDiagram
     participant ZAV as ZoneAmenityValidator
     participant ZAB as ZoneAmenityBuilder
     participant ZAR as ZoneAmenityRepository
-    C ->> ZAC: POST /zone-amenities (ZoneAmenityRequest)
+
+    C ->> ZAC: POST /zone-amenities { "zone_id": "uuid", "amenity_id": "uuid" }
     activate ZAC
-    ZAC ->> ZAS: createZoneAmenities(request)
+
+    ZAC ->> ZAS: createZoneAmenity(request)
     activate ZAS
+
     ZAS ->> ZAV: validateRequest(request)
     activate ZAV
     alt Request Validation Failed
@@ -21,7 +24,8 @@ sequenceDiagram
     else Request Validation Passed
         ZAV -->> ZAS: validation result
         deactivate ZAV
-        ZAS ->> ZS: getZoneById(request.getZoneId())
+
+        ZAS ->> ZS: getZoneById(request.zone_id)
         activate ZS
         alt Zone Not Found
             ZS --x ZAS: throw ZoneNotFoundException
@@ -30,33 +34,37 @@ sequenceDiagram
         else Zone Found
             ZS -->> ZAS: zone
             deactivate ZS
-            ZAS ->> AS: validateAmenities(request.getAmenityIds())
+
+            ZAS ->> AS: getAmenityById(request.amenity_id)
             activate AS
-            alt Invalid Amenities
-                AS --x ZAS: throw InvalidAmenitiesException
-                ZAS --x ZAC: throw InvalidAmenitiesException
-                ZAC -->> C: HTTP 400 Bad Request
-            else Amenities Valid
-                AS ->> AS: checkAmenitiesExist(amenityIds)
-                alt Some Amenities Not Found
-                    AS --x ZAS: throw AmenitiesNotFoundException
-                    ZAS --x ZAC: throw AmenitiesNotFoundException
-                    ZAC -->> C: HTTP 404 Not Found
-                else All Amenities Found
-                    AS -->> ZAS: amenities
-                    deactivate AS
-                    ZAS ->> ZAR: findExistingAssignments(zoneId, amenityIds)
-                    activate ZAR
-                    ZAR -->> ZAS: existingAssignments
+            alt Amenity Not Found
+                AS --x ZAS: throw AmenityNotFoundException
+                ZAS --x ZAC: throw AmenityNotFoundException
+                ZAC -->> C: HTTP 404 Not Found
+            else Amenity Found
+                AS -->> ZAS: amenity
+                deactivate AS
+
+                ZAS ->> ZAR: findByZoneIdAndAmenityId(zone_id, amenity_id)
+                activate ZAR
+                alt Already Exists
+                    ZAR --x ZAS: throw DuplicateZoneAmenityException
+                    ZAS --x ZAC: throw DuplicateZoneAmenityException
+                    ZAC -->> C: HTTP 409 Conflict
+                else Not Found
+                    ZAR -->> ZAS: null
                     deactivate ZAR
-                    ZAS ->> ZAB: buildNewAssignments(zone, amenities, request)
+
+                    ZAS ->> ZAB: buildZoneAmenity(zone, amenity)
                     activate ZAB
-                    ZAB -->> ZAS: newAssignments
+                    ZAB -->> ZAS: newZoneAmenity
                     deactivate ZAB
-                    ZAS ->> ZAR: saveAll(newAssignments)
+
+                    ZAS ->> ZAR: save(newZoneAmenity)
                     activate ZAR
-                    ZAR -->> ZAS: savedAssignments
+                    ZAR -->> ZAS: savedZoneAmenity
                     deactivate ZAR
+
                     ZAS -->> ZAC: ZoneAmenityResponse
                     deactivate ZAS
                     ZAC -->> C: HTTP 201 Created (ZoneAmenityResponse)
