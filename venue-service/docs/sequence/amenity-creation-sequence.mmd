@@ -1,0 +1,53 @@
+sequenceDiagram
+    autonumber
+    actor C as Client
+    participant AC as AmenityController
+    participant AS as AmenityService
+    participant CS as CategoryService
+    participant AV as AmenityValidator
+    participant AB as AmenityBuilder
+    participant AR as AmenityRepository
+
+    C ->> AC: POST /amenities (AmenityRequest)
+    activate AC
+
+    AC ->> AS: createAmenity(request)
+    activate AS
+
+    AS ->> AV: validateAmenityCreation(request)
+    activate AV
+
+    alt Amenity Validation Failed
+        AV --x AS: throw AmenityValidationException
+        AS --x AC: throw AmenityValidationException
+        AC -->> C: HTTP 400 Bad Request
+    else Amenity Validation Passed
+        AV -->> AS: validation result
+        deactivate AV
+
+        AS ->> CS: getCategoryById(request.getCategoryId())
+        activate CS
+        alt Category Not Found
+            CS --x AS: throw CategoryNotFoundException
+            AS --x AC: throw CategoryNotFoundException
+            AC -->> C: HTTP 404 Not Found
+        else Category Found
+            CS -->> AS: category
+            deactivate CS
+
+            AS ->> AB: buildAmenity(request, category)
+            activate AB
+            AB -->> AS: amenity
+            deactivate AB
+
+            AS ->> AR: save(amenity)
+            activate AR
+            AR -->> AS: savedAmenity
+            deactivate AR
+
+            AS -->> AC: AmenityResponse
+            deactivate AS
+            AC -->> C: HTTP 201 Created (AmenityResponse)
+            deactivate AC
+        end
+    end

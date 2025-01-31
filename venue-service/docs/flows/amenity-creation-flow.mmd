@@ -2,18 +2,12 @@ graph TD
 %% Main Flow
     Start([Start]) -->|POST /amenities| ValidateAmenity{Validate Amenity}
     ValidateAmenity -->|Invalid| HandleError[Return 400 Bad Request]
-    ValidateAmenity -->|Valid| CheckCategory[Check Category Exists]
+    ValidateAmenity -->|Valid| CheckCategory{Check Category Exists}
 
     CheckCategory -->|Not Found| HandleCategoryError[Return 404 Not Found]
     CheckCategory -->|Found| CreateAmenity[Create Amenity]
     CreateAmenity --> SaveAmenity[Save to Database]
-
-%% Icon Processing
-    SaveAmenity --> ValidateIcon{Validate Icon}
-    ValidateIcon -->|Invalid| HandleIconError[Return 400 Bad Request]
-    ValidateIcon -->|Valid| ProcessIcon[Process Icon]
-    ProcessIcon --> SaveIcon[Save Icon to Storage]
-    SaveIcon --> Success([Return 201 Created])
+    SaveAmenity --> Success([Return 201 Created])
 
 %% Style Definitions
     classDef start_end fill:#e3f2fd,stroke:#1976d2,color:black
@@ -23,6 +17,6 @@ graph TD
 
 %% Apply Styles
     class Start,Success start_end
-    class CreateAmenity,SaveAmenity,ProcessIcon,SaveIcon,CheckCategory process
-    class ValidateAmenity,ValidateIcon validation
-    class HandleError,HandleIconError,HandleCategoryError error
+    class CreateAmenity,SaveAmenity process
+    class ValidateAmenity,CheckCategory validation
+    class HandleError,HandleCategoryError error

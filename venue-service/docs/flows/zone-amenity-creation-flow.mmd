@@ -3,7 +3,7 @@ graph TD
     Start([Start]) -->|POST /zone-amenities| ValidateRequest{Validate Request}
     ValidateRequest -->|Invalid| HandleError[Return 400 Bad Request]
 
-    ValidateRequest -->|Valid| CheckZone[Check Zone Exists]
+    ValidateRequest -->|Valid| CheckZone{Check Zone Exists}
     CheckZone -->|Not Found| HandleZoneError[Return 404 Zone Not Found]
 
     CheckZone -->|Found| ValidateAmenities{Validate Amenity Array}
@@ -25,6 +25,6 @@ graph TD
 
 %% Apply Styles
     class Start,Success start_end
-    class CheckZone,FilterDuplicates,CreateAssignments,SaveBatch,CheckAmenities process
-    class ValidateRequest,ValidateAmenities validation
+    class FilterDuplicates,CreateAssignments,SaveBatch,CheckAmenities process
+    class ValidateRequest,ValidateAmenities,CheckZone validation
     class HandleError,HandleZoneError,HandleAmenityError,HandleNotFoundError error

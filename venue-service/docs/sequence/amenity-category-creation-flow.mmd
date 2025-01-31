@@ -1,0 +1,41 @@
+sequenceDiagram
+    autonumber
+    actor C as Client
+    participant AC as AmenityCategoryController
+    participant AS as AmenityCategoryService
+    participant AV as AmenityCategoryValidator
+    participant AB as AmenityCategoryBuilder
+    participant AR as AmenityCategoryRepository
+
+    C ->> AC: POST /amenity-categories (CategoryRequest)
+    activate AC
+
+    AC ->> AS: createCategory(request)
+    activate AS
+
+    AS ->> AV: validateCategoryCreation(request)
+    activate AV
+
+    alt Category Validation Failed
+        AV --x AS: throw CategoryValidationException
+        AS --x AC: throw CategoryValidationException
+        AC -->> C: HTTP 400 Bad Request
+    else Category Validation Passed
+        AV -->> AS: validation result
+        deactivate AV
+
+        AS ->> AB: buildCategory(request)
+        activate AB
+        AB -->> AS: category
+        deactivate AB
+
+        AS ->> AR: save(category)
+        activate AR
+        AR -->> AS: savedCategory
+        deactivate AR
+
+        AS -->> AC: CategoryResponse
+        deactivate AS
+        AC -->> C: HTTP 201 Created (CategoryResponse)
+        deactivate AC
+    end

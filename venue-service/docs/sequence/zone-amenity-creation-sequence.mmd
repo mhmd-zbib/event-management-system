@@ -1,0 +1,67 @@
+sequenceDiagram
+    autonumber
+    actor C as Client
+    participant ZAC as ZoneAmenityController
+    participant ZAS as ZoneAmenityService
+    participant ZS as ZoneService
+    participant AS as AmenityService
+    participant ZAV as ZoneAmenityValidator
+    participant ZAB as ZoneAmenityBuilder
+    participant ZAR as ZoneAmenityRepository
+    C ->> ZAC: POST /zone-amenities (ZoneAmenityRequest)
+    activate ZAC
+    ZAC ->> ZAS: createZoneAmenities(request)
+    activate ZAS
+    ZAS ->> ZAV: validateRequest(request)
+    activate ZAV
+    alt Request Validation Failed
+        ZAV --x ZAS: throw ValidationException
+        ZAS --x ZAC: throw ValidationException
+        ZAC -->> C: HTTP 400 Bad Request
+    else Request Validation Passed
+        ZAV -->> ZAS: validation result
+        deactivate ZAV
+        ZAS ->> ZS: getZoneById(request.getZoneId())
+        activate ZS
+        alt Zone Not Found
+            ZS --x ZAS: throw ZoneNotFoundException
+            ZAS --x ZAC: throw ZoneNotFoundException
+            ZAC -->> C: HTTP 404 Not Found
+        else Zone Found
+            ZS -->> ZAS: zone
+            deactivate ZS
+            ZAS ->> AS: validateAmenities(request.getAmenityIds())
+            activate AS
+            alt Invalid Amenities
+                AS --x ZAS: throw InvalidAmenitiesException
+                ZAS --x ZAC: throw InvalidAmenitiesException
+                ZAC -->> C: HTTP 400 Bad Request
+            else Amenities Valid
+                AS ->> AS: checkAmenitiesExist(amenityIds)
+                alt Some Amenities Not Found
+                    AS --x ZAS: throw AmenitiesNotFoundException
+                    ZAS --x ZAC: throw AmenitiesNotFoundException
+                    ZAC -->> C: HTTP 404 Not Found
+                else All Amenities Found
+                    AS -->> ZAS: amenities
+                    deactivate AS
+                    ZAS ->> ZAR: findExistingAssignments(zoneId, amenityIds)
+                    activate ZAR
+                    ZAR -->> ZAS: existingAssignments
+                    deactivate ZAR
+                    ZAS ->> ZAB: buildNewAssignments(zone, amenities, request)
+                    activate ZAB
+                    ZAB -->> ZAS: newAssignments
+                    deactivate ZAB
+                    ZAS ->> ZAR: saveAll(newAssignments)
+                    activate ZAR
+                    ZAR -->> ZAS: savedAssignments
+                    deactivate ZAR
+                    ZAS -->> ZAC: ZoneAmenityResponse
+                    deactivate ZAS
+                    ZAC -->> C: HTTP 201 Created (ZoneAmenityResponse)
+                    deactivate ZAC
+                end
+            end
+        end
+    end
