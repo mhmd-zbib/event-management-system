@@ -48,9 +48,10 @@ public class VenueValidator {
     private void validateVenueEligibility(Venue venue) {
         if (!Objects.equals(venue
                 .getStatus()
-                .getName(), VenueStatus.ACTIVE.name()) && !Objects.equals(venue
-                .getStatus()
-                .getName(), VenueStatus.UNDER_MAINTENANCE.name())) {
+                .getName(), VenueStatus.ACTIVE.name()) &&
+                !Objects.equals(venue
+                        .getStatus()
+                        .getName(), VenueStatus.UNDER_MAINTENANCE.name())) {
             throw new VenueStatusInvalidForZonesException();
         }
     }

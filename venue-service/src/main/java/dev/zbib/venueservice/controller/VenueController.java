@@ -21,22 +21,23 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/venues")
 @RequiredArgsConstructor
-@Tag(name = "Venues", description = "Operations for managing venues by owner")
+@Tag(name = "Venues",
+     description = "Operations for managing venues by owner")
 public class VenueController {
 
     private final VenueService venueService;
 
     @PostMapping
     @Operation(summary = "Create a new venue",
-            description = "Creates a new venue with the provided details. Requires authentication.")
+               description = "Creates a new venue with the provided details. Requires authentication.")
     public ResponseEntity<VenueCreationResponse> createVenue(
             @Parameter(hidden = true)
             @AuthenticationPrincipal
             Jwt jwt,
-            @Parameter(description = "Venue creation details",
-                    required = true,
-                    schema = @Schema(implementation = VenueCreationRequest.class))
             @RequestBody
+            @Parameter(description = "Venue creation details",
+                       required = true,
+                       schema = @Schema(implementation = VenueCreationRequest.class))
             VenueCreationRequest venueCreationRequest) {
         UUID userId = UUID.fromString(jwt.getSubject());
         VenueCreationResponse res = venueService.createVenue(userId, venueCreationRequest);
