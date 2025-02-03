@@ -4,6 +4,7 @@ import dev.zbib.venueservice.dto.ImageCreationRequest;
 import dev.zbib.venueservice.entity.Image;
 import dev.zbib.venueservice.enums.EntityType;
 import dev.zbib.venueservice.repository.ImageRepository;
+import dev.zbib.venueservice.validator.ImageValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

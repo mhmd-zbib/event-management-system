@@ -1,4 +1,4 @@
-package dev.zbib.venueservice.service;
+package dev.zbib.venueservice.validator;
 
 import dev.zbib.venueservice.dto.VenueCreationRequest;
 import dev.zbib.venueservice.entity.Venue;
@@ -20,39 +20,18 @@ public class VenueValidator {
     private static final int MIN_CAPACITY = 10;
     private static final int MAX_CAPACITY = 100000;
     private static final int MAX_ZONES_PER_VENUE = 20;
+
     private final VenueRepository venueRepository;
-    private final ZoneRepository zoneRepository;
+    private final ImageValidator imageValidator;
 
     public void validateVenueCreation(VenueCreationRequest request) {
         validateUniqueName(request);
-    }
-
-    public void validateVenueForZoneCreation(Venue venue) {
-        validateMaxZoneLimit(venue);
-        validateVenueEligibility(venue);
+        imageValidator.validateImageCreation(request.getImages());
     }
 
     private void validateUniqueName(VenueCreationRequest request) {
         if (venueRepository.existsByName(request.getName())) {
             throw new VenueNameAlreadyExistException();
-        }
-    }
-
-    private void validateMaxZoneLimit(Venue venue) {
-        long currentZoneCount = zoneRepository.countByVenueId(venue.getId());
-        if (currentZoneCount > MAX_ZONES_PER_VENUE) {
-            throw new VenueMaxZonesException();
-        }
-    }
-
-    private void validateVenueEligibility(Venue venue) {
-        if (!Objects.equals(venue
-                .getStatus()
-                .getName(), VenueStatus.ACTIVE.name()) &&
-                !Objects.equals(venue
-                        .getStatus()
-                        .getName(), VenueStatus.UNDER_MAINTENANCE.name())) {
-            throw new VenueStatusInvalidForZonesException();
         }
     }
 }

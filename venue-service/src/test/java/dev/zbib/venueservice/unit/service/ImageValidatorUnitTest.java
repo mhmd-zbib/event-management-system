@@ -4,7 +4,7 @@ import dev.zbib.venueservice.dto.ImageCreationRequest;
 import dev.zbib.venueservice.enums.EntityType;
 import dev.zbib.venueservice.exception.ImageMaxCountException;
 import dev.zbib.venueservice.repository.ImageRepository;
-import dev.zbib.venueservice.service.ImageValidator;
+import dev.zbib.venueservice.validator.ImageValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

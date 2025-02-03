@@ -5,7 +5,7 @@ import dev.zbib.venueservice.entity.Venue;
 import dev.zbib.venueservice.exception.VenueNameAlreadyExistException;
 import dev.zbib.venueservice.exception.VenueMaxCapacityException;
 import dev.zbib.venueservice.repository.VenueRepository;
-import dev.zbib.venueservice.service.VenueValidator;
+import dev.zbib.venueservice.validator.VenueValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

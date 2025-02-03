@@ -1,4 +1,4 @@
-package dev.zbib.venueservice.service;
+package dev.zbib.venueservice.validator;
 
 import dev.zbib.venueservice.dto.ZoneCreationRequest;
 import dev.zbib.venueservice.entity.Venue;

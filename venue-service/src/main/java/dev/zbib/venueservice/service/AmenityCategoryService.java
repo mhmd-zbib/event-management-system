@@ -4,6 +4,7 @@ import dev.zbib.venueservice.builder.AmenityCategoryBuilder;
 import dev.zbib.venueservice.dto.AmenityCategoryCreationRequest;
 import dev.zbib.venueservice.entity.AmenityCategory;
 import dev.zbib.venueservice.repository.AmenityCategoryRepository;
+import dev.zbib.venueservice.validator.AmenityCategoryValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

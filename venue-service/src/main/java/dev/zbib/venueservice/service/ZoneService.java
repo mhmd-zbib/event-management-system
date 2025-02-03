@@ -6,6 +6,7 @@ import dev.zbib.venueservice.entity.Venue;
 import dev.zbib.venueservice.entity.Zone;
 import dev.zbib.venueservice.enums.EntityType;
 import dev.zbib.venueservice.repository.ZoneRepository;
+import dev.zbib.venueservice.validator.ZoneValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

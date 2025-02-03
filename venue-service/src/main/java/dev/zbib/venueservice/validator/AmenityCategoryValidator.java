@@ -1,4 +1,4 @@
-package dev.zbib.venueservice.service;
+package dev.zbib.venueservice.validator;
 
 import dev.zbib.venueservice.dto.AmenityCategoryCreationRequest;
 import dev.zbib.venueservice.dto.AmenityCategoryCreationRequest.CategoryRequest;

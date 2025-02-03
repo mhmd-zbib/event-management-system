@@ -5,6 +5,7 @@ import dev.zbib.venueservice.dto.VenueCreationResponse;
 import dev.zbib.venueservice.entity.Venue;
 import dev.zbib.venueservice.enums.EntityType;
 import dev.zbib.venueservice.repository.VenueRepository;
+import dev.zbib.venueservice.validator.VenueValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +26,8 @@ public class VenueService {
         venueValidator.validateVenueCreation(request);
         Venue venue = buildVenue(userId, request);
         Venue savedVenue = venueRepository.save(venue);
-        VenueCreationResponse res = buildVenueResponse(savedVenue);
         imageService.createImages(savedVenue.getId(), request.getImages(), EntityType.VENUE);
-        return res;
+        return buildVenueResponse(savedVenue);
     }
 
     public Venue getVenueById(UUID venueId) {

@@ -12,7 +12,7 @@ import dev.zbib.venueservice.exception.VenueMaxCapacityException;
 import dev.zbib.venueservice.repository.VenueRepository;
 import dev.zbib.venueservice.service.ImageService;
 import dev.zbib.venueservice.service.VenueService;
-import dev.zbib.venueservice.service.VenueValidator;
+import dev.zbib.venueservice.validator.VenueValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
