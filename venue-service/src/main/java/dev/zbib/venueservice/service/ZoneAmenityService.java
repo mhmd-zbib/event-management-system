@@ -4,6 +4,8 @@ import dev.zbib.venueservice.dto.UpdateZoneAmenityRequest;
 import dev.zbib.venueservice.entity.Amenity;
 import dev.zbib.venueservice.entity.Zone;
 import dev.zbib.venueservice.entity.ZoneAmenity;
+import dev.zbib.venueservice.exception.DuplicateZoneAmenityException;
+import dev.zbib.venueservice.exception.ZoneAmenityNotFoundException;
 import dev.zbib.venueservice.repository.ZoneAmenityRepository;
 import dev.zbib.venueservice.repository.ZoneRepository;
 import dev.zbib.venueservice.validator.ZoneAmenityValidator;
@@ -35,7 +37,6 @@ public class ZoneAmenityService {
 
 
     public void updateZoneAmenity(UUID zoneId, UpdateZoneAmenityRequest request) {
-        //  TODO: Throw 404
         zoneAmenityValidator.validateZoneAmenitiesUpdate(request);
         removeAmenityIds(zoneId, request.getRemovedAmenityId());
         addAmenityIds(zoneId, request.getAddedAmenityId());
@@ -46,7 +47,7 @@ public class ZoneAmenityService {
         if (!amenityIds.isEmpty()) return;
         Zone zone = getZoneById(zoneId);
         if (zoneAmenityRepository.existsAnyByZoneIdAndAmenityIdIn(zone.getId(), amenityIds))
-            throw new IllegalArgumentException("Some amenities already exist in this zone"); // TODO: Create error
+            throw new DuplicateZoneAmenityException();
         List<Amenity> amenitiesToAdd = amenityService.getAmenityByIds(amenityIds);
         createZoneAmenities(zone, amenitiesToAdd);
     }
@@ -54,7 +55,7 @@ public class ZoneAmenityService {
     private void removeAmenityIds(UUID zoneId, List<UUID> amenityIds) {
         if (amenityIds.isEmpty()) return;
         if (!zoneAmenityRepository.existsAllByZoneIdAndAmenityIdIn(zoneId, amenityIds))
-            throw new IllegalArgumentException("Some amenities to remove don't exist in this zone");  // TODO: Create error
+            throw new ZoneAmenityNotFoundException();
 
         zoneAmenityRepository.deleteByZoneIdAndAmenityIdIn(zoneId, amenityIds);
     }
