@@ -30,7 +30,7 @@ public class ZoneService {
 
     public ZoneCreationResponse createZone(UUID venueId, ZoneCreationRequest request) {
         Venue venue = venueService.getVenueById(venueId);
-        List<Amenity> amenities = amenityService.getAmenitiesById(request.getAmenitiesId());
+        List<Amenity> amenities = amenityService.getAmenityByIds(request.getAmenitiesId());
 
         zoneValidator.validateZoneCreation(request, venue, amenities);
 

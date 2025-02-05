@@ -9,7 +9,7 @@ import java.util.UUID;
 @Service
 public class AmenityService {
 
-    public List<Amenity> getAmenitiesById(List<UUID> ids) {
+    public List<Amenity> getAmenityByIds(List<UUID> ids) {
 
     }
 }
