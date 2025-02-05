@@ -21,7 +21,7 @@ public class ImageService {
     private final ImageValidator imageValidator;
 
     public void createImages(UUID entityId, List<ImageCreationRequest> requests, EntityType entityType) {
-        imageValidator.validateImageCreation(entityId, requests, entityType);
+        imageValidator.validateImageCreation(requests);
         List<Image> images = requests
                 .stream()
                 .map(request -> buildImage(entityId, request, entityType))

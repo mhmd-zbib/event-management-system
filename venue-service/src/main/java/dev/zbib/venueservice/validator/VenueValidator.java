@@ -19,9 +19,9 @@ public class VenueValidator {
 
     private static final int MIN_CAPACITY = 10;
     private static final int MAX_CAPACITY = 100000;
-    private static final int MAX_ZONES_PER_VENUE = 20;
 
     private final VenueRepository venueRepository;
+    private final ZoneRepository zoneRepository;
     private final ImageValidator imageValidator;
 
     public void validateVenueCreation(VenueCreationRequest request) {
@@ -29,9 +29,22 @@ public class VenueValidator {
         imageValidator.validateImageCreation(request.getImages());
     }
 
+    public void validateZoneCreation(Venue venue) {
+        validateVenueStatus(venue);
+    }
+
     private void validateUniqueName(VenueCreationRequest request) {
         if (venueRepository.existsByName(request.getName())) {
             throw new VenueNameAlreadyExistException();
+        }
+    }
+
+    private void validateVenueStatus(Venue venue) {
+        if (!venue
+                .getStatus()
+                .getDisplayName()
+                .equalsIgnoreCase(VenueStatus.ACTIVE.getDisplayName())) {
+            //  throw error
         }
     }
 }

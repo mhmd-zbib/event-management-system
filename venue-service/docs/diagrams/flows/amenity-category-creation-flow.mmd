@@ -1,0 +1,31 @@
+erDiagram
+    VENUES ||--o{ VENUE_ZONES : has
+    VENUE_ZONES ||--o{ ZONE_AMENITIES : has
+    AMENITIES ||--o{ ZONE_AMENITIES : belongs_to
+
+    VENUE_ZONES {
+        uuid id PK
+        uuid venue_id FK
+        string name
+        string description
+        int capacity
+        decimal price_modifier
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    AMENITIES {
+        uuid id PK
+        string name
+        string description
+        string icon
+        boolean is_active
+        timestamp created_at
+    }
+
+    ZONE_AMENITIES {
+        uuid zone_id FK
+        uuid amenity_id FK
+        timestamp created_at
+    }

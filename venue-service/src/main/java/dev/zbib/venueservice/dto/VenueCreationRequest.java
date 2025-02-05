@@ -50,3 +50,4 @@ public class VenueCreationRequest {
             minLength = 5)
     private List<ImageCreationRequest> images;
 }
+

@@ -12,7 +12,6 @@ public enum VenueStatus {
     SUSPENDED("Suspended", "Venue operations are suspended"),
 
     UNDER_MAINTENANCE("Under Maintenance", "Venue is temporarily closed for maintenance"),
-    RENOVATING("Renovating", "Venue is under renovation"),
 
     PENDING_VERIFICATION("Pending Verification", "Venue is awaiting verification"),
     VERIFIED("Verified", "Venue has been verified"),

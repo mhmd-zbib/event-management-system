@@ -21,7 +21,8 @@ public class Zone {
     @GeneratedValue
     private UUID id;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false,
+            length = 100)
     private String name;
 
     @Column(length = 500)
@@ -31,35 +32,57 @@ public class Zone {
     private int capacity;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "status_id", nullable = false)
+    @JoinColumn(name = "status_id",
+                nullable = false)
     private StatusTypes status;
 
-    @Column(name = "length", precision = 8, scale = 2, nullable = false)
+    @Column(name = "length",
+            precision = 8,
+            scale = 2,
+            nullable = false)
     private BigDecimal length;
 
-    @Column(name = "width", precision = 8, scale = 2, nullable = false)
+    @Column(name = "width",
+            precision = 8,
+            scale = 2,
+            nullable = false)
     private BigDecimal width;
 
-    @Column(name = "height", precision = 6, scale = 2, nullable = false)
+    @Column(name = "height",
+            precision = 6,
+            scale = 2,
+            nullable = false)
     private BigDecimal height;
 
-    @Column(name = "area", precision = 10, scale = 2, nullable = false)
+    @Column(name = "area",
+            precision = 10,
+            scale = 2,
+            nullable = false)
     private BigDecimal area;
 
-    @Column(name = "hourly_fee", precision = 8, scale = 2, nullable = false)
+    @Column(name = "hourly_fee",
+            precision = 8,
+            scale = 2,
+            nullable = false)
     private BigDecimal hourlyFee;
 
-    @Column(name = "excess_fee", precision = 8, scale = 2, nullable = false)
+    @Column(name = "excess_fee",
+            precision = 8,
+            scale = 2,
+            nullable = false)
     private BigDecimal excessFee;
 
-    @Column(name = "min_booking_duration", nullable = false)
+    @Column(name = "min_booking_duration",
+            nullable = false)
     private int minBookingDuration;
 
-    @Column(name = "max_booking_duration", nullable = false)
+    @Column(name = "max_booking_duration",
+            nullable = false)
     private int maxBookingDuration;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "venue_id", nullable = false)
+    @JoinColumn(name = "venue_id",
+                nullable = false)
     private Venue venue;
 
     @PrePersist
