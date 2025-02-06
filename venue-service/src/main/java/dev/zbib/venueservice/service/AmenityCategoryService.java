@@ -9,6 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +22,7 @@ public class AmenityCategoryService {
     private final AmenityCategoryValidator amenityCategoryValidator;
 
     public void createAmenityCategory(AmenityCategoryCreationRequest requests) {
-        amenityCategoryValidator.validateCreation(requests);
+        amenityCategoryValidator.validateAmenityCategoryCreation(requests);
         List<AmenityCategory> amenityCategories = requests
                 .getCategories()
                 .stream()
@@ -26,4 +30,29 @@ public class AmenityCategoryService {
                 .toList();
         amenityCategoryRepository.saveAll(amenityCategories);
     }
+
+
+    public Map<UUID, AmenityCategory> getAmenityCategoriesMapById(List<UUID> categoryIds) {
+        List<AmenityCategory> categories = amenityCategoryRepository.findAllById(categoryIds);
+        if (categories.size() != categoryIds.size()) {
+            Set<UUID> foundIds = categories
+                    .stream()
+                    .map(AmenityCategory::getId)
+                    .collect(Collectors.toSet());
+            Set<UUID> missingIds = categoryIds
+                    .stream()
+                    .filter(id -> !foundIds.contains(id))
+                    .collect(Collectors.toSet());
+
+            throw new IllegalArgumentException("error");
+        }
+
+        return categories
+                .stream()
+                .collect(Collectors.toMap(
+                        AmenityCategory::getId,
+                        category -> category
+                ));
+    }
+
 }

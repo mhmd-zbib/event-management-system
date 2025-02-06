@@ -5,8 +5,8 @@ import dev.zbib.venueservice.entity.AmenityCategory;
 
 public class AmenityCategoryBuilder {
 
-    public static AmenityCategory buildAmenityCategory(AmenityCategoryCreationRequest.CategoryRequest request) {
-        return AmenityCategory
+    public static AmenityCategory buildAmenityCategory(AmenityCategoryCreationRequest.AmenityCategory request) {
+        return dev.zbib.venueservice.entity.AmenityCategory
                 .builder()
                 .name(request.getName())
                 .description(request.getDescription())

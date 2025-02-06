@@ -1,7 +1,7 @@
 package dev.zbib.venueservice.validator;
 
 import dev.zbib.venueservice.dto.AmenityCategoryCreationRequest;
-import dev.zbib.venueservice.dto.AmenityCategoryCreationRequest.CategoryRequest;
+import dev.zbib.venueservice.dto.AmenityCategoryCreationRequest.AmenityCategory;
 import dev.zbib.venueservice.repository.AmenityCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,16 +18,16 @@ public class AmenityCategoryValidator {
     private final AmenityCategoryRepository amenityCategoryRepository;
 
     @Transactional(readOnly = true)
-    public void validateCreation(AmenityCategoryCreationRequest request) {
-        List<CategoryRequest> categories = request.getCategories();
+    public void validateAmenityCategoryCreation(AmenityCategoryCreationRequest request) {
+        List<AmenityCategory> categories = request.getCategories();
         validateUniqueness(categories);
         validateNotExisting(categories);
     }
 
-    private void validateUniqueness(List<CategoryRequest> categories) {
+    private void validateUniqueness(List<AmenityCategory> categories) {
         Set<String> names = categories
                 .stream()
-                .map(CategoryRequest::getName)
+                .map(AmenityCategory::getName)
                 .collect(Collectors.toSet());
 
         if (names.size() < categories.size()) {
@@ -36,7 +36,7 @@ public class AmenityCategoryValidator {
 
         Set<String> icons = categories
                 .stream()
-                .map(CategoryRequest::getIconUrl)
+                .map(AmenityCategory::getIconUrl)
                 .collect(Collectors.toSet());
 
         if (icons.size() < categories.size()) {
@@ -44,10 +44,10 @@ public class AmenityCategoryValidator {
         }
     }
 
-    private void validateNotExisting(List<CategoryRequest> categories) {
+    private void validateNotExisting(List<AmenityCategory> categories) {
         Set<String> names = categories
                 .stream()
-                .map(CategoryRequest::getName)
+                .map(AmenityCategory::getName)
                 .collect(Collectors.toSet());
 
         if (amenityCategoryRepository.existsByNames(names)) {

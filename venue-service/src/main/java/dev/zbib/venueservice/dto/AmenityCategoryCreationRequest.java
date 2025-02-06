@@ -14,11 +14,11 @@ public class AmenityCategoryCreationRequest {
     @NotEmpty(message = "At least one category is required")
     @Size(max = 100, message = "Cannot create more than 100 categories at once")
     @Valid
-    private List<CategoryRequest> categories;
+    private List<AmenityCategory> categories;
 
     @Getter
     @Setter
-    public static class CategoryRequest {
+    public static class AmenityCategory {
         @NotBlank(message = "Name is required")
         @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
         private String name;
