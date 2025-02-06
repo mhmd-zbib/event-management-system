@@ -21,7 +21,7 @@ public class ZoneValidator {
 
     public void validateZoneCreation(ZoneCreationRequest request, Venue venue, List<Amenity> amenities) {
         venueValidator.validateZoneCreation(venue);
-        zoneAmenityValidator.validateZoneAmenitiesCreation(request.getAmenitiesId());
+        zoneAmenityValidator.validateZoneAmenitiesCreation(amenities);
         validateUniqueName(request, venue);
     }
 
